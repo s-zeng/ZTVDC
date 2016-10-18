@@ -8,4 +8,5 @@ public class Converter {
 	//JAVE Library http://www.sauronsoftware.it/projects/jave/index.php
 	//Stuff to experiment with: Joba Time, Java Media Framework API (JMF)
 	//https://github.com/Rebant/Video-Converter/blob/master/videoConverter.java
+	//https://www.ffmpeg.org/
 }
