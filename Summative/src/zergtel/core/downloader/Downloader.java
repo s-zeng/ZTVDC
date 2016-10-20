@@ -1,4 +1,4 @@
-package zergtel.core;
+package zergtel.core.downloader;
 
 public class Downloader {
 	//Some inspirational code:
