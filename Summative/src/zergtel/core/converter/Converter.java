@@ -1,9 +1,10 @@
-package zergtel.core;
+package zergtel.core.converter;
 
 import java.io.*;
 
 @SuppressWarnings("unused")
-public class Converter {
+public class Converter 
+{
 	//https://docs.oracle.com/javase/tutorial/sound/converters.html
 	//JAVE Library http://www.sauronsoftware.it/projects/jave/index.php
 	//Stuff to experiment with: Joba Time, Java Media Framework API (JMF)
