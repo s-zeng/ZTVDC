@@ -12,7 +12,7 @@ public class Run {
 		}
 		try {
 			Runtime convert = Runtime.getRuntime();
-			Process app = convert.exec("ffmpeg.exe");
+			Process app = convert.exec("c:/Users/User/IdeaProjects/summative/Summative/bin/ffmpeg.exe");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
