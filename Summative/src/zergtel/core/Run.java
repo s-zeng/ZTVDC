@@ -10,6 +10,12 @@ public class Run {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		try {
+			Runtime convert = Runtime.getRuntime();
+			Process app = convert.exec("ffmpeg.exe");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
