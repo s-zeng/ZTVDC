@@ -20,7 +20,6 @@ public class Http {
 		String lineInput;
 		while ((lineInput = in.readLine()) != null) {
 			writer.write(lineInput);
-
 		}
 
 
