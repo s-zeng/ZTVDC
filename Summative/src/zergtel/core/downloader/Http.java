@@ -2,34 +2,32 @@ package zergtel.core.downloader;
 
 import java.io.*;
 import java.net.*;
-import zergtel.core.io.*;
 
 
 public class Http {
-	public static String get(String uri) throws Exception {
-		return get(new URL(uri));
+	private static final int bufferSize = 4096;
+
+	public static String get(String uri, String fileName) throws Exception {
+		return get(new URL(uri), fileName);
 	}
 
-	public static String get(URL uri) throws Exception {
-		String fileName = getFileOutputName(uri);
+	private static String get(URL uri, String fileName) throws Exception {
+		if (fileName.equals(""))
+			fileName = getFileOutputName(uri);
 
 		URLConnection connection = uri.openConnection();
-		BufferedReader in = new BufferedReader(
-				new InputStreamReader(
-						connection.getInputStream()));
 
-		FileOut writer = new FileOut(fileName);
+		InputStream in = connection.getInputStream();
+		byte[] buffer = new byte[bufferSize];
+		int n = - 1;
 
-
-
-		String lineInput;
-		while ((lineInput = in.readLine()) != null) {
-			writer.println(lineInput);
+		OutputStream output = new FileOutputStream(fileName);
+		while ((n = in.read(buffer)) != -1)
+		{
+			output.write(buffer, 0, n);
 		}
-
-
 		in.close();
-		writer.closeOutputFile();
+		output.close();
 
 		return fileName;
 	}
