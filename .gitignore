@@ -1,6 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 Summative/src/zergtel/core/Run.java
-Summative/bin/zergtel
+Summative/bin/zergtel/
 .gitignore
 .idea/uiDesigner.xml
 .idea/workspace.xml
+download/

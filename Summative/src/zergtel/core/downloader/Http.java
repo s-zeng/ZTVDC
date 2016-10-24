@@ -6,6 +6,9 @@ import java.net.*;
 
 public class Http {
 	private static final int BUFFER_SIZE = 4096;
+	private static final String DOWNLOAD_LOCATION = "download/";
+
+	//Todo - method to avoid naming conflicts (e.g. save as example(1).mp3 if example.mp3 already exists)
 
 	public static String get(String uri) throws Exception {
 		return get(new URL(uri), "");
@@ -22,6 +25,8 @@ public class Http {
 			fileName = getFileOutputName(uri);
 			System.out.println("File name: " + fileName);
 		}
+
+		fileName = DOWNLOAD_LOCATION.concat(cleanseName(fileName));
 
 		URLConnection connection = uri.openConnection();
 
@@ -48,7 +53,7 @@ public class Http {
 			output = uri.getHost() + uri.getPath();
 		}
 
-		return cleanseName(output);
+		return output;
 	}
 
 	private static String cleanseName(String fileName) {
