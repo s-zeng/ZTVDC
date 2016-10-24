@@ -5,20 +5,28 @@ import java.net.*;
 
 
 public class Http {
-	private static final int bufferSize = 4096;
+	private static final int BUFFER_SIZE = 4096;
+
+	public static String get(String uri) throws Exception {
+		return get(new URL(uri), "");
+	}
 
 	public static String get(String uri, String fileName) throws Exception {
 		return get(new URL(uri), fileName);
 	}
 
 	private static String get(URL uri, String fileName) throws Exception {
-		if (fileName.equals(""))
+		//Merits some refactoring for efficiency this code does
+
+		if (fileName.equals("")) {
 			fileName = getFileOutputName(uri);
+			System.out.println("File name: " + fileName);
+		}
 
 		URLConnection connection = uri.openConnection();
 
 		InputStream in = connection.getInputStream();
-		byte[] buffer = new byte[bufferSize];
+		byte[] buffer = new byte[BUFFER_SIZE];
 		int n = - 1;
 
 		OutputStream output = new FileOutputStream(fileName);
@@ -40,6 +48,11 @@ public class Http {
 			output = uri.getHost() + uri.getPath();
 		}
 
-		return output;
+		return cleanseName(output);
+	}
+
+	private static String cleanseName(String fileName) {
+		//flesh this function out to be able to fix all illegal windows file names
+		return fileName.replaceAll("/", "");
 	}
 }
