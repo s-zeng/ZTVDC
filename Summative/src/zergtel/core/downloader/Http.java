@@ -34,14 +34,14 @@ public class Http {
 
 		InputStream in = connection.getInputStream();
 		byte[] buffer = new byte[BUFFER_SIZE];
-		int n = -1;
+		int n;
 
-		OutputStream output = new FileOutputStream(fileName);
+		OutputStream out = new FileOutputStream(fileName);
 		while ((n = in.read(buffer)) != -1) {
-			output.write(buffer, 0, n);
+			out.write(buffer, 0, n);
 		}
 		in.close();
-		output.close();
+		out.close();
 
 		return fileName;
 	}
