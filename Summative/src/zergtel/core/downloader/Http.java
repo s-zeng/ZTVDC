@@ -8,7 +8,9 @@ public class Http {
 	private static final int BUFFER_SIZE = 4096;
 	private static final String DOWNLOAD_LOCATION = "download/";
 
-	//Todo - method to avoid naming conflicts (e.g. save as example(1).mp3 if example.mp3 already exists)
+//	Todo - method to avoid naming conflicts (e.g. save as example(1).mp3 if example.mp3 already exists)
+//		maybe add seperate class for file things like this and cleanseName
+
 
 	public static String get(String uri) throws Exception {
 		return get(new URL(uri), "");
@@ -32,11 +34,10 @@ public class Http {
 
 		InputStream in = connection.getInputStream();
 		byte[] buffer = new byte[BUFFER_SIZE];
-		int n = - 1;
+		int n = -1;
 
 		OutputStream output = new FileOutputStream(fileName);
-		while ((n = in.read(buffer)) != -1)
-		{
+		while ((n = in.read(buffer)) != -1) {
 			output.write(buffer, 0, n);
 		}
 		in.close();
