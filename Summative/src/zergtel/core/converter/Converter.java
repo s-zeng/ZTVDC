@@ -5,28 +5,27 @@ import java.io.*;
 
 public class Converter 
 {
-    public File convert(File f)
+    public void convert(File f, String n, String f1) //f1 = format
     {
         try {
-            int char1 = f.getName().indexOf(0);
-            int char2 = f.getName().indexOf(".");
-            String outFile = "", format = "";
-            outFile = outFile.substring(char1, char2);
-            format = format.substring(char2);
+            String outFile = n;
+            String  format = f1;
             Runtime convert = Runtime.getRuntime();
-            Process app = convert.exec("ffmpeg -i " + f.getName() + " " + outFile + format);
+            final Process app = convert.exec("ffmpeg -i " + f.getName() + " " + outFile + format);
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getInputStream()));
-            String test;
 
-            while ((test = appReader.readLine()) != null)
-            {
-
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return f;
+
     }
+
+    public void cancel()
+    {
+
+    }
+    //http://stackoverflow.com/questions/17123118/how-to-stop-ffmpeg-that-runs-through-java-process
+    //http://stackoverflow.com/questions/10927718/how-to-read-ffmpeg-response-from-java-and-use-it-to-create-a-progress-bar
 	//https://docs.oracle.com/javase/tutorial/sound/converters.html
 	//JAVE Library http://www.sauronsoftware.it/projects/jave/index.php
 	//Stuff to experiment with: Joba Time, Java Media Framework API (JMF)
