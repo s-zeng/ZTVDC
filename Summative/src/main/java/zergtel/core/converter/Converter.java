@@ -31,6 +31,16 @@ public class Converter
                 e.printStackTrace();
         }
     }
+
+    public void pause()
+    {
+
+    }
+
+    public void resume()
+    {
+
+    }
     //http://stackoverflow.com/questions/17123118/how-to-stop-ffmpeg-that-runs-through-java-process
     //http://stackoverflow.com/questions/10927718/how-to-read-ffmpeg-response-from-java-and-use-it-to-create-a-progress-bar
 	//https://docs.oracle.com/javase/tutorial/sound/converters.html
