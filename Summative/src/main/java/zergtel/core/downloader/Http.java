@@ -31,13 +31,18 @@ public class Http extends Observable implements Runnable {
 
     // Constructor for Http.
     public Http(URL url) {
+        setUrl(url);
+    }
+
+    public void setUrl(String url) throws Exception{
+
+    }
+
+    public void setUrl(URL url) {
         this.url = url;
         size = -1;
         downloaded = 0;
         status = DOWNLOADING;
-
-        // Begin the download.
-        download();
     }
 
     // Get this download's URL.
@@ -86,7 +91,7 @@ public class Http extends Observable implements Runnable {
     }
 
     // Start or resume downloading.
-    private void download() {
+    public void download() {
         Thread thread = new Thread(this);
         thread.start();
     }
