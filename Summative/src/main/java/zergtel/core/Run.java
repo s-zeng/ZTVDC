@@ -21,7 +21,7 @@ public class Run {
 //
 //			while (getter.getStatus() == 0)
 //				System.out.println(getter.getProgress());
-			VGet thread1 = new VGet(new URL("https://www.youtube.com/watch?v=dQw4w9WgXcQ"), new File("D:/Simon/Downloads"));
+			VGet thread1 = new VGet(new URL("https://www.youtube.com/watch?v=dQw4w9WgXcQ"), new File("download/"));
 			thread1.download(new AtomicBoolean(false), new Runnable() {
 				public void run() {
 					System.out.print(".");
