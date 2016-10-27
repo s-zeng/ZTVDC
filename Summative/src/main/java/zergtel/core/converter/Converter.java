@@ -1,6 +1,10 @@
 package zergtel.core.converter;
 
+import sun.security.util.SecurityConstants;
+
+import java.awt.event.KeyEvent;
 import java.io.*;
+import java.awt.*;
 
 
 public class Converter 
@@ -23,18 +27,20 @@ public class Converter
 
     public void cancel()
         {
-        OutputStream cancel = app.getOutputStream();
-            try {
-        cancel.write("q\n".getBytes());
-                cancel.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-        }
+        app.destroy();
     }
 
     public void pause()
     {
-
+        try{
+            Robot r = new Robot();
+            r.keyPress(KeyEvent.CTRL_MASK);
+            r.keyPress(KeyEvent.VK_C);
+            r.keyRelease(KeyEvent.VK_C);
+            r.keyRelease(KeyEvent.CTRL_MASK);
+        } catch(AWTException e) {
+            e.printStackTrace();
+        }
     }
 
     public void resume()
