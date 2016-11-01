@@ -2,9 +2,7 @@ package zergtel.core.converter;
 
 import sun.security.util.SecurityConstants;
 
-import java.awt.event.KeyEvent;
 import java.io.*;
-import java.awt.*;
 
 
 public class Converter 
@@ -16,7 +14,7 @@ public class Converter
             String outFile = n;
             String  format = fn;
             Runtime convert = Runtime.getRuntime();
-            app = convert.exec("ffmpeg -i " + f.getName() + " " + outFile + format);
+            app = convert.exec("ffmpeg -i " + f.getName() + " " + outFile + "." + format);
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getInputStream()));
 
         } catch (IOException e) {
@@ -26,32 +24,13 @@ public class Converter
     }
 
     public void cancel() { app.destroy(); }
-
-    public void pause()
-    {
-        try{
-            Robot r = new Robot();
-            r.keyPress(KeyEvent.CTRL_MASK);
-            r.keyPress(KeyEvent.VK_C);
-            r.keyRelease(KeyEvent.VK_C);
-            r.keyRelease(KeyEvent.CTRL_MASK);
-        } catch(AWTException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void resume()
-    {
-
-    }
-
     public void merge(File f1, File f2, String n, String fn)
     {
         try {
             String outFile = n;
             String  format = fn;
             Runtime convert = Runtime.getRuntime();
-            app = convert.exec("ffmpeg -i " + f1.getName() + "-i " + f2.getName() + "-c:v copy -c:a aac -strict experimental " + n + fn);
+            app = convert.exec("ffmpeg -i " + f1.getName() + "-i " + f2.getName() + "-c:v copy -c:a aac -strict experimental " + n + "." + fn);
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getInputStream()));
 
         } catch (IOException e) {
@@ -67,4 +46,5 @@ public class Converter
 	//Stuff to experiment with: Joba Time, Java Media Framework API (JMF)
 	//https://github.com/Rebant/Video-Converter/blob/master/videoConverter.java
 	//https://www.ffmpeg.org/
+    //https://github.com/wseemann/FFmpegMediaMetadataRetriever
 }
