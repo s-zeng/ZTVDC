@@ -34,8 +34,10 @@ public class Http extends Observable implements Runnable {
         setUrl(url);
     }
 
-    public void setUrl(String url) throws Exception{
+    public Http() {}
 
+    public void setUrl(String url) throws Exception{
+        setUrl(new URL(url));
     }
 
     public void setUrl(URL url) {

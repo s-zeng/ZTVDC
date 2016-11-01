@@ -4,9 +4,9 @@ import java.io.*;
 import java.net.*;
 
 
-public class HttpOld {
+public class EzHttp {
 	private static final int BUFFER_SIZE = 4096;
-	private static final String DOWNLOAD_LOCATION = "download/";
+	private static String DOWNLOAD_LOCATION = "download/";
 
 //	Todo - method to avoid naming conflicts (e.g. save as example(1).mp3 if example.mp3 already exists)
 //		maybe add seperate class for file things like this and cleanseName
