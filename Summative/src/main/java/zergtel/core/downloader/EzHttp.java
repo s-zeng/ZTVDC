@@ -48,7 +48,7 @@ public class EzHttp {
 		in.close();
 		out.close();
 
-		return fileName;
+		return DOWNLOAD_LOCATION + fileName;
 	}
 
 	private static String getFileOutputName(URL uri) {
