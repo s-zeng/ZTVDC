@@ -1,14 +1,23 @@
 package zergtel.core.io;
 
+import com.xuggle.xuggler.IContainer;
+import com.xuggle.xuggler.io.*;
 import java.io.*;
 /**
  * Created by User on 2016-11-01.
  */
 public class Metadata {
 
-    public static String get(File f) throws IOException
+    public static void get(File f) throws IOException
     {
-        return null;
+        IContainer iC = IContainer.make();
+        int data = iC.open(f.getPath(), IContainer.Type.READ, null);
+        if (data < 0)
+            throw new RuntimeException("ripperoni with a side of spaghetti");
+        int numStreams = iC.getNumStreams();
+        long duration = iC.getDuration();
+        long fileSize = iC.getFileSize();
+        long bitRate = iC.getBitRate();
     }
 
 }
