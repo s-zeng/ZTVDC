@@ -11,7 +11,7 @@ public class Bandcamp {
             EzHttp.get(url, "bandcamp.tmp");
         } catch (Exception e) {
             System.err.println("Invalid url");
-            return;
+            return "";
         }
         return "";
     }
