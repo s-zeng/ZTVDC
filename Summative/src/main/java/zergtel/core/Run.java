@@ -1,38 +1,21 @@
 package zergtel.core;
 
-import java.net.URL;
 
-import com.github.axet.vget.*;
 
 import java.io.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import zergtel.core.downloader.*;
+
+
 
 
 public class Run {
 
-    public static void main(String[] args) {
-        try {
-//			EzHttp.get("http://popplers5.bandcamp.com/download/track?enc=mp3-128&fsig=8b732af24df036790dce29b8bf65fde4&id=214214452&stream=1&ts=1476937747.0", "Nascency.mp3");
-//			EzHttp.get("http://simonzeng.tk/example.mp3");
-//			Http getter = new Http(new URL("http://simonzeng.tk/example.mp3"));
-//			getter.download();
-//
-//			while (getter.getStatus() == 0)
-//				System.out.println(getter.getProgress());
-//			VGet thread1 = new VGet(new URL("https://www.youtube.com/watch?v=dQw4w9WgXcQ"), new File("download/"));
-//			thread1.download(new AtomicBoolean(false), new Runnable() {
-//				public void run() {
-//					System.out.print(".");
-//				}
-//			});
-            System.out.println("bandcamp begin");
-            Bandcamp.get("https://determination-ut.bandcamp.com/album/determination");
-            System.out.println("bandcamp end");
-            //Todo - integrate vget into the project (shift dependencies) to make changes
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	public static void main(String[] args) {
+		File file = new File("file.mp4");
+		try{
+			Metadata.get(file);
+		} catch (IOException e) {
+			System.err.println("doh I missed");
+		}
+	}
 
 }
