@@ -17,25 +17,32 @@ public class Bandcamp {
             return "";
         }
         System.out.println("before");
-        String[] temp = extractLinks(tmp);
+        String[] temp = extractFiles(tmp);
         System.out.println("after");
 
         return "";
     }
 
-    private static String[] extractLinks(File file) {
+    private static String[] extractFiles(File file) {
+        String json = extractString(file);
+        return new String[5];
+    }
+
+    private static String extractString(File file) {
         System.out.println(file.getName());
+        String line;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
             while ((line = br.readLine()) != null) {
                 if (line.contains("poppler")) {
+                    line = "{".concat(line.trim()).concat("}");
                     System.out.println(line);
                     break;
                 }
             }
         } catch (Exception e) {
             System.out.println("doh");
+            return "";
         }
-        return new String[1];
+        return line;
     }
 }
