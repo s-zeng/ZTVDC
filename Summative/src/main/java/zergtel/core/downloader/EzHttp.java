@@ -43,12 +43,11 @@ public class EzHttp {
 		while ((n = in.read(buffer)) != -1) {
 			out.write(buffer, 0, n);
 			downloaded += n;
-			System.out.println(Math.round((double)100*downloaded/size));
 		}
 		in.close();
 		out.close();
 
-		return DOWNLOAD_LOCATION + fileName;
+		return fileName;
 	}
 
 	private static String getFileOutputName(URL uri) {

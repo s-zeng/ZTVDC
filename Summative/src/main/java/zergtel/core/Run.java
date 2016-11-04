@@ -26,8 +26,9 @@ public class Run {
 //					System.out.print(".");
 //				}
 //			});
-
+            System.out.println("bandcamp begin");
             Bandcamp.get("https://determination-ut.bandcamp.com/album/determination");
+            System.out.println("bandcamp end");
             //Todo - integrate vget into the project (shift dependencies) to make changes
         } catch (Exception e) {
             e.printStackTrace();

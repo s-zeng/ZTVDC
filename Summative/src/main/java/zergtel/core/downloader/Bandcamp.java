@@ -2,7 +2,7 @@ package zergtel.core.downloader;
 
 
 import java.io.File;
-import java.util.Scanner;
+import java.io.*;
 
 /**
  * Created by Simon on 11/1/2016.
@@ -16,25 +16,26 @@ public class Bandcamp {
             System.err.println("Invalid url");
             return "";
         }
-
-        extractLinks(tmp);
+        System.out.println("before");
+        String[] temp = extractLinks(tmp);
+        System.out.println("after");
 
         return "";
     }
 
     private static String[] extractLinks(File file) {
-        try {
-            Scanner in = new Scanner(file);
-
-            while (in.hasNextLine()) {
-                String line = in.nextLine();
+        System.out.println(file.getName());
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
                 if (line.contains("poppler")) {
                     System.out.println(line);
+                    break;
                 }
             }
         } catch (Exception e) {
-
+            System.out.println("doh");
         }
-        return new String[0];
+        return new String[1];
     }
 }
