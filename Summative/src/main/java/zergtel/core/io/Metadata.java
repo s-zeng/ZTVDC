@@ -23,7 +23,7 @@ public class Metadata {
         {
             IStream s = iC.getStream(i);
             IStreamCoder iCS = s.getStreamCoder();
-            System.out.printf(" %d", i);
+            System.out.printf("%d", i);
             System.out.printf("%s ", iCS.getCodecType());
             System.out.printf("%s ", iCS.getCodecID());
             System.out.printf("%s ", s.getDuration());
