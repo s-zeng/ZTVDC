@@ -35,5 +35,6 @@ public class Bandcamp {
         } catch (Exception e) {
 
         }
+        return new String[0];
     }
 }
