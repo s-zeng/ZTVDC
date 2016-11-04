@@ -1,6 +1,8 @@
 package zergtel.core.downloader;
 
 
+import com.google.gson.Gson;
+
 import java.io.File;
 import java.io.*;
 
@@ -25,6 +27,8 @@ public class Bandcamp {
 
     private static String[] extractFiles(File file) {
         String json = extractString(file);
+        Gson gson = new Gson();
+        gson.fromJson(json);
         return new String[5];
     }
 
