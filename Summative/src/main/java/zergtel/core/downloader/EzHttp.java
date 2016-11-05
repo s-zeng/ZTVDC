@@ -41,8 +41,7 @@ public class EzHttp {
 		}
 
 		File dir = new File(
-				downloadLocation.concat(cleanseDirectory(downLocation)
-				)
+				downloadLocation.concat(cleanseDirectory(downLocation))
 		);
 		dir.mkdir();
 
