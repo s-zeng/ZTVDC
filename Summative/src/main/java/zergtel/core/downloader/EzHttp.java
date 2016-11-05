@@ -6,21 +6,33 @@ import java.net.*;
 
 public class EzHttp {
 	private static final int BUFFER_SIZE = 4096;
-	private static String DOWNLOAD_LOCATION = "download/";
+	private static String downloadLocation = "download/";
 
 //	Todo - method to avoid naming conflicts (e.g. save as example(1).mp3 if example.mp3 already exists)
 //		maybe add seperate class for file things like this and cleanseName
 
 
+	public static String getDownloadLocation() {
+		return downloadLocation;
+	}
+
+	public static void setDownloadLocation(String ndownloadLocation) {
+		downloadLocation = ndownloadLocation;
+	}
+
 	public static String get(String uri) throws Exception {
-		return get(new URL(uri), "");
+		return get(new URL(uri), "", "");
 	}
 
 	public static String get(String uri, String fileName) throws Exception {
-		return get(new URL(uri), fileName);
+		return get(new URL(uri), fileName, "");
 	}
 
-	private static String get(URL uri, String fileName) throws Exception {
+	public static String get(String uri, String fileName, String downLocation) throws Exception {
+		return get(new URL(uri), fileName, downLocation);
+	}
+
+	private static String get(URL uri, String fileName, String downLocation) throws Exception {
 		//Merits some refactoring for efficiency this code does
 
 		if (fileName.equals("")) {
@@ -28,7 +40,17 @@ public class EzHttp {
 			System.out.println("File name: " + fileName);
 		}
 
-		fileName = DOWNLOAD_LOCATION.concat(cleanseName(fileName));
+		File dir = new File(
+				downloadLocation.concat(cleanseDirectory(downLocation)
+				)
+		);
+		dir.mkdir();
+
+		fileName = dir
+				.getAbsolutePath()
+				.concat("/")
+				.concat(cleanseName(fileName));
+		System.out.println(fileName);
 
 		URLConnection connection = uri.openConnection();
 		int size = connection.getContentLength();
@@ -63,6 +85,10 @@ public class EzHttp {
 
 	private static String cleanseName(String fileName) {
 		//flesh this function out to be able to fix all illegal windows file names
-		return fileName.replaceAll("\"|\\/|\\?", "");
+		return fileName.replaceAll("\"|\\/|\\?|\\||:|\\*|<|>", "");
+	}
+
+	private static String cleanseDirectory(String dirName) {
+		return dirName.replaceAll("\"|\\?|\\||:|\\*|<|>", "");
 	}
 }

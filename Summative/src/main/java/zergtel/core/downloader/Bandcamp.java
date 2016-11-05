@@ -13,27 +13,33 @@ import java.io.FileReader;
  * Created by Simon on 11/1/2016.
  */
 public class Bandcamp {
-    public static String get(String url) {
+    public static void get(String url) {
         File tmp;
         try {
             tmp = new File(EzHttp.get(url, "bandcamp.tmp"));
+            extractFiles(tmp);
+            tmp.delete();
         } catch (Exception e) {
-            System.err.println("Invalid url");
-            return "";
+            System.err.println("Invalid url or such");
         }
-        System.out.println("before");
-        String[] temp = extractFiles(tmp);
-        System.out.println("after");
-
-        return "";
     }
 
-    private static String[] extractFiles(File file) {
+    private static void extractFiles(File file) {
         //such a good debug tool for json shenanigans: http://jsonviewer.stack.hu/
+        String rawJson = extractLine(file, "poppler");
+
+        //preprocessing json
+        rawJson = "{".concat(rawJson.trim());
+        rawJson = rawJson.substring(0, rawJson.length() - 2).concat("]}");
+
+        
         JsonParser parser = new JsonParser();
         JsonArray mediaList = ((JsonObject)parser
-                .parse(extractString(file)))
+                .parse(rawJson))
                 .getAsJsonArray("trackinfo");
+
+        String folder = getTitle(file);
+        System.out.println(folder);
 
         for (int i = 0; i < mediaList.size(); i++) {
             JsonObject media = mediaList
@@ -49,35 +55,29 @@ public class Bandcamp {
                     .replaceAll("\"", "")
             );
 
-            String mediaName = media.get("title").toString().concat(".mp3");
+
+
+            String mediaName = media
+                    .get("title")
+                    .toString()
+                    .concat(".mp3");
 
             try {
                 System.out.println(mediaName + " - " + downloadLink);
-                EzHttp.get(downloadLink, mediaName);
+                EzHttp.get(downloadLink, mediaName, folder);
             } catch (Exception e) {
                 System.err.println("wtf");
             }
 
         }
-
-
-        return new String[5];
     }
 
-    private static String extractString(File file) {
-        System.out.println(file.getName());
+    //gets the first line within file that contains string str
+    private static String extractLine(File file, String str) {
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             while ((line = br.readLine()) != null) {
-                if (line.contains("poppler")) {
-                    System.out.println(line.length());
-
-                    //this is for preprocessing of the json
-//                    line = line.trim().substring(11);
-                    line = "{".concat(line.trim());
-                    line = line.substring(0, line.length() - 2).concat("]}");
-
-
+                if (line.contains(str)) {
                     System.out.println(line);
                     break;
                 }
@@ -87,5 +87,10 @@ public class Bandcamp {
             return "";
         }
         return line;
+    }
+
+    //gets title of track/album
+    private static String getTitle(File http) {
+        return extractLine(http, "<title>").trim().replaceAll("<(.*?)>|\\\\|\\/", "");
     }
 }
