@@ -1,11 +1,13 @@
 package zergtel.core.downloader;
 
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.*;
-import java.util.ArrayList;
+import java.io.FileReader;
 
 /**
  * Created by Simon on 11/1/2016.
