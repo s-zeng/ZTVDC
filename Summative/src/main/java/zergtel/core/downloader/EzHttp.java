@@ -63,6 +63,6 @@ public class EzHttp {
 
 	private static String cleanseName(String fileName) {
 		//flesh this function out to be able to fix all illegal windows file names
-		return fileName.replaceAll("/", "");
+		return fileName.replaceAll("\"|\\/|\\?", "");
 	}
 }

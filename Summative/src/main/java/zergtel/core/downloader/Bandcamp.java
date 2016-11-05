@@ -49,7 +49,7 @@ public class Bandcamp {
                     .replaceAll("\"", "")
             );
 
-            String mediaName = media.get("title").toString().replaceAll("\"", "").concat(".mp3");
+            String mediaName = media.get("title").toString().concat(".mp3");
 
             try {
                 System.out.println(mediaName + " - " + downloadLink);
