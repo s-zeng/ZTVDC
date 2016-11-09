@@ -3,17 +3,19 @@ package zergtel.core.io;
 import com.xuggle.xuggler.*;
 
 import java.io.*;
+import java.util.*;
+
 
 public class Metadata {
 
-    public static void transfer(File f, File f2) throws IOException {
-        IContainer iR = IContainer.make();
-        int data = iR.open(f.getPath(), IContainer.Type.READ, null);
-        IMetaData metaData = iR.getMetaData();
+    public static void get(File file, Map<String, String> map)
+    {
         IContainer iW = IContainer.make();
-        int data2 = iW.open(f2.getPath(), IContainer.Type.WRITE, null);
-        iW.setMetaData(metaData);
-
+        iW.open(file.getPath(), IContainer.Type.WRITE, null);
+        IMetaData data = IMetaData.make();
+        //data.setValue(); // setValue(String keys, String value)
+        iW.setMetaData((IMetaData) data);
+        iW.close();
     }
 
 }

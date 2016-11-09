@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 
 /**
- * Created by Simon on 11/1/2016.
+ * Created by Simonin on 11/1/2016.
  */
 public class Bandcamp {
     public static void get(String url) {
@@ -54,8 +54,6 @@ public class Bandcamp {
                     .toString()
                     .replaceAll("\"", "")
             );
-
-
 
             String mediaName = media
                     .get("title")
