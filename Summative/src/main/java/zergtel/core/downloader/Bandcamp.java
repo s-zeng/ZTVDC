@@ -12,6 +12,18 @@ import java.io.FileReader;
 /**
  * Created by Simonin on 11/1/2016.
  */
+
+/**
+ * To download from bandcamp:
+ * In the script sections of the html of any album/track page, ther will be a JSON object in the form of var TralbumData -
+ * TralbumData['trackinfo'] is a list of JSONs, where each element corresponds to one track on the page
+ * TralbumData['trackinfo'][n]['title'] contains the title of the track, and
+ * TralbumData['trackinfo'][n]['file'] contains a json with available download links
+ * Normally, the only available format to download is mp3-128. However, sometimes we are lucky and it's a free download by default -
+ * in that case, we have things like flac and mp3-320 to choose from.
+ * As of right now though, this class downloads mp3-128 only - we will have to add additional format detection later
+ */
+
 public class Bandcamp {
     public static void get(String url) {
         File tmp;
@@ -21,6 +33,7 @@ public class Bandcamp {
             tmp.delete();
         } catch (Exception e) {
             System.err.println("Invalid url or such");
+            e.printStackTrace();
         }
     }
 
@@ -32,9 +45,9 @@ public class Bandcamp {
         rawJson = "{".concat(rawJson.trim());
         rawJson = rawJson.substring(0, rawJson.length() - 2).concat("]}");
 
-        
+
         JsonParser parser = new JsonParser();
-        JsonArray mediaList = ((JsonObject)parser
+        JsonArray mediaList = ((JsonObject) parser
                 .parse(rawJson))
                 .getAsJsonArray("trackinfo");
 
@@ -48,11 +61,11 @@ public class Bandcamp {
 
             String downloadLink = "http:".concat(
                     media
-                    .get("file")
-                    .getAsJsonObject()
-                    .get("mp3-128")
-                    .toString()
-                    .replaceAll("\"", "")
+                            .get("file")
+                            .getAsJsonObject()
+                            .get("mp3-128")
+                            .toString()
+                            .replaceAll("\"", "")
             );
 
             String mediaName = media
