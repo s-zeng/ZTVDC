@@ -2,6 +2,7 @@ package zergtel.core.downloader;
 
 
 import java.net.URI;
+import java.util.Arrays;
 
 public class Downloader {
 	//Some inspirational code:
@@ -14,8 +15,10 @@ public class Downloader {
         return get(new URI(uri));
     }
 
-    private static boolean get(URI uri) {
-        System.out.println(uri.getHost());
+    private static boolean get(URI uri) throws Exception {
+        String[] hosts = uri.getHost().split("\\.");
+        String host = hosts[hosts.length - 2] + "." + hosts[hosts.length-1];
+        System.out.println(host);
 
 
         return false;

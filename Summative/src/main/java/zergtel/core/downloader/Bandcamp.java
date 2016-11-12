@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.net.URI;
 
 /**
  * Created by Simonin on 11/1/2016.
@@ -25,16 +26,11 @@ import java.io.FileReader;
  */
 
 public class Bandcamp {
-    public static void get(String url) {
+    public static void get(String url) throws Exception{
         File tmp;
-        try {
-            tmp = new File(EzHttp.get(url, "bandcamp.tmp"));
-            extractFiles(tmp);
-            tmp.delete();
-        } catch (Exception e) {
-            System.err.println("Invalid url or such");
-            e.printStackTrace();
-        }
+        tmp = new File(EzHttp.get(url, "bandcamp.tmp"));
+        extractFiles(tmp);
+        tmp.delete();
     }
 
     private static void extractFiles(File file) {
@@ -95,6 +91,7 @@ public class Bandcamp {
             }
         } catch (Exception e) {
             System.err.println("doh");
+            e.printStackTrace();
             return "";
         }
         return line;
