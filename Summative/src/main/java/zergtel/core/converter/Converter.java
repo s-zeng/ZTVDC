@@ -8,15 +8,13 @@ import java.io.*;
 public class Converter 
 {
     Process app;
-    public void convert(File f, String n, String fn) //f1 = format
+    public void convert(File f, String n, String fn)
     {
         try {
             String outFile = n;
             String  format = fn;
-            Runtime convert = Runtime.getRuntime();
-            app = convert.exec("ffmpeg -i " + f.getName() + " " + outFile + "." + format);
-            BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getInputStream()));
-
+            String cmd = "C:/Users/User/IdeaProjects/summative/Summative/bin/FFMPEG/bin/ffmpeg -i " + f.getAbsolutePath() + " " + outFile + "." + format;
+            Runtime.getRuntime().exec(cmd);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -30,7 +28,7 @@ public class Converter
             String outFile = n;
             String  format = fn;
             Runtime convert = Runtime.getRuntime();
-            app = convert.exec("ffmpeg -i " + f1.getName() + "-i " + f2.getName() + "-c:v copy -c:a aac -strict experimental " + n + "." + fn);
+            app = convert.exec("ffmpeg -i " + f1.getAbsolutePath() + "-i " + f2.getAbsolutePath() + "-c:v copy -c:a aac -strict experimental " + n + "." + fn);
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getInputStream()));
 
         } catch (IOException e) {
