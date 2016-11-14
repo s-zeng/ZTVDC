@@ -12,7 +12,8 @@ public class Run {
 
 	public static void main(String[] args) {
 		File file = new File("C:/Users/User/IdeaProjects/summative/Summative/bin/file.mp4");
+		File f2 = new File("C:/Users/User/IdeaProjects/summative/Summative/bin/hi.mp3");
 		Converter c = new Converter();
-		c.convert(file, "hi", "mp3");
+		c.merge(file, f2, "test1", "mp4");
 	}
 }
