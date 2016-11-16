@@ -14,6 +14,6 @@ public class Run {
 		File file = new File("C:/Users/User/IdeaProjects/summative/Summative/bin/file.mp4");
 		File f2 = new File("C:/Users/User/IdeaProjects/summative/Summative/bin/hi.mp3");
 		Converter c = new Converter();
-		c.merge(file, f2, "test1", "mp4");
-	}
+		c.merge(file, f2, "test4", "mp4");
+				}
 }

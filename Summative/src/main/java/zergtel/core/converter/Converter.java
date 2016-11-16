@@ -25,7 +25,7 @@ public class Converter
     public void merge(File f1, File f2, String n, String fn)
     {
         try {
-            String cmd = "C:/Users/User/IdeaProjects/summative/Summative/bin/FFMPEG/bin/ffmpeg -i " + f1.getAbsolutePath() + "-i " + f2.getAbsolutePath() + "-c:v copy -c:a aac -strict experimental " + n + "." + fn;
+            String cmd = "C:/Users/User/IdeaProjects/summative/Summative/bin/FFMPEG/bin/ffmpeg -i " + f1.getAbsolutePath() + " -i " + f2.getAbsolutePath() + " -c:v copy -c:a copy " + n + "." + fn;
             Runtime convert = Runtime.getRuntime();
             app = convert.exec(cmd);
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getInputStream()));
