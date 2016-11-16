@@ -17,8 +17,16 @@ public class Downloader {
 
     private static boolean get(URI uri) throws Exception {
         String[] hosts = uri.getHost().split("\\.");
+
         String host = hosts[hosts.length - 2] + "." + hosts[hosts.length-1];
+        String path = uri.getPath();
+
         System.out.println(host);
+        System.out.println(path);
+
+        if (path.contains(".")) {
+            EzHttp.get(uri.toString());
+        }
 
 
         return false;

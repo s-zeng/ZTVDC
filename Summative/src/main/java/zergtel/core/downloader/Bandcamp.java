@@ -16,10 +16,10 @@ import java.net.URI;
 
 /**
  * To download from bandcamp:
- * In the script sections of the html of any album/track page, ther will be a JSON object in the form of var TralbumData -
+ * In the script sections of the html of any album/track page, there will be a JSON object in the form of var TralbumData -
  * TralbumData['trackinfo'] is a list of JSONs, where each element corresponds to one track on the page
- * TralbumData['trackinfo'][n]['title'] contains the title of the track, and
- * TralbumData['trackinfo'][n]['file'] contains a json with available download links
+ * TralbumData['trackinfo'][n]['title'] contains the title of the nth track, and
+ * TralbumData['trackinfo'][n]['file'] contains a json with available download links for that track
  * Normally, the only available format to download is mp3-128. However, sometimes we are lucky and it's a free download by default -
  * in that case, we have things like flac and mp3-320 to choose from.
  * As of right now though, this class downloads mp3-128 only - we will have to add additional format detection later
