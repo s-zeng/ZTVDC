@@ -10,10 +10,17 @@ import zergtel.core.downloader.EzHttp;
 public class DownTest {
 	public static void main(String[] args) {
 		try {
-//			Downloader.get("https://insaneintherainmusic.bandcamp.com/album/live-at-grillbys");
-//			Downloader.get("http://simonzeng.tk/example.mp3");
-//			Downloader.get("https://www.youtube.com/watch?v=f4yvZF1cMz0");
-			Downloader.get("https://vimeo.com/29950141"); //vimeo not working right now - due to relatively recent https change unsupported by vget, will have to manually change
+			String[] links = {"https://insaneintherainmusic.bandcamp.com/album/live-at-grillbys", "http://simonzeng.tk/example.mp3", "https://www.youtube.com/watch?v=f4yvZF1cMz0", "https://vimeo.com/29950141"};
+			boolean success;
+
+			for (int i = 0; i < links.length; i++) {
+				success = Downloader.get(links[i]);
+				if (success) {
+					System.out.println("Download successful");
+				} else {
+					System.out.println("Download failed");
+				}
+			}
 
 			/**
 			 * things left to implement (caps means emphasis):
@@ -25,11 +32,13 @@ public class DownTest {
 			 * THREADING
 			 * proper file location/name handling
 			 * vimeo fix, integration of vget library for greater changes
+			 * 	-notably, replacing axet's wget library with my own http client
 			 * error handling paradigm design
 			 * imports cleanup
 			 * filetype checking for raw http downloads (overall just more comprehensive url parsing)
 			 * temp file handling and cleanup
 			 * bandcamp additional quality/format detection
+			 * automated testing
 			 *
 			 * ...and maybe then we can start on the ui :)
 			 */

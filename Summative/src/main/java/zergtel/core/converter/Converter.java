@@ -18,6 +18,7 @@ public class Converter
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("Completed");
 
     }
 
@@ -33,6 +34,7 @@ public class Converter
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("Completed");
 
     }
 

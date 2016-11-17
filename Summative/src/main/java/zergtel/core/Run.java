@@ -12,6 +12,9 @@ import java.io.*;
 public class Run {
 
 	public static void main(String[] args) {
-		ComputerUI ui = new ComputerUI();
+		File f = new File("C:/Users/User/IdeaProjects/Summative/summative/bin/file.mp4");
+		File f2 = new File("C:/Users/User/IdeaProjects/Summative/summative/bin/hi.mp3");
+		Converter c = new Converter();
+		c.merge(f, f2, "Test", "mp4");
 				}
 }

@@ -7,8 +7,7 @@ import java.awt.*;
  * Created by Shyam on 2016-10-25.
  */
 public class ComputerUI extends JFrame {
-    private JButton download = new JButton();
-    private JButton convert = new JButton();
+    private JButton[] buttons = new JButton[6];
     public ComputerUI() {
         setExtendedState(MAXIMIZED_BOTH);
         setTitle("ZergTel VDC");
@@ -18,5 +17,6 @@ public class ComputerUI extends JFrame {
         c.setBackground(new Color(44, 42, 43));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
+
     }
 }
