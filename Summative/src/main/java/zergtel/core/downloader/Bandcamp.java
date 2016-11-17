@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.net.URI;
+import java.net.URL;
+
 
 /**
  * Created by Simonin on 11/1/2016.
@@ -26,11 +28,15 @@ import java.net.URI;
  */
 
 public class Bandcamp {
-    public static void get(String url) throws Exception{
+    public static void get(URL url) throws Exception {
         File tmp;
         tmp = new File(EzHttp.get(url, "bandcamp.tmp"));
         extractFiles(tmp);
         tmp.delete();
+    }
+
+    public static void get(String url) throws Exception{
+        get(new URL(url));
     }
 
     private static void extractFiles(File file) {

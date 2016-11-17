@@ -28,6 +28,10 @@ public class EzHttp {
 		return get(uri, "", "");
 	}
 
+	public static String get(URL uri, String fileName) throws Exception {
+		return get(uri, fileName, "");
+	}
+
 	public static String get(String uri, String fileName) throws Exception {
 		return get(new URL(uri), fileName, "");
 	}
