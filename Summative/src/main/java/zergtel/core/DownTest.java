@@ -10,7 +10,7 @@ import zergtel.core.downloader.EzHttp;
 public class DownTest {
 	public static void main(String[] args) {
 		try {
-			String[] links = {"https://insaneintherainmusic.bandcamp.com/album/live-at-grillbys", "http://simonzeng.tk/example.mp3", "https://www.youtube.com/watch?v=f4yvZF1cMz0", "https://vimeo.com/29950141"};
+			String[] links = {"https://insaneintherainmusic.bandcamp.com/album/live-at-grillbys", "http://simonzeng.tk/example.mp3", "https://www.youtube.com/watch?v=f4yvZF1cMz0", "https://vimeo.com/29950141", "https://www.youtube.com/watch?v=4zLfCnGVeL4"};
 			boolean success;
 
 			for (int i = 0; i < links.length; i++) {
