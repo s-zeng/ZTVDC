@@ -9,9 +9,10 @@ import java.awt.*;
 public class ComputerUI extends JFrame {
     private JButton[] buttons = new JButton[6];
     public ComputerUI() {
+        JPanel panel = new JPanel(new BorderLayout());
         setExtendedState(MAXIMIZED_BOTH);
         setTitle("ZergTel VDC");
-        setLayout(null);
+        setLayout(null); //CHANGE THIS BEFORE SPAGHETTI HAPPENS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         setResizable(true);
         Container c = getContentPane();
         c.setBackground(new Color(44, 42, 43));
