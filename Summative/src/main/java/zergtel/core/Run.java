@@ -1,5 +1,6 @@
 package zergtel.core;
 
+
 import org.apache.log4j.BasicConfigurator;
 import zergtel.UI.ComputerUI;
 import zergtel.core.converter.Converter;
