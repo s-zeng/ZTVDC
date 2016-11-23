@@ -28,18 +28,20 @@ import java.net.URL;
  */
 
 public class Bandcamp {
-    public static void get(URL url) throws Exception {
+    public static String get(URL url) throws Exception {
         File tmp;
         tmp = new File(EzHttp.get(url, "bandcamp.tmp"));
-        extractFiles(tmp);
+        String[] downloadedFiles = extractFiles(tmp);
         tmp.delete();
+
+        return downloadedFiles[3];
     }
 
-    public static void get(String url) throws Exception{
-        get(new URL(url));
+    public static String get(String url) throws Exception{
+        return get(new URL(url));
     }
 
-    private static void extractFiles(File file) {
+    private static String[] extractFiles(File file) {
         //such a good debug tool for json shenanigans: http://jsonviewer.stack.hu/
         String rawJson = extractLine(file, "poppler");
 
@@ -56,6 +58,7 @@ public class Bandcamp {
         String folder = getTitle(file);
         System.out.println(folder);
 
+        String[] output = new String[mediaList.size()];
         for (int i = 0; i < mediaList.size(); i++) {
             JsonObject media = mediaList
                     .get(i)
@@ -78,11 +81,14 @@ public class Bandcamp {
             try {
                 System.out.println(mediaName + " - " + downloadLink);
                 EzHttp.get(downloadLink, mediaName, folder);
+                output[i] = folder + "\\" + mediaName;
             } catch (Exception e) {
                 System.err.println("wtf");
             }
 
         }
+
+        return output;
     }
 
     //gets the first line within file that contains string str
