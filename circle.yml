@@ -10,5 +10,5 @@ general:
 test:
   override:
     - cd "Summative"
-    - cd "summative"
+    - cd "Summative"
     - mvn test
