@@ -37,6 +37,25 @@ public class DownloaderTest {
      * ...and maybe then we can start on the ui :)
      */
 
+    /**
+    Week of 11/21 topics to write about:
+     Set up automated testing
+        -TestNG
+        -lack of ci :(
+        -or maybe circle ci...?
+     downloader get output standardizing
+     comparison testing
+     code coverage
+     vget interface + direct urls
+        -next step: integrating with EzHttp
+            -will have to find audio stream url however
+     future fork to android
+     getting shyam to include comprehensive test suite
+     include:
+        https://github.com/kronicmage/summative/commits/master
+        html attachment of light and full test output of downloader
+     */
+
     @DataProvider(name = "links")
     public static Object[][] getLinks(ITestContext context) {
         Object[][] fullList = new Object[][] {
