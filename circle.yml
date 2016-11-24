@@ -1,8 +1,4 @@
-test:
-  post:
-    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - cp -r "/home/ubuntu/summative/Summative/target/surefire-reports/junitreports/*" $CIRCLE_TEST_REPORTS/junit
-general:
+  general:
   artifacts:
     - "Summative/target/surefire-reports"
     - "Summative/download"
@@ -14,3 +10,5 @@ dependencies:
 test:
   post:
     - mvn -f "/home/ubuntu/summative/Summative" test
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - cp -r "/home/ubuntu/summative/Summative/target/surefire-reports/junitreports/*" $CIRCLE_TEST_REPORTS/junit/
