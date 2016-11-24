@@ -9,5 +9,7 @@ general:
 
 test:
   override:
-    - cd "~/summative/Summative"
+    - ls
+    - cd "summative"
+    - ls
     - mvn test
