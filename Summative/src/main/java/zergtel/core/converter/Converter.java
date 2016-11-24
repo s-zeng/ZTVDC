@@ -18,7 +18,7 @@ public class Converter
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Completed");
+        System.out.println("Completed!");
     }
 
     public void cancel() { app.destroy(); }
