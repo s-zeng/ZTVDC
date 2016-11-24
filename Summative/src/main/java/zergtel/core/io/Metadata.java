@@ -1,9 +1,10 @@
 package zergtel.core.io;
 
-import com.xuggle.xuggler.*;
+import com.xuggle.xuggler.IContainer;
+import com.xuggle.xuggler.IMetaData;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.Map;
 
 
 public class Metadata {
@@ -14,7 +15,7 @@ public class Metadata {
         iW.open(file.getPath(), IContainer.Type.WRITE, null);
         IMetaData data = IMetaData.make();
         //data.setValue(); // setValue(String keys, String value)
-        iW.setMetaData((IMetaData) data);
+        iW.setMetaData(data);
         iW.close();
     }
 

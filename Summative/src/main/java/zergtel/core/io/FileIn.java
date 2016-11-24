@@ -1,6 +1,7 @@
 package zergtel.core.io;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 
 public class FileIn
@@ -12,7 +13,7 @@ public class FileIn
     private int char1;
     public String getName(File f) throws IOException
     {
-        fileName = new String(f.getName());
+        fileName = f.getName();
         return fileName;
     }
 

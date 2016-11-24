@@ -1,12 +1,7 @@
 package zergtel.core.downloader;
 
 
-import com.github.axet.vget.*;
-
-import java.io.File;
-import java.net.URI;
 import java.net.URL;
-import java.util.Arrays;
 
 
 public class Downloader {

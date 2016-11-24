@@ -71,7 +71,7 @@ public class DownloaderTest {
         File downloadDir = new File(EzHttp.getDownloadLocation());
         String[]entries = downloadDir.list();
         System.out.println("blah");
-        for(String s: entries){
+        for(String s: entries != null ? entries : new String[0]){
             File currentFile = new File(downloadDir.getPath(),s);
             currentFile.delete();
         }
