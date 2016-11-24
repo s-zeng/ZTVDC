@@ -3,6 +3,10 @@ general:
     - "Summative/target/surefire-reports"
     - "Summative/download"
 
+machine:
+  java:
+    version: openjdk8
+
 dependencies:
   post:
     - mvn -f "/home/ubuntu/summative/Summative" dependency:resolve
@@ -11,4 +15,4 @@ test:
   post:
     - mvn -f "/home/ubuntu/summative/Summative" test
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - cp -r "/home/ubuntu/summative/Summative/target/surefire-reports/junitreports/*" $CIRCLE_TEST_REPORTS/junit/
+    - cp -r "/home/ubuntu/summative/Summative/target/surefire-reports/junitreports/" $CIRCLE_TEST_REPORTS/junit/
