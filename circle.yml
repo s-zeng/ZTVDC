@@ -3,10 +3,6 @@ general:
     - "Summative/target/surefire-reports"
     - "Summative/download"
 
-machine:
-  java:
-    version: openjdk8
-
 dependencies:
   post:
     - mvn -f "/home/ubuntu/summative/Summative" dependency:resolve
