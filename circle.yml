@@ -1,13 +1,16 @@
 test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - find . -type f -regex ".*/Summative/target/surefire-reports/junitreports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    - find "/home/ubuntu/summative/Summative/target/surefire-reports/junitreports/" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 general:
   artifacts:
     - "Summative/target/surefire-reports"
     - "Summative/download"
 
-test:
+dependencies:
   post:
     - mvn -f "/home/ubuntu/summative/Summative" dependency:resolve
+
+test:
+  post:
     - mvn -f "/home/ubuntu/summative/Summative" test
