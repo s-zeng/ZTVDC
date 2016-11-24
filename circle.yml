@@ -11,5 +11,4 @@ test:
     - mvn -f "/home/ubuntu/summative/Summative" test
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - cp -r "/home/ubuntu/summative/Summative/target/surefire-reports/junitreports/" $CIRCLE_TEST_REPORTS/junit/
     - cp -r "/home/ubuntu/summative/Summative/target/surefire-reports/" $CIRCLE_TEST_REPORTS/
