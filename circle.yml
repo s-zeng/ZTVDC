@@ -9,6 +9,5 @@ general:
 
 test:
   override:
-    - cd "Summative"
-    - cd "Summative"
+    - cd "/home/ubuntu/summative/Summative"
     - mvn test
