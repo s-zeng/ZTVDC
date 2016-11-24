@@ -19,7 +19,6 @@ public class Converter
             e.printStackTrace();
         }
         System.out.println("Completed");
-
     }
 
     public void cancel() { app.destroy(); }
