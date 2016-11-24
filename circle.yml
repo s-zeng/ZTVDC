@@ -1,7 +1,7 @@
 test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - find "/home/ubuntu/summative/Summative/target/surefire-reports/junitreports/" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    - cp -r "/home/ubuntu/summative/Summative/target/surefire-reports/junitreports/*" $CIRCLE_TEST_REPORTS/junit
 general:
   artifacts:
     - "Summative/target/surefire-reports"
