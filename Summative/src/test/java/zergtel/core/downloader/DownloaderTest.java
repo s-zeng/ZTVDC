@@ -1,12 +1,15 @@
 package zergtel.core.downloader;
 
-import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
+import org.testng.ITestContext;
+import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
+import java.io.File;
 import java.util.Arrays;
+import java.util.List;
+
 
 /**
  * Created by Simon on 11/22/2016.
@@ -28,30 +31,58 @@ public class DownloaderTest {
      * filetype checking for raw http downloads (overall just more comprehensive url parsing)
      * temp file handling and cleanup
      * bandcamp additional quality/format detection
-     * automated testing
+//     * -automated testing- done
      * metadata getting from youtube!
      *
      * ...and maybe then we can start on the ui :)
      */
 
     @DataProvider(name = "links")
-    public static Object[][] getLinks() {
-        return new Object[][] {
+    public static Object[][] getLinks(ITestContext context) {
+        Object[][] fullList = new Object[][] {
             {"https://insaneintherainmusic.bandcamp.com/album/live-at-grillbys"},
+            {"http://souleyedigitalmusic.bandcamp.com/album/extreme-road-trip-ost"},
             {"http://simonzeng.tk/example.mp3"},
             {"https://www.youtube.com/watch?v=f4yvZF1cMz0"},
             {"https://vimeo.com/29950141"},
-            {"https://www.youtube.com/watch?v=4zLfCnGVeL4"}
+            {"https://www.youtube.com/watch?v=4zLfCnGVeL4"},
+            {"https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
         };
+        Object[][] lightList = new Object[][] {
+            {"http://souleyedigitalmusic.bandcamp.com/album/extreme-road-trip-ost"},
+            {"http://simonzeng.tk/example.mp3"},
+            {"https://www.youtube.com/watch?v=f4yvZF1cMz0"}
+        };
+
+        List<String> includedGroups = Arrays.asList(context.getIncludedGroups());
+
+        if(includedGroups.contains("downloadLight")) {
+            return lightList;
+        }
+        else if (includedGroups.contains("downloadFull")) {
+            return fullList;
+        }
+
+        return null;
     }
 
+    @BeforeGroups(groups = {"downloadLight", "downloadFull"})
+    public static void clearDownloads() {
+        File downloadDir = new File(EzHttp.getDownloadLocation());
+        String[]entries = downloadDir.list();
+        System.out.println("blah");
+        for(String s: entries){
+            File currentFile = new File(downloadDir.getPath(),s);
+            currentFile.delete();
+        }
+    }
 
-    @Test(dataProvider = "links")
+    @Test(dataProvider = "links", groups = {"downloadLight", "downloadFull"})
     public void testGet(String link) throws Exception {
         System.out.println("Link test: " + link);
         String downLocation = Downloader.get(link);
-        String[] paths = downLocation.split("\\/");
-        Arrays.toString(paths);
+        String[] paths = downLocation.split("\\/|\\\\");
+        System.out.println(Arrays.toString(paths));
 
         Assert.assertTrue(true);
 

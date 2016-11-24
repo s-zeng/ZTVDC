@@ -8,7 +8,6 @@ import com.google.gson.JsonParser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.net.URI;
 import java.net.URL;
 
 
@@ -34,7 +33,7 @@ public class Bandcamp {
         String[] downloadedFiles = extractFiles(tmp);
         tmp.delete();
 
-        return downloadedFiles[3];
+        return downloadedFiles[0];
     }
 
     public static String get(String url) throws Exception{
