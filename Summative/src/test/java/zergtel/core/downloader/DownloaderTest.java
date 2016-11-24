@@ -27,11 +27,8 @@ public class DownloaderTest {
      * vimeo fix, integration of vget library for greater changes
      * 	-notably, replacing axet's wget library with my own http client
      * error handling paradigm design
-     * imports cleanup
      * filetype checking for raw http downloads (overall just more comprehensive url parsing)
-     * temp file handling and cleanup
      * bandcamp additional quality/format detection
-//     * -automated testing- done
      * metadata getting from youtube!
      *
      * ...and maybe then we can start on the ui :)
