@@ -5,3 +5,4 @@ test:
 general:
   artifacts:
     - "Summative/target/surefire-reports"
+    - "Summative/download"
