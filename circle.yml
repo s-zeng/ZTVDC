@@ -8,6 +8,6 @@ general:
     - "Summative/download"
 
 test:
-  override:
+  post:
     - cd "/home/ubuntu/summative/Summative"
     - mvn test
