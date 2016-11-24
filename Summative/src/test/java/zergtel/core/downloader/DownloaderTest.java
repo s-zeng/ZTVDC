@@ -38,8 +38,7 @@ public class DownloaderTest {
     Week of 11/21 topics to write about:
      Set up automated testing
         -TestNG
-        -lack of ci :(
-        -or maybe circle ci...?
+     Getting circle ci to co-operate
      downloader get output standardizing
      comparison testing
      code coverage
