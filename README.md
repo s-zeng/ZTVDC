@@ -1,5 +1,7 @@
 # Zergtel Download Converter
 
+[![CircleCI](https://circleci.com/gh/kronicmage/summative.svg?style=svg)](https://circleci.com/gh/kronicmage/summative)
+
 2016-09-14
 
 Zergtel Download Converter is a sane, flexible and reliable appliction for downloading and converting of any video or audio file. Zergtel supports any audio or video file from any location, including from online sites such as YouTube.
