@@ -9,5 +9,5 @@ general:
 
 test:
   override:
-    - cd "Summative"
+    - cd "summative/Summative"
     - mvn test
