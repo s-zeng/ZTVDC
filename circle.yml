@@ -9,7 +9,6 @@ general:
 
 test:
   override:
-    - ls
     - cd "Summative"
-    - ls
+    - cd "summative"
     - mvn test
