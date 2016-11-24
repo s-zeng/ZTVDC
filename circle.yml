@@ -9,5 +9,4 @@ general:
 
 test:
   post:
-    - cd "/home/ubuntu/summative/Summative"
-    - mvn test
+    - mvn -f "/home/ubuntu/summative/Summative" test
