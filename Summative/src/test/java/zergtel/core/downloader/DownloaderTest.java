@@ -35,21 +35,7 @@ public class DownloaderTest {
      */
 
     /**
-    Week of 11/21 topics to write about:
-     Set up automated testing
-        -TestNG
-     Getting circle ci to co-operate
-     downloader get output standardizing
-     comparison testing
-     code coverage
-     vget interface + direct urls
-        -next step: integrating with EzHttp
-            -will have to find audio stream url however
-     future fork to android
-     getting shyam to include comprehensive test suite
-     include:
-        https://github.com/kronicmage/summative/commits/master
-        html attachment of light and full test output of downloader
+    Week of 11/28 topics to write about:
      */
 
     @DataProvider(name = "links")
