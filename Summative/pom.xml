@@ -13,6 +13,10 @@
             <id>xuggle repo</id>
             <url>https://files.liferay.com/mirrors/xuggle.googlecode.com/svn/trunk/repo/share/java/</url>
         </repository>
+        <repository>
+            <id>google-api-services</id>
+            <url>http://google-api-client-libraries.appspot.com/mavenrepo</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -20,6 +24,11 @@
             <groupId>xuggle</groupId>
             <artifactId>xuggle-xuggler</artifactId>
             <version>5.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-youtube</artifactId>
+            <version>RELEASE</version>
         </dependency>
         <dependency>
             <groupId>com.github.axet</groupId>
