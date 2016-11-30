@@ -1,5 +1,5 @@
 package zergtel.core.searcher;
-import com.google.*;
+import com.google.api.*;
 
 /**
  * Created by Shyam on 2016-11-25.
