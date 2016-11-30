@@ -28,7 +28,7 @@
         <dependency>
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-youtube</artifactId>
-            <version>RELEASE</version>
+            <version>v3-rev180-1.22.0</version>
         </dependency>
         <dependency>
             <groupId>com.github.axet</groupId>
