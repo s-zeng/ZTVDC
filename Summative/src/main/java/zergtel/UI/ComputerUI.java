@@ -7,7 +7,8 @@ import javafx.scene.web.WebView;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 /**
  * Created by Shyam on 2016-10-25.
@@ -35,8 +36,7 @@ public class ComputerUI extends JFrame {
                 }
             });
         setVisible(true);
-      /*  JFXPanel browser = new JFXPanel();
-        browser.setBounds(100, 100, 1820, 800);
+        JFXPanel browser = new JFXPanel();
         browser.setVisible(true);
         c.add(browser);
 
@@ -44,7 +44,8 @@ public class ComputerUI extends JFrame {
             WebView youtube = new WebView();
             browser.setScene(new Scene(youtube));
             youtube.getEngine().load("https://www.youtube.com/");
-        });*/
+        });
+        pack();
     }
 
 }
