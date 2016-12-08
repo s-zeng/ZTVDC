@@ -14,10 +14,13 @@ import java.awt.event.ComponentEvent;
  * Created by Shyam on 2016-10-25.
  */
 public class ComputerUI extends JFrame {
+    String options[] = {"---Select an Option---", "File", "Settings", "Lisense", "Version"};
     Dimension minSize = new Dimension(640,480);
-    private JButton[] buttons = new JButton[6];
-    private JPanel[] panels = new JPanel[3];
-    private JButton logo = new JButton();
+    JPanel logo = new JPanel();
+    JPanel filler = new JPanel();
+    JPanel commands = new JPanel();
+    JComboBox logoBox = new JComboBox(options);
+
     public ComputerUI() {
         setTitle("ZergTel VDC");
         setResizable(true);
@@ -26,6 +29,7 @@ public class ComputerUI extends JFrame {
         setBackground(new Color(44, 42, 43));
         setMinimumSize(minSize);
         setLayout(l);
+        logo.add(logoBox);
         this.addComponentListener(new ComponentAdapter(){
             public void componentResized(ComponentEvent e){
                 Dimension size = ComputerUI.this.getSize();
@@ -37,24 +41,31 @@ public class ComputerUI extends JFrame {
                 }
             });
         setVisible(true);
+        logo.setBorder(BorderFactory.createTitledBorder("ZergTel VDC"));
         JFXPanel browser = new JFXPanel();
         browser.setVisible(true);
-        logo.setBounds(0, 0, 200, 150);
-        Platform.runLater(() -> {
+            Platform.runLater(() -> {
             WebView youtube = new WebView();
             browser.setScene(new Scene(youtube));
             browser.setBounds(200, 150, 1000, 1000);
             youtube.getEngine().load("https://www.youtube.com/");
         });
-        l.setHorizontalGroup(l
-                .createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addGroup(l.createSequentialGroup()
-                    .addComponent(logo, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addComponent(browser, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-        l.setVerticalGroup(l.createSequentialGroup()
-        .addGroup(l.createParallelGroup(GroupLayout.Alignment.TRAILING))
-            .addComponent(logo)
-        .addComponent(browser));
-    }
+        browser.setBorder(BorderFactory.createTitledBorder("Searcher"));
+        commands.setBorder(BorderFactory.createTitledBorder("Menu"));
+        l.setHorizontalGroup(l.createSequentialGroup()
+        .addGroup(l.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                .addComponent(logo)
+                .addComponent(commands))
+        .addGroup(l.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addComponent(filler)
+                .addComponent(browser)));
 
+        l.setVerticalGroup(l.createSequentialGroup()
+        .addGroup(l.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(logo)
+                .addComponent(filler))
+        .addGroup(l.createParallelGroup()
+                .addComponent(commands)
+                .addComponent(browser)));
+    }
 }
