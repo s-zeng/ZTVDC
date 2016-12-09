@@ -33,7 +33,7 @@ public class Bandcamp {
         String[] downloadedFiles = extractFiles(tmp);
         tmp.delete();
 
-        return downloadedFiles[0];
+        return "Replace this string later";
     }
 
     public static String get(String url) throws Exception{
@@ -43,6 +43,7 @@ public class Bandcamp {
     private static String[] extractFiles(File file) {
         //such a good debug tool for json shenanigans: http://jsonviewer.stack.hu/
         String rawJson = extractLine(file, "poppler");
+//        System.out.println(rawJson);
 
         //preprocessing json
         rawJson = "{".concat(rawJson.trim());

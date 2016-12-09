@@ -50,7 +50,7 @@ public class DownloaderTest {
             {"https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
         };
         Object[][] lightList = new Object[][] {
-            {"http://souleyedigitalmusic.bandcamp.com/album/extreme-road-trip-ost"},
+            {"https://souleyedigitalmusic.bandcamp.com/album/extreme-road-trip-ost"},
             {"http://simonzeng.tk/example.mp3"},
             {"https://www.youtube.com/watch?v=f4yvZF1cMz0"}
         };
