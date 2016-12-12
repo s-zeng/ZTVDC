@@ -1,8 +1,9 @@
 package zergtel.core.converter;
 
-import sun.security.util.SecurityConstants;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 
 public class Converter extends Thread
@@ -12,6 +13,9 @@ public class Converter extends Thread
     String name, format;
     public void convert(File f, String n, String fn)
     {
+        file = f;
+        name = n;
+        format = fn;
         try {
             String cmd = "C:/Users/User/IdeaProjects/summative/Summative/bin/FFMPEG/bin/ffmpeg -i " + f.getAbsolutePath() + " " + n + "." + fn;
             Runtime convert = Runtime.getRuntime();
@@ -28,6 +32,7 @@ public class Converter extends Thread
         convert(file, name, format);
         }
     });
+
 
     public void cancel() { th.destroy(); }
     public void pause() { th.stop(); }

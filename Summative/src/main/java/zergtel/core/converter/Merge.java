@@ -11,6 +11,10 @@ public class Merge extends Thread{
     String name, format;
     public void merge(File f1, File f2, String n, String fn)
     {
+        file1 = f1;
+        file2 = f2;
+        name = n;
+        format = fn;
         try {
             String cmd = "C:/Users/User/IdeaProjects/summative/Summative/bin/FFMPEG/bin/ffmpeg -i " + f1.getAbsolutePath() + " -i " + f2.getAbsolutePath() + " -c:v copy -c:a copy " + n + "." + fn;
             Runtime convert = Runtime.getRuntime();
