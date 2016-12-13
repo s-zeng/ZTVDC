@@ -8,9 +8,9 @@ import java.io.InputStreamReader;
 
 public class Converter extends Thread
 {
-    Process app;
-    File file;
-    String name, format;
+    private Process app;
+    private File file;
+   private String name, format;
     public void convert(File f, String n, String fn)
     {
         file = f;
@@ -24,7 +24,7 @@ public class Converter extends Thread
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Completed!");
+        System.out.println("Working!");
     }
     Thread th = new Thread(new Runnable() {
         @Override

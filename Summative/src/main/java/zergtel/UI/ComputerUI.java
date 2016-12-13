@@ -1,6 +1,9 @@
 package zergtel.UI;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker.State;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
@@ -22,7 +25,7 @@ import java.io.File;
  */
 public class ComputerUI extends JFrame implements ActionListener{
     private int start = 0;
-    private String url = "https://youtube.com"; //this will be used for webview, DO NOT KEEP IN FINAL PRODUCT
+    private String url; //this will be used for webview, DO NOT KEEP IN FINAL PRODUCT
     private String options[] = {"PlaceHolder", "File", "Settings", "Lisense", "Version"};
     private String u1, u2, name, format;
     private File f1, f2;
@@ -34,6 +37,8 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JPanel convert = new JPanel();
     private JPanel search = new JPanel();
     private JFXPanel browser = new JFXPanel();
+    private WebView youtube;
+    private WebEngine youtubeEngine;
     private JButton downloadUrl = new JButton("Download with URL");
     private JButton converter = new JButton("Convert");
     private JButton merge = new JButton("Merge");
@@ -80,6 +85,23 @@ public class ComputerUI extends JFrame implements ActionListener{
         convert.add(converter);
         convert.add(merge);
         search.add(searchKW);
+
+        Platform.runLater(() -> {
+            youtube = new WebView();
+            youtubeEngine = youtube.getEngine();
+            youtubeEngine.load("https://youtube.com");
+            browser.setScene(new Scene(youtube));
+            youtubeEngine.getLoadWorker().stateProperty().addListener(
+                    new ChangeListener<State>() {
+                        @Override
+                        public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
+                            if(newValue == State.SUCCEEDED)
+                                url = youtubeEngine.getLocation();
+                            System.out.println(url);
+                        }
+                    }
+            );
+        });
 
         browser.setBorder(BorderFactory.createTitledBorder("Searcher"));
         commands.setBorder(BorderFactory.createTitledBorder("Menu"));
@@ -140,73 +162,47 @@ public class ComputerUI extends JFrame implements ActionListener{
         merge.addActionListener(this);
         searchKW.addActionListener(this);
 
+
+
         info.showMessageDialog(null, "Click Download with URL to search a video to download, or else click convert/merge to use that function!");
         }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == downloadUrl)
-        {
-            if(start == 0) {
-                info.showMessageDialog(null, "In order to download a video, click the download button when watching the video you would like to download", "How to download", info.PLAIN_MESSAGE);
-                start++;
+        if (e.getSource() == downloadUrl) {
+            info.showMessageDialog(null, "Click download while playing the youtube video.");
+            Platform.runLater(() ->
+                    youtubeEngine.reload());
+                try {
+                Downloader.get(url);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                failure.showMessageDialog(null, "Oh no! Something goofed!", "Error", failure.ERROR_MESSAGE);
+
             }
-            Platform.runLater(() -> {
-                WebView youtube = new WebView();
-                WebEngine youtubeEngine = youtube.getEngine();
-                if(url.equals("https://youtube.com")) {
-                    browser.setScene(new Scene(youtube));
-                    youtubeEngine.load(url);
-                    url += "a";
-                } else {
-                    url = youtubeEngine.getLocation();
-                    try {
-                        Downloader.get(url); //GET SIMON TO NOTIFY HOW TO PROPERLY DOWNLOAD VIA URL
-                    } catch(Exception ex) {
-                        failure.showMessageDialog(null, "Oh no! Something goofed!", "Error", failure.ERROR_MESSAGE);
-                    }
-                }
-            });
 
         }
+
         if (e.getSource() == converter) {
             Converter c = new Converter();
-            u1 = userI1.showInputDialog(null, "Insert the name of the file (INCLUDE .FORMAT!!!!!!!!) example: test.mp4");
+            u1 = userI1.showInputDialog(null, "Insert the directory of the file.");
             name = userI3.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
             format = userI4.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
-            File location = new File("C:\\");
-            File[] listOfFiles = location.listFiles();
-            for (int i = 0; i < listOfFiles.length; i++) {
-                String filename = listOfFiles[i].getName();
-                if (filename.endsWith(u1))
-                    f1 = listOfFiles[i];
-            }
-                c.convert(f1.getAbsoluteFile(), name, format);
+            f1 = new File(u1);
+            c.convert(f1, name, format);
         }
         if(e.getSource() == merge) {
             Merge m = new Merge();
-            u1 = userI1.showInputDialog(null, "Insert the name of the video file (INCLUDE .FORMAT!!!!!!!!) example: test.mp4");
-            u2 = userI2.showInputDialog(null, "Insert the name of the audio file (INCLUDE FORMAT!!!!!!!!) example test.mp3");
+            u1 = userI1.showInputDialog(null, "Insert the directory of the video file");
+            u2 = userI2.showInputDialog(null, "Insert the directory of the audio file");
             name = userI3.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
             format = userI4.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
-            File location1 = new File("C:\\");
-            File[] listOfFiles1 = location1.listFiles();
-            for (int i = 0; i < listOfFiles1.length; i++) {
-                String filename = listOfFiles1[i].getName();
-                if (filename.endsWith(u1))
-                    f1 = listOfFiles1[i];
-            }
-            File location2 = new File("C:\\");
-            File[] listOfFiles2 = location2.listFiles();
-            for (int i = 0; i < listOfFiles2.length; i++) {
-                String filename = listOfFiles2[i].getName();
-                if (filename.endsWith(u1))
-                    f2 = listOfFiles2[i];
-            }
-            m.merge(f1.getAbsoluteFile(), f2.getAbsoluteFile(), name, format);
+            f1 = new File(u1);
+            f2 = new File(u2);
+            m.merge(f1, f2, name, format);
         }
         if(e.getSource() == searchKW)
-            info.showMessageDialog(null, "This will be available soon!");
+            info.showMessageDialog(null, "This feature is coming soon");
     }
 }
 

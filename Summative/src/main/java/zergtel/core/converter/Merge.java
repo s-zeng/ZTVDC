@@ -24,7 +24,7 @@ public class Merge extends Thread{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Completed");
+        System.out.println("Working!");
 
     }
     Thread th = new Thread(new Runnable() {
