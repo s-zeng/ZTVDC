@@ -164,6 +164,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         .addComponent(searchKW, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
         downloadUrl.addActionListener(this);
+        downloadLink.addActionListener(this);
         converter.addActionListener(this);
         merge.addActionListener(this);
         searchKW.addActionListener(this);
@@ -184,7 +185,15 @@ public class ComputerUI extends JFrame implements ActionListener{
             }
 
         }
-
+        if (e.getSource() == downloadLink) {
+            u1 = userI1.showInputDialog(null, "Insert the url for the video");
+            try {
+                Downloader.get(u1);
+            } catch (Exception ex){
+                ex.printStackTrace();
+                failure.showMessageDialog(null, "Oh no! Something goofed!", "Error", failure.ERROR_MESSAGE);
+            }
+        }
         if (e.getSource() == converter) {
             Converter c = new Converter();
             u1 = userI1.showInputDialog(null, "Insert the directory of the file.");
