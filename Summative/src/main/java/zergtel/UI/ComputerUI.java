@@ -39,10 +39,11 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JFXPanel browser = new JFXPanel();
     private WebView youtube;
     private WebEngine youtubeEngine;
-    private JButton downloadUrl = new JButton("Download with URL");
+    private JButton downloadUrl = new JButton("Download with URL in Searcher");
+    private JButton downloadLink = new JButton("Download with URL");
     private JButton converter = new JButton("Convert");
     private JButton merge = new JButton("Merge");
-    private JButton searchKW = new JButton("Coming Soon!");
+    private JButton searchKW = new JButton("Reload");
     private JOptionPane info = new JOptionPane();
     private JOptionPane failure = new JOptionPane();
     private JOptionPane userI1 = new JOptionPane();
@@ -111,7 +112,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         search.setBorder(BorderFactory.createTitledBorder("Searcher"));
 
         l.setHorizontalGroup(l.createSequentialGroup()
-        .addGroup(l.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                .addGroup(l.createParallelGroup(GroupLayout.Alignment.TRAILING)
                 .addComponent(logo)
                 .addComponent(commands))
         .addGroup(l.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -138,9 +139,14 @@ public class ComputerUI extends JFrame implements ActionListener{
         .addComponent(search, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
         dL.setHorizontalGroup(dL.createSequentialGroup()
-        .addComponent(downloadUrl, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        .addGroup(dL.createParallelGroup(GroupLayout.Alignment.LEADING)
+        .addComponent(downloadUrl, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(downloadLink, 0 ,GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         dL.setVerticalGroup(dL.createSequentialGroup()
-        .addComponent(downloadUrl, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        .addGroup(dL.createParallelGroup(GroupLayout.Alignment.CENTER))
+        .addComponent(downloadUrl, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGroup(dL.createParallelGroup(GroupLayout.Alignment.CENTER)
+        .addComponent(downloadLink, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         cL2.setHorizontalGroup(cL2.createSequentialGroup()
         .addGroup(cL2.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -162,8 +168,6 @@ public class ComputerUI extends JFrame implements ActionListener{
         merge.addActionListener(this);
         searchKW.addActionListener(this);
 
-
-
         info.showMessageDialog(null, "Click Download with URL to search a video to download, or else click convert/merge to use that function!");
         }
 
@@ -171,9 +175,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == downloadUrl) {
             info.showMessageDialog(null, "Click download while playing the youtube video.");
-            Platform.runLater(() ->
-                    youtubeEngine.reload());
-                try {
+            try {
                 Downloader.get(url);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -202,7 +204,8 @@ public class ComputerUI extends JFrame implements ActionListener{
             m.merge(f1, f2, name, format);
         }
         if(e.getSource() == searchKW)
-            info.showMessageDialog(null, "This feature is coming soon");
+            Platform.runLater(() ->
+                    youtubeEngine.reload());
     }
 }
 
