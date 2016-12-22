@@ -42,7 +42,6 @@ public class DownloaderTest {
     public static Object[][] getLinks(ITestContext context) {
         Object[][] fullList = new Object[][] {
             {"https://insaneintherainmusic.bandcamp.com/album/live-at-grillbys"},
-            {"http://souleyedigitalmusic.bandcamp.com/album/extreme-road-trip-ost"},
             {"http://simonzeng.tk/example.mp3"},
             {"https://www.youtube.com/watch?v=f4yvZF1cMz0"},
             {"https://vimeo.com/29950141"},
