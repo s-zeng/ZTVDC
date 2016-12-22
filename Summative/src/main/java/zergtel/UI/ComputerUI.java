@@ -27,7 +27,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private int start = 0;
     private String url; //this will be used for webview, DO NOT KEEP IN FINAL PRODUCT
     private String options[] = {"PlaceHolder", "File", "Settings", "Lisense", "Version"};
-    private String u1, u2, name, format;
+    private String u1, u2, directory, name, format;
     private File f1, f2;
     private Dimension minSize = new Dimension(640,480);
     private JPanel logo = new JPanel();
@@ -36,7 +36,11 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JPanel download = new JPanel();
     private JPanel convert = new JPanel();
     private JPanel search = new JPanel();
-    private JFXPanel browser = new JFXPanel();
+    private JPanel convertProgress[] = new JPanel[0];
+    private JPanel openingPanel = new JPanel();
+    private JPanel downloadPanel = new JPanel();
+    private JPanel convertPanel = new JPanel();
+    private JFXPanel searchPanel = new JFXPanel();
     private WebView youtube;
     private WebEngine youtubeEngine;
     private JButton downloadUrl = new JButton("Download with URL in Searcher");
@@ -46,11 +50,8 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JButton searchKW = new JButton("Reload");
     private JOptionPane info = new JOptionPane();
     private JOptionPane failure = new JOptionPane();
-    private JOptionPane userI1 = new JOptionPane();
-    private JOptionPane userI2 = new JOptionPane();
-    private JOptionPane userI3 = new JOptionPane();
-    private JOptionPane userI4 = new JOptionPane();
-    private JComboBox logoBox = new JComboBox(options);
+    private JOptionPane userI = new JOptionPane();
+
 
     public ComputerUI() {
         setTitle("ZergTel VDC");
@@ -75,13 +76,16 @@ public class ComputerUI extends JFrame implements ActionListener{
         GroupLayout dL = new GroupLayout(download);
         GroupLayout cL2 = new GroupLayout(convert);
         GroupLayout sL = new GroupLayout(search);
+        GridLayout converterDisplayLayout = new GridLayout(1, convertProgress.length);
+
         setLayout(l);
         commands.setLayout(cL);
         download.setLayout(dL);
         convert.setLayout(cL2);
+        convertPanel.setLayout(converterDisplayLayout);
         search.setLayout(sL); //I made seperate layouts in order to make them resizeable
 
-        logo.add(logoBox);
+        download.add(downloadLink);
         download.add(downloadUrl);
         convert.add(converter);
         convert.add(merge);
@@ -91,7 +95,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             youtube = new WebView();
             youtubeEngine = youtube.getEngine();
             youtubeEngine.load("https://youtube.com");
-            browser.setScene(new Scene(youtube));
+            searchPanel.setScene(new Scene(youtube));
             youtubeEngine.getLoadWorker().stateProperty().addListener(
                     new ChangeListener<State>() {
                         @Override
@@ -104,7 +108,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             );
         });
 
-        browser.setBorder(BorderFactory.createTitledBorder("Searcher"));
+        searchPanel.setBorder(BorderFactory.createTitledBorder("Searcher"));
         commands.setBorder(BorderFactory.createTitledBorder("Menu"));
         logo.setBorder(BorderFactory.createTitledBorder("ZergTel VDC"));
         download.setBorder(BorderFactory.createTitledBorder("Downloader"));
@@ -113,18 +117,18 @@ public class ComputerUI extends JFrame implements ActionListener{
 
         l.setHorizontalGroup(l.createSequentialGroup()
                 .addGroup(l.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                .addComponent(logo)
-                .addComponent(commands))
+                .addComponent(logo, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(commands, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addGroup(l.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addComponent(filler)
-                .addComponent(browser,  0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                .addComponent(searchPanel)));
         l.setVerticalGroup(l.createSequentialGroup()
         .addGroup(l.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                .addComponent(logo)
+                .addComponent(logo, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(filler))
         .addGroup(l.createParallelGroup()
                 .addComponent(commands, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(browser,  0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                .addComponent(searchPanel)));
 
         cL.setHorizontalGroup(cL.createSequentialGroup()
                 .addGroup(cL.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -169,24 +173,27 @@ public class ComputerUI extends JFrame implements ActionListener{
         merge.addActionListener(this);
         searchKW.addActionListener(this);
 
-        info.showMessageDialog(null, "Click Download with URL to search a video to download, or else click convert/merge to use that function!");
+        info.showMessageDialog(null, "Click Download with URL in Searcher once to get instructions, then the rest of the time click it to download, or else click convert/merge to use that function!");
         }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == downloadUrl) {
-            info.showMessageDialog(null, "Click download while playing the youtube video.");
-            try {
-                Downloader.get(url);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                failure.showMessageDialog(null, "Oh no! Something goofed!", "Error", failure.ERROR_MESSAGE);
+            if(start == 0) {
+                info.showMessageDialog(null, "Reload the page with the desired download video. Click download while playing the youtube video.");
+                start++;
+            } else {
+                try {
+                    Downloader.get(url);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    failure.showMessageDialog(null, "Oh no! Something goofed!", "Error", failure.ERROR_MESSAGE);
 
+                }
             }
-
         }
         if (e.getSource() == downloadLink) {
-            u1 = userI1.showInputDialog(null, "Insert the url for the video");
+            u1 = userI.showInputDialog(null, "Insert the url for the video");
             try {
                 Downloader.get(u1);
             } catch (Exception ex){
@@ -196,21 +203,23 @@ public class ComputerUI extends JFrame implements ActionListener{
         }
         if (e.getSource() == converter) {
             Converter c = new Converter();
-            u1 = userI1.showInputDialog(null, "Insert the directory of the file.");
-            name = userI3.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
-            format = userI4.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
+            u1 = userI.showInputDialog(null, "Insert the directory of the file.");
+            directory = userI.showInputDialog(null, "Insert the directory of the output file");
+            name = userI.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
+            format = userI.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
             f1 = new File(u1);
-            c.convert(f1, name, format);
+            c.convert(f1, directory, name, format);
         }
         if(e.getSource() == merge) {
             Merge m = new Merge();
-            u1 = userI1.showInputDialog(null, "Insert the directory of the video file");
-            u2 = userI2.showInputDialog(null, "Insert the directory of the audio file");
-            name = userI3.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
-            format = userI4.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
+            u1 = userI.showInputDialog(null, "Insert the directory of the video file");
+            u2 = userI.showInputDialog(null, "Insert the directory of the audio file");
+            directory = userI.showInputDialog(null, "Insert the directory of the output file");
+            name = userI.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
+            format = userI.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
             f1 = new File(u1);
             f2 = new File(u2);
-            m.merge(f1, f2, name, format);
+            m.merge(f1, f2, directory, name, format);
         }
         if(e.getSource() == searchKW)
             Platform.runLater(() ->
