@@ -26,7 +26,6 @@ import java.io.File;
 public class ComputerUI extends JFrame implements ActionListener{
     private int start = 0;
     private String url; //this will be used for webview, DO NOT KEEP IN FINAL PRODUCT
-    private String options[] = {"PlaceHolder", "File", "Settings", "Lisense", "Version"};
     private String u1, u2, directory, name, format;
     private File f1, f2;
     private Dimension minSize = new Dimension(1024, 576);
