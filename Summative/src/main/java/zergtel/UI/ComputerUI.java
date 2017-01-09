@@ -29,7 +29,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private String options[] = {"PlaceHolder", "File", "Settings", "Lisense", "Version"};
     private String u1, u2, directory, name, format;
     private File f1, f2;
-    private Dimension minSize = new Dimension(640,480);
+    private Dimension minSize = new Dimension(1024, 576);
     private JPanel logo = new JPanel();
     private JPanel filler = new JPanel();
     private JPanel commands = new JPanel();
@@ -51,7 +51,6 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JOptionPane info = new JOptionPane();
     private JOptionPane failure = new JOptionPane();
     private JOptionPane userI = new JOptionPane();
-
 
     public ComputerUI() {
         setTitle("ZergTel VDC");
@@ -117,30 +116,30 @@ public class ComputerUI extends JFrame implements ActionListener{
 
         l.setHorizontalGroup(l.createSequentialGroup()
                 .addGroup(l.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                .addComponent(logo, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(commands, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addGroup(l.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(filler)
-                .addComponent(searchPanel)));
+                        .addComponent(logo, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(commands, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(l.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(filler)
+                        .addComponent(searchPanel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         l.setVerticalGroup(l.createSequentialGroup()
-        .addGroup(l.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                .addComponent(logo, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(filler))
-        .addGroup(l.createParallelGroup()
-                .addComponent(commands, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(searchPanel)));
+                .addGroup(l.createParallelGroup(GroupLayout.Alignment.CENTER)
+                        .addComponent(logo, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(filler))
+                .addGroup(l.createParallelGroup()
+                        .addComponent(commands, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(searchPanel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         cL.setHorizontalGroup(cL.createSequentialGroup()
                 .addGroup(cL.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addComponent(download, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(convert, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(search, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))); //Adding the parameter 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE allows it to force resize, or else it will stay at min size.
+                .addComponent(search))); //Adding the parameter 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE allows it to force resize, or else it will stay at min size.
         cL.setVerticalGroup(cL.createSequentialGroup()
         .addGroup(cL.createParallelGroup(GroupLayout.Alignment.BASELINE)
         .addComponent(download, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addGroup(cL.createParallelGroup(GroupLayout.Alignment.BASELINE)
         .addComponent(convert, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addComponent(search, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        .addComponent(search));
 
         dL.setHorizontalGroup(dL.createSequentialGroup()
         .addGroup(dL.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -194,6 +193,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         }
         if (e.getSource() == downloadLink) {
             u1 = userI.showInputDialog(null, "Insert the url for the video");
+
             try {
                 Downloader.get(u1);
             } catch (Exception ex){
