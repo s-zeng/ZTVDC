@@ -42,7 +42,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JFXPanel searchPanel = new JFXPanel();
     private WebView youtube;
     private WebEngine youtubeEngine;
-    private JButton downloadUrl = new JButton("Download with URL in Searcher");
+    private JButton downloadUrl = new JButton("Download with URL in SearcherExample");
     private JButton downloadLink = new JButton("Download with URL");
     private JButton converter = new JButton("Convert");
     private JButton merge = new JButton("Merge");
@@ -106,12 +106,12 @@ public class ComputerUI extends JFrame implements ActionListener{
             );
         });
 
-        searchPanel.setBorder(BorderFactory.createTitledBorder("Searcher"));
+        searchPanel.setBorder(BorderFactory.createTitledBorder("SearcherExample"));
         commands.setBorder(BorderFactory.createTitledBorder("Menu"));
         logo.setBorder(BorderFactory.createTitledBorder("ZergTel VDC"));
         download.setBorder(BorderFactory.createTitledBorder("Downloader"));
         convert.setBorder(BorderFactory.createTitledBorder("Converter"));
-        search.setBorder(BorderFactory.createTitledBorder("Searcher"));
+        search.setBorder(BorderFactory.createTitledBorder("SearcherExample"));
 
         l.setHorizontalGroup(l.createSequentialGroup()
                 .addGroup(l.createParallelGroup(GroupLayout.Alignment.TRAILING)
@@ -171,7 +171,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         merge.addActionListener(this);
         searchKW.addActionListener(this);
 
-        info.showMessageDialog(null, "Click Download with URL in Searcher once to get instructions, then the rest of the time click it to download, or else click convert/merge to use that function!");
+        info.showMessageDialog(null, "Click Download with URL in SearcherExample once to get instructions, then the rest of the time click it to download, or else click convert/merge to use that function!");
         }
 
     @Override
