@@ -8,7 +8,6 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import zergtel.core.converter.Converter;
 import zergtel.core.converter.Merge;
 import zergtel.core.downloader.Downloader;
 
@@ -24,7 +23,7 @@ import java.io.File;
  * Created by Shyam on 2016-10-25.
  */
 public class ComputerUI extends JFrame implements ActionListener{
-    private int start = 0;
+    private int isPressed = 0;
     private String url; //this will be used for webview, DO NOT KEEP IN FINAL PRODUCT
     private String u1, u2, directory, name, format;
     private File f1, f2;
@@ -42,7 +41,8 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JFXPanel searchPanel = new JFXPanel();
     private WebView youtube;
     private WebEngine youtubeEngine;
-    private JButton downloadUrl = new JButton("Download with URL in SearcherExample");
+    private GroupLayout l;
+    private JButton downloadUrl = new JButton("Download with URL in Browser");
     private JButton downloadLink = new JButton("Download with URL");
     private JButton converter = new JButton("Convert");
     private JButton merge = new JButton("Merge");
@@ -50,6 +50,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JOptionPane info = new JOptionPane();
     private JOptionPane failure = new JOptionPane();
     private JOptionPane userI = new JOptionPane();
+    private JTextArea openingText = new JTextArea();
 
     public ComputerUI() {
         setTitle("ZergTel VDC");
@@ -69,11 +70,12 @@ public class ComputerUI extends JFrame implements ActionListener{
         });
         setVisible(true);
 
-        GroupLayout l = new GroupLayout(getContentPane());
+        l = new GroupLayout(getContentPane());
         GroupLayout cL = new GroupLayout(commands);
         GroupLayout dL = new GroupLayout(download);
         GroupLayout cL2 = new GroupLayout(convert);
         GroupLayout sL = new GroupLayout(search);
+        GroupLayout oL = new GroupLayout(openingPanel);
         GridLayout converterDisplayLayout = new GridLayout(1, convertProgress.length);
 
         setLayout(l);
@@ -82,51 +84,42 @@ public class ComputerUI extends JFrame implements ActionListener{
         convert.setLayout(cL2);
         convertPanel.setLayout(converterDisplayLayout);
         search.setLayout(sL); //I made seperate layouts in order to make them resizeable
+        openingPanel.setLayout(oL);
+
+        openingText.setText("Welcome to ZTVDC!\nUse the Menu to the left for options.");
+        openingText.setBackground(null);
+        openingText.setFont(new Font("Times New Roman", Font.PLAIN, 32));
+        openingText.setEditable(false);
 
         download.add(downloadLink);
         download.add(downloadUrl);
         convert.add(converter);
         convert.add(merge);
         search.add(searchKW);
+        openingPanel.add(openingText);
 
-        Platform.runLater(() -> {
-            youtube = new WebView();
-            youtubeEngine = youtube.getEngine();
-            youtubeEngine.load("https://youtube.com");
-            searchPanel.setScene(new Scene(youtube));
-            youtubeEngine.getLoadWorker().stateProperty().addListener(
-                    new ChangeListener<State>() {
-                        @Override
-                        public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
-                            if(newValue == State.SUCCEEDED)
-                                url = youtubeEngine.getLocation();
-                            System.out.println(url);
-                        }
-                    }
-            );
-        });
-
-        searchPanel.setBorder(BorderFactory.createTitledBorder("SearcherExample"));
+        openingPanel.setBorder(BorderFactory.createTitledBorder("Welcome to ZTVDC"));
+        searchPanel.setBorder(BorderFactory.createTitledBorder("Browser"));
         commands.setBorder(BorderFactory.createTitledBorder("Menu"));
         logo.setBorder(BorderFactory.createTitledBorder("ZergTel VDC"));
         download.setBorder(BorderFactory.createTitledBorder("Downloader"));
         convert.setBorder(BorderFactory.createTitledBorder("Converter"));
-        search.setBorder(BorderFactory.createTitledBorder("SearcherExample"));
+        search.setBorder(BorderFactory.createTitledBorder("Search"));
 
         l.setHorizontalGroup(l.createSequentialGroup()
                 .addGroup(l.createParallelGroup(GroupLayout.Alignment.TRAILING)
                         .addComponent(logo, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(commands, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(l.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(filler)
-                        .addComponent(searchPanel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                        .addComponent(filler, 0 ,GroupLayout.DEFAULT_SIZE, 724)
+                        .addComponent(openingPanel, 0, 700, Short.MAX_VALUE)));
         l.setVerticalGroup(l.createSequentialGroup()
                 .addGroup(l.createParallelGroup(GroupLayout.Alignment.CENTER)
-                        .addComponent(logo, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(filler))
+                        .addComponent(logo, 0, GroupLayout.DEFAULT_SIZE, 100)
+                        .addComponent(filler, 0, GroupLayout.DEFAULT_SIZE, 100))
                 .addGroup(l.createParallelGroup()
                         .addComponent(commands, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(searchPanel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                        .addComponent(openingPanel, 0, 500, Short.MAX_VALUE)));
 
         cL.setHorizontalGroup(cL.createSequentialGroup()
                 .addGroup(cL.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -165,6 +158,11 @@ public class ComputerUI extends JFrame implements ActionListener{
         sL.setVerticalGroup(sL.createSequentialGroup()
         .addComponent(searchKW, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
+        oL.setHorizontalGroup(oL.createSequentialGroup()
+        .addComponent(openingText, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        oL.setVerticalGroup(oL.createSequentialGroup()
+        .addComponent(openingText, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+
         downloadUrl.addActionListener(this);
         downloadLink.addActionListener(this);
         converter.addActionListener(this);
@@ -177,9 +175,27 @@ public class ComputerUI extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == downloadUrl) {
-            if(start == 0) {
+            if(isPressed == 0) {
+                l.replace(openingPanel, searchPanel);
+                Platform.runLater(() -> {
+                    youtube = new WebView();
+                    youtubeEngine = youtube.getEngine();
+                    youtubeEngine.load("https://youtube.com");
+                    searchPanel.setScene(new Scene(youtube));
+                    youtubeEngine.getLoadWorker().stateProperty().addListener(
+                            new ChangeListener<State>() {
+                                @Override
+                                public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
+                                    if (newValue == State.SUCCEEDED){
+                                        url = youtubeEngine.getLocation();
+                                        System.out.println(url);
+                                    }
+                                }
+                            }
+                    );
+                });
                 info.showMessageDialog(null, "Reload the page with the desired download video. Click download while playing the youtube video.");
-                start++;
+                isPressed++;
             } else {
                 try {
                     Downloader.get(url);
@@ -201,13 +217,12 @@ public class ComputerUI extends JFrame implements ActionListener{
             }
         }
         if (e.getSource() == converter) {
-            Converter c = new Converter();
             u1 = userI.showInputDialog(null, "Insert the directory of the file.");
             directory = userI.showInputDialog(null, "Insert the directory of the output file");
             name = userI.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
             format = userI.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
             f1 = new File(u1);
-            c.convert(f1, directory, name, format);
+            ConverterProgressBar c = new ConverterProgressBar(f1, directory, name, format);
         }
         if(e.getSource() == merge) {
             Merge m = new Merge();
