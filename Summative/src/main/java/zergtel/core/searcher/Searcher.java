@@ -1,17 +1,20 @@
 package zergtel.core.searcher;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.services.youtube.YouTube;
-import com.google.api.services.youtube.model.*;
+import com.google.api.services.youtube.model.ResourceId;
+import com.google.api.services.youtube.model.SearchListResponse;
+import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.SearchResultSnippet;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created by Simon on 1/9/2017.
@@ -54,9 +57,6 @@ public class Searcher {
             SearchListResponse searchResponse = search.execute();
 
             return parse(searchResponse);
-//            make sure to write the parse function tomorrow!
-//            return null;
-
         } catch (GoogleJsonResponseException e) {
             System.err.println("There was a service error: " + e.getDetails().getCode() + " : "
                     + e.getDetails().getMessage());
@@ -65,7 +65,7 @@ public class Searcher {
         } catch (Throwable t) {
             t.printStackTrace();
         }
-
+        System.err.println("Search error - no results found");
         return null;
     }
 
@@ -93,7 +93,7 @@ public class Searcher {
             rId = result.getId();
             Map element = new HashMap<String, String>();
             element.put("title", snippet.getTitle());
-            element.put("url", "http://www.youtube.com/watch?v=" + rId.getVideoId());
+            element.put("url", "http://www.youtube.com/embed/" + rId.getVideoId());
             element.put("thumbnail", snippet.getThumbnails().getDefault().getUrl());
             output.add(element);
         }
