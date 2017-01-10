@@ -5,18 +5,13 @@ import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.services.youtube.YouTube;
-import com.google.api.services.youtube.model.ResourceId;
-import com.google.api.services.youtube.model.SearchListResponse;
-import com.google.api.services.youtube.model.SearchResult;
-import com.google.api.services.youtube.model.Thumbnail;
+import com.google.api.services.youtube.model.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by Simon on 1/9/2017.
@@ -29,16 +24,16 @@ public class Searcher {
     private static final int NUMBER_OF_VIDEOS_RETURNED = 25;
     private static YouTube youtube;
 
-    public static ArrayList<String> search(String query) {
+    public static ArrayList<Map> search(String query) {
         Properties properties = getProperties(PROPERTIES_FILENAME);
-        return search(query, 0, Integer.parseInt(properties.getProperty("youtube.numReturns")), properties);
+        return search(query, 0, Integer.parseInt(properties.getProperty("youtube.maxreturns")), properties);
     }
 
-    public static ArrayList<String> search(String query, int beginIndex, int endIndex) {
+    public static ArrayList<Map> search(String query, int beginIndex, int endIndex) {
         return search(query, beginIndex, endIndex, getProperties(PROPERTIES_FILENAME));
     }
 
-    public static ArrayList<String> search(String query, int beginIndex, int endIndex, Properties properties) {
+    public static ArrayList<Map> search(String query, int beginIndex, int endIndex, Properties properties) {
         try {
             youtube = new YouTube.Builder(Auth.HTTP_TRANSPORT, Auth.JSON_FACTORY, new HttpRequestInitializer() {
                 public void initialize(HttpRequest request) throws IOException {
@@ -58,9 +53,9 @@ public class Searcher {
 
             SearchListResponse searchResponse = search.execute();
 
-//            return parse(searchResponse.getItems());
+            return parse(searchResponse);
 //            make sure to write the parse function tomorrow!
-            return null;
+//            return null;
 
         } catch (GoogleJsonResponseException e) {
             System.err.println("There was a service error: " + e.getDetails().getCode() + " : "
@@ -71,7 +66,7 @@ public class Searcher {
             t.printStackTrace();
         }
 
-        return new ArrayList<String>();
+        return null;
     }
 
     private static Properties getProperties(String fileName) {
@@ -87,6 +82,22 @@ public class Searcher {
         }
 
         return properties;
+    }
+
+    private static ArrayList<Map> parse(SearchListResponse response) {
+        ResourceId rId;
+        ArrayList<Map> output = new ArrayList<>();
+
+        for (SearchResult result : response.getItems()) {
+            SearchResultSnippet snippet = result.getSnippet();
+            rId = result.getId();
+            Map element = new HashMap<String, String>();
+            element.put("title", snippet.getTitle());
+            element.put("url", "http://www.youtube.com/watch?v=" + rId.getVideoId());
+            element.put("thumbnail", snippet.getThumbnails().getDefault().getUrl());
+            output.add(element);
+        }
+        return output;
     }
 
 
