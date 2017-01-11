@@ -20,7 +20,7 @@ import java.io.Reader;
 import java.util.List;
 
 /**
- * Shared class used by every sample. Contains methods for authorizing a user and caching credentials.
+ * Class borrowed straight from Google Api samples
  */
 public class Auth {
 

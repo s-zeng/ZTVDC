@@ -21,6 +21,8 @@ import java.util.Properties;
  * Based largely off of Google's searcher example class
  * This file contains some structures designed to include support for pages of searching,
  * but that feature hasn't been implemented yet as of 2017-01-10
+ *
+ * For an example on how to use this searcher, please see SearcherTest.java in test/java/zergtel/core/searcher
  */
 public class Searcher {
     private static final String PROPERTIES_FILENAME = "youtube.properties";
@@ -29,7 +31,7 @@ public class Searcher {
 
     public static ArrayList<Map> search(String query) {
         Properties properties = getProperties(PROPERTIES_FILENAME);
-        return search(query, 0, Integer.parseInt(properties.getProperty("youtube.maxreturns")), properties);
+        return search(query, 0, Integer.parseInt(properties.getProperty("youtube.numreturns")), properties);
     }
 
     public static ArrayList<Map> search(String query, int beginIndex, int endIndex) {
@@ -72,7 +74,7 @@ public class Searcher {
     private static Properties getProperties(String fileName) {
         Properties properties = new Properties();
         try {
-            InputStream in = SearcherExample.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
+            InputStream in = Searcher.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
             properties.load(in);
 
         } catch (IOException e) {
