@@ -8,6 +8,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import zergtel.core.converter.Converter;
 import zergtel.core.converter.Merge;
 import zergtel.core.downloader.Downloader;
 
@@ -222,7 +223,8 @@ public class ComputerUI extends JFrame implements ActionListener{
             name = userI.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
             format = userI.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
             f1 = new File(u1);
-            ConverterProgressBar c = new ConverterProgressBar(f1, directory, name, format);
+            Converter c = new Converter();
+            c.convert(f1, directory, name, format);
         }
         if(e.getSource() == merge) {
             Merge m = new Merge();
