@@ -52,6 +52,8 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JOptionPane failure = new JOptionPane();
     private JOptionPane userI = new JOptionPane();
     private JTextArea openingText = new JTextArea();
+    private JFileChooser chooser = new JFileChooser();
+    private int chooserValue;
 
     public ComputerUI() {
         setTitle("ZergTel VDC");
@@ -218,11 +220,11 @@ public class ComputerUI extends JFrame implements ActionListener{
             }
         }
         if (e.getSource() == converter) {
-            u1 = userI.showInputDialog(null, "Insert the directory of the file.");
-            directory = userI.showInputDialog(null, "Insert the directory of the output file");
+            f1 = choose("Select file to convert", JFileChooser.FILES_ONLY);
+//            directory = userI.showInputDialog(null, "Insert the directory of the output file");
+            directory = choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
             name = userI.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
             format = userI.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
-            f1 = new File(u1);
             Converter c = new Converter();
             c.convert(f1, directory, name, format);
         }
@@ -240,6 +242,17 @@ public class ComputerUI extends JFrame implements ActionListener{
         if(e.getSource() == searchKW)
             Platform.runLater(() ->
                     youtubeEngine.reload());
+    }
+
+    private File choose(String title, int mode) {
+        chooser.setDialogTitle(title);
+        chooser.setFileSelectionMode(mode);
+        chooserValue = chooser.showOpenDialog(null);
+        File output = null;
+        if (chooserValue == JFileChooser.APPROVE_OPTION) {
+            output = chooser.getSelectedFile();
+        }
+        return output;
     }
 }
 
