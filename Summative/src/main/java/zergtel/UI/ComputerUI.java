@@ -220,13 +220,17 @@ public class ComputerUI extends JFrame implements ActionListener{
             }
         }
         if (e.getSource() == converter) {
-            f1 = choose("Select file to convert", JFileChooser.FILES_ONLY);
+            try {
+                f1 = choose("Select file to convert", JFileChooser.FILES_ONLY);
 //            directory = userI.showInputDialog(null, "Insert the directory of the output file");
-            directory = choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
-            name = userI.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
-            format = userI.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
-            Converter c = new Converter();
-            c.convert(f1, directory, name, format);
+                directory = choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
+                name = userI.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
+                format = userI.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
+                Converter c = new Converter();
+                c.convert(f1, directory, name, format);
+            } catch (HeadlessException e1) {
+                userI.showMessageDialog(null, e1.getMessage());
+            }
         }
         if(e.getSource() == merge) {
             Merge m = new Merge();

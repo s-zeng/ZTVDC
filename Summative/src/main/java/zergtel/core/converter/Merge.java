@@ -9,7 +9,7 @@ public class Merge {
     public Process app;
     public String cmd, directory, name, format;
     public File tempFile, file1, file2;
-    public final static File FILE_FFMPEG = new File("Summative/bin/FFMPEG/bin/ffmpeg");
+    public final static File FILE_FFMPEG = new File("./ffmpeg.exe");
     public void merge(File f1, File f2, String d, String n, String fn) {
         try {
             file1 = f1;

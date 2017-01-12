@@ -10,7 +10,7 @@ public class Converter {
     public Process app;
     public String cmd, directory, name, format;
     public File file, tempFile;
-    public final static File FILE_FFMPEG = new File("Summative/bin/FFMPEG/bin/ffmpeg");
+    public final static File FILE_FFMPEG = new File("./ffmpeg.exe");
     public void convert(File f, String d, String n, String fn) {
         try {
             file = f;
