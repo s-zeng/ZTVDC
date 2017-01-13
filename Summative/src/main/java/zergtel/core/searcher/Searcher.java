@@ -53,7 +53,7 @@ public class Searcher {
 
             search.setType("video");
 
-            search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url,snippet/publishedAt,snippet/description,snippet/channelTitle,snippet/duration)");
+            search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url,snippet/publishedAt,snippet/description,snippet/channelTitle)");
             search.setMaxResults((long)endIndex);
 
             SearchListResponse searchResponse = search.execute();
