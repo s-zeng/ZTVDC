@@ -175,6 +175,8 @@ public class ComputerUI extends JFrame implements ActionListener{
         mergeCancel.addActionListener(this);
         searchKW.addActionListener(this);
 
+        converterCancel.setEnabled(false);
+        mergeCancel.setEnabled(false);
         info.showMessageDialog(null, "Click Download with URL in SearcherExample once to get instructions, then the rest of the time click it to download, or else click convert/merge to use that function!");
     }
 
@@ -238,6 +240,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                 e1.printStackTrace();
                 failure.showMessageDialog(null, e1.getMessage(), "Error", failure.ERROR_MESSAGE);
             }
+            converterCancel.setEnabled(true);
         }
         if(e.getSource() == converterCancel)
             c.cancel();
@@ -250,6 +253,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             file1 = new File(userInput1);
             file2 = new File(userInput2);
             m.merge(file1, file2, directory, name, format);
+            mergeCancel.setEnabled(true);
         }
         if(e.getSource() == mergeCancel)
             m.cancel();

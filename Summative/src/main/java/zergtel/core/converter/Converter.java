@@ -37,7 +37,7 @@ public class Converter {
     public void cancel()
     {
         app.destroy();
-        tempFile = new File(directory + name + format);
+        tempFile = new File(directory + name + "." + format);
         tempFile.delete();
     }
 
