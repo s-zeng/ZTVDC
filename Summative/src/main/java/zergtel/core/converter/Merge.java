@@ -7,17 +7,16 @@ import java.io.InputStreamReader;
 
 public class Merge {
     public Process app;
-    public String cmd, directory, name, format;
+    public String cmd, directory, name;
     public File tempFile, file1, file2;
     public final static File FILE_FFMPEG = new File("./ffmpeg.exe");
-    public void merge(File f1, File f2, String d, String n, String fn) {
+    public void merge(File f1, File f2, String d, String n) {
         try {
             file1 = f1;
             file2 = f2;
             directory = d + "/";
             name = n;
-            format = fn;
-            cmd = FILE_FFMPEG.getAbsolutePath() + " -i " + file1.getAbsolutePath() + " -i " + file2.getAbsolutePath() + " -c:v copy -c:a copy " + directory + name + "." + format;
+            cmd = FILE_FFMPEG.getAbsolutePath() + " -i " + file1.getAbsolutePath() + " -i " + file2.getAbsolutePath() + " -c:v copy -c:a copy " + directory + name;
             Runtime convert = Runtime.getRuntime();
             app = convert.exec(cmd);
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getInputStream()));
@@ -29,7 +28,7 @@ public class Merge {
     public void cancel()
     {
         app.destroy();
-        tempFile = new File(directory + name + "." + format);
+        tempFile = new File(directory + name);
         tempFile.delete();
     }
 }

@@ -30,8 +30,6 @@ public class ComputerUI extends JFrame implements ActionListener{
     private String userInput1, userInput2, directory, name, format;
     private File file1, file2;
     private Dimension minSize = new Dimension(1024, 576);
-    private JPanel logo = new JPanel();
-    private JPanel filler = new JPanel();
     private JPanel commands = new JPanel();
     private JPanel download = new JPanel();
     private JPanel convert = new JPanel();
@@ -106,7 +104,6 @@ public class ComputerUI extends JFrame implements ActionListener{
         openingPanel.setBorder(BorderFactory.createTitledBorder("Welcome to ZTVDC"));
         searchPanel.setBorder(BorderFactory.createTitledBorder("Browser"));
         commands.setBorder(BorderFactory.createTitledBorder("Menu"));
-        logo.setBorder(BorderFactory.createTitledBorder("ZergTel VDC"));
         download.setBorder(BorderFactory.createTitledBorder("Downloader"));
         convert.setBorder(BorderFactory.createTitledBorder("Converter"));
         search.setBorder(BorderFactory.createTitledBorder("Search"));
@@ -232,9 +229,8 @@ public class ComputerUI extends JFrame implements ActionListener{
                 if (!file1.equals(null)) {
                     directory = chooser.choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
                     if (!directory.equals(null)) {
-                        name = userI.showInputDialog(null, "Insert name of the new file (Exclude format) example: test");
-                        format = userI.showInputDialog(null, "Insert format of the file (Exclude name and dot) example: mp4");
-                        c.convert(file1, directory, name, format);
+                        name = userI.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
+                        c.convert(file1, directory, name);
                     }
                 }
             } catch (HeadlessException e1) {
@@ -248,11 +244,10 @@ public class ComputerUI extends JFrame implements ActionListener{
             userInput1 = userI.showInputDialog(null, "Insert the directory of the video file");
             userInput2 = userI.showInputDialog(null, "Insert the directory of the audio file");
             directory = userI.showInputDialog(null, "Insert the directory of the output file");
-            name = userI.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
-            format = userI.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
+            name = userI.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
             file1 = new File(userInput1);
             file2 = new File(userInput2);
-            m.merge(file1, file2, directory, name, format);
+            m.merge(file1, file2, directory, name);
         }
         if(e.getSource() == mergeCancel)
             m.cancel();
