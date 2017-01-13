@@ -22,7 +22,7 @@ public class SearcherTest {
     @Test(dataProvider = "queries", groups = {"searcher"})
     public void testSearch(String query) throws Exception {
         System.out.println("Searcher test: " + query);
-        ArrayList<Map> results = Searcher.search(query);
+        ArrayList<Map<String, String>> results = Searcher.search(query);
         int counter = 1;
         for (Map<String, String> result : results) {
             System.out.println("Result # " + counter++);

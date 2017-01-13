@@ -241,13 +241,23 @@ public class ComputerUI extends JFrame implements ActionListener{
         if(e.getSource() == converterCancel)
             c.cancel();
         if(e.getSource() == merge) {
-            userInput1 = userI.showInputDialog(null, "Insert the directory of the video file");
-            userInput2 = userI.showInputDialog(null, "Insert the directory of the audio file");
-            directory = userI.showInputDialog(null, "Insert the directory of the output file");
-            name = userI.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
-            file1 = new File(userInput1);
-            file2 = new File(userInput2);
-            m.merge(file1, file2, directory, name);
+//            userInput1 = userI.showInputDialog(null, "Insert the directory of the video file");
+//            userInput2 = userI.showInputDialog(null, "Insert the directory of the audio file");
+//            directory = userI.showInputDialog(null, "Insert the directory of the output file");
+//            name = userI.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
+//            file1 = new File(userInput1);
+//            file2 = new File(userInput2);
+            file1 = chooser.choose("Select video source file", JFileChooser.FILES_ONLY);
+            if (!file1.equals(null)) {
+                file2 = chooser.choose("Select audio source file", JFileChooser.FILES_ONLY);
+                if (!file2.equals(null)) {
+                    directory = chooser.choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
+                    if (!directory.equals(null)) {
+                        name = userI.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
+                        m.merge(file1, file2, directory, name);
+                    }
+                }
+            }
         }
         if(e.getSource() == mergeCancel)
             m.cancel();

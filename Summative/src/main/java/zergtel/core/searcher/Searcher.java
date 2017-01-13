@@ -1,8 +1,6 @@
 package zergtel.core.searcher;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.ResourceId;
 import com.google.api.services.youtube.model.SearchListResponse;
@@ -26,23 +24,20 @@ import java.util.Properties;
  */
 public class Searcher {
     private static final String PROPERTIES_FILENAME = "youtube.properties";
-    private static final int NUMBER_OF_VIDEOS_RETURNED = 25;
     private static YouTube youtube;
 
-    public static ArrayList<Map> search(String query) {
+    public static ArrayList<Map<String, String>> search(String query) {
         Properties properties = getProperties(PROPERTIES_FILENAME);
         return search(query, 0, Integer.parseInt(properties.getProperty("youtube.numreturns")), properties);
     }
 
-    public static ArrayList<Map> search(String query, int beginIndex, int endIndex) {
+    public static ArrayList<Map<String, String>> search(String query, int beginIndex, int endIndex) {
         return search(query, beginIndex, endIndex, getProperties(PROPERTIES_FILENAME));
     }
 
-    public static ArrayList<Map> search(String query, int beginIndex, int endIndex, Properties properties) {
+    public static ArrayList<Map<String, String>> search(String query, int beginIndex, int endIndex, Properties properties) {
         try {
-            youtube = new YouTube.Builder(Auth.HTTP_TRANSPORT, Auth.JSON_FACTORY, new HttpRequestInitializer() {
-                public void initialize(HttpRequest request) throws IOException {
-                }
+            youtube = new YouTube.Builder(Auth.HTTP_TRANSPORT, Auth.JSON_FACTORY, request -> {
             }).setApplicationName("ZTVDC").build();
 
             YouTube.Search.List search = youtube.search().list("id,snippet");
@@ -74,11 +69,11 @@ public class Searcher {
     private static Properties getProperties(String fileName) {
         Properties properties = new Properties();
         try {
-            InputStream in = Searcher.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
+            InputStream in = Searcher.class.getResourceAsStream("/" + fileName);
             properties.load(in);
 
         } catch (IOException e) {
-            System.err.println("There was an error reading " + PROPERTIES_FILENAME + ": " + e.getCause()
+            System.err.println("There was an error reading " + fileName + ": " + e.getCause()
                     + " : " + e.getMessage());
             System.exit(1);
         }
@@ -86,21 +81,20 @@ public class Searcher {
         return properties;
     }
 
-    private static ArrayList<Map> parse(SearchListResponse response) {
+    private static ArrayList<Map<String, String>> parse(SearchListResponse response) {
         ResourceId rId;
-        ArrayList<Map> output = new ArrayList<>();
+        ArrayList<Map<String, String>> output = new ArrayList<>();
 
         for (SearchResult result : response.getItems()) {
             SearchResultSnippet snippet = result.getSnippet();
             rId = result.getId();
-            Map element = new HashMap<String, String>();
+            Map<String, String> element = new HashMap<String, String>();
             element.put("title", snippet.getTitle());
             element.put("url", "http://www.youtube.com/embed/" + rId.getVideoId());
             element.put("thumbnail", snippet.getThumbnails().getDefault().getUrl());
             element.put("description", snippet.getDescription());
             element.put("channel", snippet.getChannelTitle());
             element.put("datePublished", snippet.getPublishedAt().toString());
-            element.put("duration", "");
             output.add(element);
         }
         return output;
