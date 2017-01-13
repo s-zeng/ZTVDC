@@ -175,6 +175,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         mergeCancel.addActionListener(this);
         searchKW.addActionListener(this);
 
+        this.setLocationRelativeTo(null);
         converterCancel.setEnabled(false);
         mergeCancel.setEnabled(false);
         info.showMessageDialog(null, "Click Download with URL in SearcherExample once to get instructions, then the rest of the time click it to download, or else click convert/merge to use that function!");

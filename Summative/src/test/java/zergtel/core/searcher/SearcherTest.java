@@ -24,11 +24,11 @@ public class SearcherTest {
         System.out.println("Searcher test: " + query);
         ArrayList<Map> results = Searcher.search(query);
         int counter = 1;
-        for (Map result : results) {
+        for (Map<String, String> result : results) {
             System.out.println("Result # " + counter++);
-            System.out.println("Title: " + result.get("title"));
-            System.out.println("Url: " + result.get("url"));
-            System.out.println("Thumbnail: " + result.get("thumbnail"));
+            for(Map.Entry<String, String> entry : result.entrySet()) {
+                System.out.println(entry.getKey() + ": " + entry.getValue());
+            }
             System.out.println("-------");
         }
         Assert.assertTrue(true);

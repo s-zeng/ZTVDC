@@ -53,7 +53,7 @@ public class Searcher {
 
             search.setType("video");
 
-            search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)");
+            search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url,snippet/publishedAt,snippet/description,snippet/channelTitle,snippet/duration)");
             search.setMaxResults((long)endIndex);
 
             SearchListResponse searchResponse = search.execute();
@@ -97,6 +97,10 @@ public class Searcher {
             element.put("title", snippet.getTitle());
             element.put("url", "http://www.youtube.com/embed/" + rId.getVideoId());
             element.put("thumbnail", snippet.getThumbnails().getDefault().getUrl());
+            element.put("description", snippet.getDescription());
+            element.put("channel", snippet.getChannelTitle());
+            element.put("datePublished", snippet.getPublishedAt().toString());
+            element.put("duration", "");
             output.add(element);
         }
         return output;
