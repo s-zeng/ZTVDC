@@ -240,7 +240,6 @@ public class ComputerUI extends JFrame implements ActionListener{
                 e1.printStackTrace();
                 failure.showMessageDialog(null, e1.getMessage(), "Error", failure.ERROR_MESSAGE);
             }
-            converterCancel.setEnabled(true);
         }
         if(e.getSource() == converterCancel)
             c.cancel();
@@ -253,7 +252,6 @@ public class ComputerUI extends JFrame implements ActionListener{
             file1 = new File(userInput1);
             file2 = new File(userInput2);
             m.merge(file1, file2, directory, name, format);
-            mergeCancel.setEnabled(true);
         }
         if(e.getSource() == mergeCancel)
             m.cancel();
