@@ -237,6 +237,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                 e1.printStackTrace();
                 failure.showMessageDialog(null, e1.getMessage(), "Error", failure.ERROR_MESSAGE);
             }
+            converterCancel.setEnabled(true);
         }
         if(e.getSource() == converterCancel)
             c.cancel();
@@ -258,6 +259,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                     }
                 }
             }
+            mergeCancel.setEnabled(true);
         }
         if(e.getSource() == mergeCancel)
             m.cancel();
