@@ -14,7 +14,7 @@ public class Merge {
         try {
             file1 = f1;
             file2 = f2;
-            directory = d;
+            directory = d + "/";
             name = n;
             format = fn;
             cmd = FILE_FFMPEG.getAbsolutePath() + " -i " + f1.getAbsolutePath() + " -i " + f2.getAbsolutePath() + " -c:v copy -c:a copy " + d + n + "." + fn;

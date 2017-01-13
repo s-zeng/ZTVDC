@@ -14,7 +14,7 @@ public class Converter {
     public void convert(File f, String d, String n, String fn) {
         try {
             file = f;
-            directory = d;
+            directory = d + "/";
             name = n;
             format = fn;
             cmd = FILE_FFMPEG.getAbsolutePath() + " -i " + f.getAbsolutePath() + " " + d + "/" + n + "." + fn;

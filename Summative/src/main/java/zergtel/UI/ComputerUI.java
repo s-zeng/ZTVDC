@@ -27,8 +27,8 @@ import java.io.File;
 public class ComputerUI extends JFrame implements ActionListener{
     private int isPressed = 0;
     private String url; //this will be used for webview, DO NOT KEEP IN FINAL PRODUCT
-    private String u1, u2, directory, name, format;
-    private File f1, f2;
+    private String userInput1, userInput2, directory, name, format;
+    private File file1, file2;
     private Dimension minSize = new Dimension(1024, 576);
     private JPanel logo = new JPanel();
     private JPanel filler = new JPanel();
@@ -36,14 +36,11 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JPanel download = new JPanel();
     private JPanel convert = new JPanel();
     private JPanel search = new JPanel();
-    private JPanel convertProgress[] = new JPanel[0];
     private JPanel openingPanel = new JPanel();
-    private JPanel downloadPanel = new JPanel();
-    private JPanel convertPanel = new JPanel();
     private JFXPanel searchPanel = new JFXPanel();
     private WebView youtube;
     private WebEngine youtubeEngine;
-    private GroupLayout l;
+    private GroupLayout layout;
     private JButton downloadUrl = new JButton("Download with URL in Browser");
     private JButton downloadLink = new JButton("Download with URL");
     private JButton converter = new JButton("Convert");
@@ -74,21 +71,19 @@ public class ComputerUI extends JFrame implements ActionListener{
         });
         setVisible(true);
 
-        l = new GroupLayout(getContentPane());
-        GroupLayout cL = new GroupLayout(commands);
-        GroupLayout dL = new GroupLayout(download);
-        GroupLayout cL2 = new GroupLayout(convert);
-        GroupLayout sL = new GroupLayout(search);
-        GroupLayout oL = new GroupLayout(openingPanel);
-        GridLayout converterDisplayLayout = new GridLayout(1, convertProgress.length);
+        layout = new GroupLayout(getContentPane());
+        GroupLayout commandLayout = new GroupLayout(commands);
+        GroupLayout downloadLayout = new GroupLayout(download);
+        GroupLayout convertLayout = new GroupLayout(convert);
+        GroupLayout searchLayout = new GroupLayout(search);
+        GroupLayout openingLayout = new GroupLayout(openingPanel);
 
-        setLayout(l);
-        commands.setLayout(cL);
-        download.setLayout(dL);
-        convert.setLayout(cL2);
-        convertPanel.setLayout(converterDisplayLayout);
-        search.setLayout(sL); //I made seperate layouts in order to make them resizeable
-        openingPanel.setLayout(oL);
+        setLayout(layout);
+        commands.setLayout(commandLayout);
+        download.setLayout(downloadLayout);
+        convert.setLayout(convertLayout);
+        search.setLayout(searchLayout); //I made seperate layouts in order to make them resizeable
+        openingPanel.setLayout(openingLayout);
 
         openingText.setText("Welcome to ZTVDC!\nUse the Menu to the left for options.");
         openingText.setBackground(null);
@@ -110,61 +105,61 @@ public class ComputerUI extends JFrame implements ActionListener{
         convert.setBorder(BorderFactory.createTitledBorder("Converter"));
         search.setBorder(BorderFactory.createTitledBorder("Search"));
 
-        l.setHorizontalGroup(l.createSequentialGroup()
-                .addGroup(l.createParallelGroup(GroupLayout.Alignment.TRAILING)
+        layout.setHorizontalGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                         .addComponent(logo, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(commands, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGroup(l.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addComponent(filler, 0 ,GroupLayout.DEFAULT_SIZE, 724)
                         .addComponent(openingPanel, 0, 700, Short.MAX_VALUE)));
-        l.setVerticalGroup(l.createSequentialGroup()
-                .addGroup(l.createParallelGroup(GroupLayout.Alignment.CENTER)
+        layout.setVerticalGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addComponent(logo, 0, GroupLayout.DEFAULT_SIZE, 100)
                         .addComponent(filler, 0, GroupLayout.DEFAULT_SIZE, 100))
-                .addGroup(l.createParallelGroup()
+                .addGroup(layout.createParallelGroup()
                         .addComponent(commands, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(openingPanel, 0, 500, Short.MAX_VALUE)));
 
-        cL.setHorizontalGroup(cL.createSequentialGroup()
-                .addGroup(cL.createParallelGroup(GroupLayout.Alignment.LEADING)
+        commandLayout.setHorizontalGroup(commandLayout.createSequentialGroup()
+                .addGroup(commandLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addComponent(download, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(convert, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(search))); //Adding the parameter 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE allows it to force resize, or else it will stay at min size.
-        cL.setVerticalGroup(cL.createSequentialGroup()
-        .addGroup(cL.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        commandLayout.setVerticalGroup(commandLayout.createSequentialGroup()
+        .addGroup(commandLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
         .addComponent(download, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addGroup(cL.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        .addGroup(commandLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
         .addComponent(convert, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addComponent(search));
 
-        dL.setHorizontalGroup(dL.createSequentialGroup()
-        .addGroup(dL.createParallelGroup(GroupLayout.Alignment.LEADING)
+        downloadLayout.setHorizontalGroup(downloadLayout.createSequentialGroup()
+        .addGroup(downloadLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
         .addComponent(downloadUrl, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addComponent(downloadLink, 0 ,GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-        dL.setVerticalGroup(dL.createSequentialGroup()
-        .addGroup(dL.createParallelGroup(GroupLayout.Alignment.CENTER))
+        downloadLayout.setVerticalGroup(downloadLayout.createSequentialGroup()
+        .addGroup(downloadLayout.createParallelGroup(GroupLayout.Alignment.CENTER))
         .addComponent(downloadUrl, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addGroup(dL.createParallelGroup(GroupLayout.Alignment.CENTER)
+        .addGroup(downloadLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
         .addComponent(downloadLink, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
-        cL2.setHorizontalGroup(cL2.createSequentialGroup()
-        .addGroup(cL2.createParallelGroup(GroupLayout.Alignment.LEADING)
+        convertLayout.setHorizontalGroup(convertLayout.createSequentialGroup()
+        .addGroup(convertLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
         .addComponent(converter, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addComponent(merge, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-        cL2.setVerticalGroup(cL2.createSequentialGroup()
-        .addGroup(cL2.createParallelGroup(GroupLayout.Alignment.CENTER)
+        convertLayout.setVerticalGroup(convertLayout.createSequentialGroup()
+        .addGroup(convertLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
         .addComponent(converter, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addGroup(cL2.createParallelGroup(GroupLayout.Alignment.CENTER)
+        .addGroup(convertLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
         .addComponent(merge, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
-        sL.setHorizontalGroup(sL.createSequentialGroup()
+        searchLayout.setHorizontalGroup(searchLayout.createSequentialGroup()
         .addComponent(searchKW, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-        sL.setVerticalGroup(sL.createSequentialGroup()
+        searchLayout.setVerticalGroup(searchLayout.createSequentialGroup()
         .addComponent(searchKW, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
-        oL.setHorizontalGroup(oL.createSequentialGroup()
+        openingLayout.setHorizontalGroup(openingLayout.createSequentialGroup()
         .addComponent(openingText, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-        oL.setVerticalGroup(oL.createSequentialGroup()
+        openingLayout.setVerticalGroup(openingLayout.createSequentialGroup()
         .addComponent(openingText, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
         downloadUrl.addActionListener(this);
@@ -180,7 +175,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == downloadUrl) {
             if(isPressed == 0) {
-                l.replace(openingPanel, searchPanel);
+                layout.replace(openingPanel, searchPanel);
                 Platform.runLater(() -> {
                     youtube = new WebView();
                     youtubeEngine = youtube.getEngine();
@@ -211,10 +206,10 @@ public class ComputerUI extends JFrame implements ActionListener{
             }
         }
         if (e.getSource() == downloadLink) {
-            u1 = userI.showInputDialog(null, "Insert the url for the video");
+            userInput1 = userI.showInputDialog(null, "Insert the url for the video");
 
             try {
-                Downloader.get(u1);
+                Downloader.get(userInput1);
             } catch (Exception ex){
                 ex.printStackTrace();
                 failure.showMessageDialog(null, "Oh no! Something goofed!", "Error", failure.ERROR_MESSAGE);
@@ -222,15 +217,15 @@ public class ComputerUI extends JFrame implements ActionListener{
         }
         if (e.getSource() == converter) {
             try {
-                f1 = chooser.choose("Select file to convert", JFileChooser.FILES_ONLY);
+                file1 = chooser.choose("Select file to convert", JFileChooser.FILES_ONLY);
 //            directory = userI.showInputDialog(null, "Insert the directory of the output file");
-                if (!f1.equals(null)) {
+                if (!file1.equals(null)) {
                     directory = chooser.choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
                     if (!directory.equals(null)) {
                         name = userI.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
                         format = userI.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
                         Converter c = new Converter();
-                        c.convert(f1, directory, name, format);
+                        c.convert(file1, directory, name, format);
                     }
                 }
             } catch (HeadlessException e1) {
@@ -240,14 +235,14 @@ public class ComputerUI extends JFrame implements ActionListener{
         }
         if(e.getSource() == merge) {
             Merge m = new Merge();
-            u1 = userI.showInputDialog(null, "Insert the directory of the video file");
-            u2 = userI.showInputDialog(null, "Insert the directory of the audio file");
+            userInput1 = userI.showInputDialog(null, "Insert the directory of the video file");
+            userInput2 = userI.showInputDialog(null, "Insert the directory of the audio file");
             directory = userI.showInputDialog(null, "Insert the directory of the output file");
             name = userI.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
             format = userI.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
-            f1 = new File(u1);
-            f2 = new File(u2);
-            m.merge(f1, f2, directory, name, format);
+            file1 = new File(userInput1);
+            file2 = new File(userInput2);
+            m.merge(file1, file2, directory, name, format);
         }
         if(e.getSource() == searchKW)
             Platform.runLater(() ->
