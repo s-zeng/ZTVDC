@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class Metadata {
 
-    public static void get(File file, Map<String, String> map)
+    public static void set(File file, Map<String, String> map)
     {
         IContainer iW = IContainer.make();
         iW.open(file.getPath(), IContainer.Type.WRITE, null);

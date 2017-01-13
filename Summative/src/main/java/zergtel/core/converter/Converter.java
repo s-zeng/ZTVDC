@@ -17,7 +17,8 @@ public class Converter {
             directory = d + "/";
             name = n;
             format = fn;
-            cmd = FILE_FFMPEG.getAbsolutePath() + " -i " + f.getAbsolutePath() + " " + d + "/" + n + "." + fn;
+            cmd = FILE_FFMPEG.getAbsolutePath() + " -i " + file.getAbsolutePath() + " " + directory + name + "." + format;
+            System.out.println(cmd);
             Runtime convert = Runtime.getRuntime();
             app = convert.exec(cmd);
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getInputStream()));

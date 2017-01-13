@@ -17,7 +17,7 @@ public class Merge {
             directory = d + "/";
             name = n;
             format = fn;
-            cmd = FILE_FFMPEG.getAbsolutePath() + " -i " + f1.getAbsolutePath() + " -i " + f2.getAbsolutePath() + " -c:v copy -c:a copy " + d + n + "." + fn;
+            cmd = FILE_FFMPEG.getAbsolutePath() + " -i " + file1.getAbsolutePath() + " -i " + file2.getAbsolutePath() + " -c:v copy -c:a copy " + directory + name + "." + format;
             Runtime convert = Runtime.getRuntime();
             app = convert.exec(cmd);
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getInputStream()));
