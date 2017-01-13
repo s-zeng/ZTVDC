@@ -37,8 +37,10 @@ public class Converter {
     public void cancel()
     {
         app.destroy();
-        tempFile = new File(directory + name);
-        tempFile.delete();
+        while(tempFile != null) {
+            tempFile = new File(directory + name);
+            tempFile.delete();
+        }
     }
 
     //http://stackoverflow.com/questions/17123118/how-to-stop-ffmpeg-that-runs-through-java-process

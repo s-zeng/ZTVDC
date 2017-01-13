@@ -19,12 +19,11 @@ public class ConverterProgressBar extends JPanel implements Runnable {
     String d;
     String n;
     String fn;
-    ConverterProgressBar(File fi, String di, String na, String fo) {
+    ConverterProgressBar(File fi, String di, String na) {
         f = fi;
         d = di;
         n = na;
-        fn = fo;
-        c.convert(f, d, n, fn);
+        c.convert(f, d, n);
 
         Scanner read = new Scanner(c.app.getErrorStream());
         Pattern lengthPatt = Pattern.compile("(?<=Duration: )[^,]*");
@@ -42,22 +41,21 @@ public class ConverterProgressBar extends JPanel implements Runnable {
             progress.setText("" + completionRate);
         }
     }
-    public void run() { ConverterProgressBar cPB = new ConverterProgressBar(f, d, n, fn); }//this won't work, find work around
+    public void run() { ConverterProgressBar cPB = new ConverterProgressBar(f, d, n); }//this won't work, find work around
 
 }
 class MergeProgressBar extends JPanel implements Runnable {
     File f1, f2;
-    String d, n, fn;
+    String d, n;
     JTextField progress = new JTextField();
     Merge m = new Merge();
-    MergeProgressBar(File fi1, File fi2, String di, String na, String fo)
+    MergeProgressBar(File fi1, File fi2, String di, String na)
     {
         f1 = fi1;
         f2 = fi2;
         d = di;
         n = na;
-        fn = fo;
-        m.merge(f1, f2, d, n, fn);
+        m.merge(f1, f2, d, n);
 
         Scanner read = new Scanner(m.app.getErrorStream());
         Pattern lengthPatt = Pattern.compile("(?<=Duration: )[^,]*");
@@ -75,5 +73,5 @@ class MergeProgressBar extends JPanel implements Runnable {
             progress.setText("" + completionRate);
         }
     }
-    public void run() {MergeProgressBar mPB = new MergeProgressBar(f1, f2, d, n ,fn);} //this won't work, find work around
+    public void run() {MergeProgressBar mPB = new MergeProgressBar(f1, f2, d, n);} //this won't work, find work around
 }
