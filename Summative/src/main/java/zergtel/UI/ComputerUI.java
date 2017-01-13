@@ -11,6 +11,7 @@ import javafx.scene.web.WebView;
 import zergtel.core.converter.Converter;
 import zergtel.core.converter.Merge;
 import zergtel.core.downloader.Downloader;
+import zergtel.core.io.FileChooser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,8 +53,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JOptionPane failure = new JOptionPane();
     private JOptionPane userI = new JOptionPane();
     private JTextArea openingText = new JTextArea();
-    private JFileChooser chooser = new JFileChooser();
-    private int chooserValue;
+    private FileChooser chooser = new FileChooser();
 
     public ComputerUI() {
         setTitle("ZergTel VDC");
@@ -61,6 +61,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setBackground(new Color(44, 42, 43));
         setMinimumSize(minSize);
+        chooser.setDirectory(new File("."));
         this.addComponentListener(new ComponentAdapter(){
             public void componentResized(ComponentEvent e){
                 Dimension size = ComputerUI.this.getSize();
@@ -173,7 +174,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         searchKW.addActionListener(this);
 
         info.showMessageDialog(null, "Click Download with URL in SearcherExample once to get instructions, then the rest of the time click it to download, or else click convert/merge to use that function!");
-        }
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -221,15 +222,20 @@ public class ComputerUI extends JFrame implements ActionListener{
         }
         if (e.getSource() == converter) {
             try {
-                f1 = choose("Select file to convert", JFileChooser.FILES_ONLY);
+                f1 = chooser.choose("Select file to convert", JFileChooser.FILES_ONLY);
 //            directory = userI.showInputDialog(null, "Insert the directory of the output file");
-                directory = choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
-                name = userI.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
-                format = userI.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
-                Converter c = new Converter();
-                c.convert(f1, directory, name, format);
+                if (!f1.equals(null)) {
+                    directory = chooser.choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
+                    if (!directory.equals(null)) {
+                        name = userI.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
+                        format = userI.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
+                        Converter c = new Converter();
+                        c.convert(f1, directory, name, format);
+                    }
+                }
             } catch (HeadlessException e1) {
-                userI.showMessageDialog(null, e1.getMessage());
+                e1.printStackTrace();
+                failure.showMessageDialog(null, e1.getMessage(), "Error", failure.ERROR_MESSAGE);
             }
         }
         if(e.getSource() == merge) {
@@ -246,17 +252,6 @@ public class ComputerUI extends JFrame implements ActionListener{
         if(e.getSource() == searchKW)
             Platform.runLater(() ->
                     youtubeEngine.reload());
-    }
-
-    private File choose(String title, int mode) {
-        chooser.setDialogTitle(title);
-        chooser.setFileSelectionMode(mode);
-        chooserValue = chooser.showOpenDialog(null);
-        File output = null;
-        if (chooserValue == JFileChooser.APPROVE_OPTION) {
-            output = chooser.getSelectedFile();
-        }
-        return output;
     }
 }
 
