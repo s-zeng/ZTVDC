@@ -44,13 +44,17 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JButton downloadUrl = new JButton("Download with URL in Browser");
     private JButton downloadLink = new JButton("Download with URL");
     private JButton converter = new JButton("Convert");
+    private JButton converterCancel = new JButton("Cancel");
     private JButton merge = new JButton("Merge");
+    private JButton mergeCancel = new JButton("Cancel");
     private JButton searchKW = new JButton("Reload");
     private JOptionPane info = new JOptionPane();
     private JOptionPane failure = new JOptionPane();
     private JOptionPane userI = new JOptionPane();
     private JTextArea openingText = new JTextArea();
     private FileChooser chooser = new FileChooser();
+    private Converter c = new Converter();
+    private Merge m = new Merge();
 
     public ComputerUI() {
         setTitle("ZergTel VDC");
@@ -93,7 +97,9 @@ public class ComputerUI extends JFrame implements ActionListener{
         download.add(downloadLink);
         download.add(downloadUrl);
         convert.add(converter);
+        convert.add(converterCancel);
         convert.add(merge);
+        convert.add(mergeCancel);
         search.add(searchKW);
         openingPanel.add(openingText);
 
@@ -107,15 +113,9 @@ public class ComputerUI extends JFrame implements ActionListener{
 
         layout.setHorizontalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                        .addComponent(logo, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(commands, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(filler, 0 ,GroupLayout.DEFAULT_SIZE, 724)
-                        .addComponent(openingPanel, 0, 700, Short.MAX_VALUE)));
+                        .addComponent(openingPanel, 0, 700, Short.MAX_VALUE));
         layout.setVerticalGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                        .addComponent(logo, 0, GroupLayout.DEFAULT_SIZE, 100)
-                        .addComponent(filler, 0, GroupLayout.DEFAULT_SIZE, 100))
                 .addGroup(layout.createParallelGroup()
                         .addComponent(commands, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(openingPanel, 0, 500, Short.MAX_VALUE)));
@@ -145,12 +145,17 @@ public class ComputerUI extends JFrame implements ActionListener{
         convertLayout.setHorizontalGroup(convertLayout.createSequentialGroup()
         .addGroup(convertLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
         .addComponent(converter, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addComponent(merge, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+        .addComponent(merge, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addGroup(convertLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        .addComponent(converterCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(mergeCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         convertLayout.setVerticalGroup(convertLayout.createSequentialGroup()
         .addGroup(convertLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-        .addComponent(converter, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addComponent(converter, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(converterCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addGroup(convertLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-        .addComponent(merge, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+        .addComponent(merge, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(mergeCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         searchLayout.setHorizontalGroup(searchLayout.createSequentialGroup()
         .addComponent(searchKW, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
@@ -165,7 +170,9 @@ public class ComputerUI extends JFrame implements ActionListener{
         downloadUrl.addActionListener(this);
         downloadLink.addActionListener(this);
         converter.addActionListener(this);
+        converterCancel.addActionListener(this);
         merge.addActionListener(this);
+        mergeCancel.addActionListener(this);
         searchKW.addActionListener(this);
 
         info.showMessageDialog(null, "Click Download with URL in SearcherExample once to get instructions, then the rest of the time click it to download, or else click convert/merge to use that function!");
@@ -222,9 +229,8 @@ public class ComputerUI extends JFrame implements ActionListener{
                 if (!file1.equals(null)) {
                     directory = chooser.choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
                     if (!directory.equals(null)) {
-                        name = userI.showInputDialog(null, "Insert name of the new file (EXCLUDE .FORMAT!!!!!!!) example: test");
-                        format = userI.showInputDialog(null, "Insert format of the file (EXCLUDE NAME AND PERIOD!!!!!!!!) example mp4");
-                        Converter c = new Converter();
+                        name = userI.showInputDialog(null, "Insert name of the new file (Exclude format) example: test");
+                        format = userI.showInputDialog(null, "Insert format of the file (Exclude name and dot) example: mp4");
                         c.convert(file1, directory, name, format);
                     }
                 }
@@ -233,8 +239,9 @@ public class ComputerUI extends JFrame implements ActionListener{
                 failure.showMessageDialog(null, e1.getMessage(), "Error", failure.ERROR_MESSAGE);
             }
         }
+        if(e.getSource() == converterCancel)
+            c.cancel();
         if(e.getSource() == merge) {
-            Merge m = new Merge();
             userInput1 = userI.showInputDialog(null, "Insert the directory of the video file");
             userInput2 = userI.showInputDialog(null, "Insert the directory of the audio file");
             directory = userI.showInputDialog(null, "Insert the directory of the output file");
@@ -244,6 +251,8 @@ public class ComputerUI extends JFrame implements ActionListener{
             file2 = new File(userInput2);
             m.merge(file1, file2, directory, name, format);
         }
+        if(e.getSource() == mergeCancel)
+            m.cancel();
         if(e.getSource() == searchKW)
             Platform.runLater(() ->
                     youtubeEngine.reload());
