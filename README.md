@@ -1,5 +1,6 @@
 # Zergtel Download Converter
 
+CircleCI build state:
 [![CircleCI](https://circleci.com/gh/kronicmage/summative.svg?style=svg)](https://circleci.com/gh/kronicmage/summative)
 
 2016-09-14
