@@ -1,9 +1,8 @@
 package zergtel.UI;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker.State;
+import javafx.beans.value.*;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
@@ -15,13 +14,13 @@ import zergtel.core.io.FileChooser;
 import zergtel.core.searcher.Searcher;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
+import java.util.Map;
 
 /**
  * Created by Shyam on 2016-10-25.
@@ -39,6 +38,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JPanel openingPanel = new JPanel();
     private JPanel searchPanel = new JPanel();
     private JPanel[] searchQuery = new JPanel[5];
+    private Map[] searchResults = new Map[25];
     private JFXPanel browserPanel = new JFXPanel();
     private WebView youtube;
     private WebEngine youtubeEngine;
@@ -50,6 +50,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JButton merge = new JButton("Merge");
     private JButton mergeCancel = new JButton("Cancel");
     private JButton searchKW = new JButton("Search by Key Words");
+    private JButton previewURL = new JButton("Preview URL");
     private JOptionPane info = new JOptionPane();
     private JOptionPane failure = new JOptionPane();
     private JOptionPane userI = new JOptionPane();
@@ -105,10 +106,8 @@ public class ComputerUI extends JFrame implements ActionListener{
         convert.add(merge);
         convert.add(mergeCancel);
         search.add(searchKW);
+        search.add(previewURL);
         openingPanel.add(openingText);
-  //      for(int i = 0; i <5; i++) {
-    //        searchPanel.add(searchQuery[i]);
-    //    }
 
         openingPanel.setBorder(BorderFactory.createTitledBorder("Welcome to ZTVDC"));
         browserPanel.setBorder(BorderFactory.createTitledBorder("Browser"));
@@ -165,9 +164,14 @@ public class ComputerUI extends JFrame implements ActionListener{
         .addComponent(mergeCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         searchLayout.setHorizontalGroup(searchLayout.createSequentialGroup()
-        .addComponent(searchKW, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        .addGroup(searchLayout.createParallelGroup()
+        .addComponent(searchKW, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(previewURL, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         searchLayout.setVerticalGroup(searchLayout.createSequentialGroup()
-        .addComponent(searchKW, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        .addGroup(searchLayout.createParallelGroup()
+        .addComponent(searchKW, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addGroup(searchLayout.createParallelGroup()
+        .addComponent(previewURL, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         openingLayout.setHorizontalGroup(openingLayout.createSequentialGroup()
         .addComponent(openingText, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
@@ -181,6 +185,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         merge.addActionListener(this);
         mergeCancel.addActionListener(this);
         searchKW.addActionListener(this);
+        previewURL.addActionListener(this);
 
         this.setLocationRelativeTo(null);
         converterCancel.setEnabled(false);
@@ -192,24 +197,6 @@ public class ComputerUI extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == downloadUrl) {
             if(isPressed == 0) {
-                layout.replace(openingPanel, browserPanel);
-                Platform.runLater(() -> {
-                    youtube = new WebView();
-                    youtubeEngine = youtube.getEngine();
-                    youtubeEngine.load("https://youtube.com");
-                    browserPanel.setScene(new Scene(youtube));
-                    youtubeEngine.getLoadWorker().stateProperty().addListener(
-                            new ChangeListener<State>() {
-                                @Override
-                                public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
-                                    if (newValue == State.SUCCEEDED){
-                                        url = youtubeEngine.getLocation();
-                                        System.out.println(url);
-                                    }
-                                }
-                            }
-                    );
-                });
                 info.showMessageDialog(null, "Reload the page with the desired download video. Click download while playing the youtube video.");
                 isPressed++;
             } else {
@@ -276,6 +263,16 @@ public class ComputerUI extends JFrame implements ActionListener{
         if(e.getSource() == searchKW) {
             userInput1 = userI.showInputDialog(null, "Please enter the key words you desire to search for");
             Searcher.search(userInput1);
+        }
+        if(e.getSource() == previewURL) {
+            userInput1 = userI.showInputDialog(null, "Please enter the URL you would like to search");
+            Platform.runLater (() -> {
+                youtube = new WebView();
+                youtubeEngine = youtube.getEngine();
+                youtubeEngine.load(userInput1);
+                browserPanel.setScene(new Scene(youtube));
+            });
+            layout.replace(openingPanel, browserPanel);
         }
     }
 }
