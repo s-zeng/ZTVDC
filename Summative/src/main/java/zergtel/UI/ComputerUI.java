@@ -106,9 +106,9 @@ public class ComputerUI extends JFrame implements ActionListener{
         convert.add(mergeCancel);
         search.add(searchKW);
         openingPanel.add(openingText);
-        for(int i = 0; i <5; i++) {
-            searchPanel.add(searchQuery[i]);
-        }
+  //      for(int i = 0; i <5; i++) {
+    //        searchPanel.add(searchQuery[i]);
+    //    }
 
         openingPanel.setBorder(BorderFactory.createTitledBorder("Welcome to ZTVDC"));
         browserPanel.setBorder(BorderFactory.createTitledBorder("Browser"));
