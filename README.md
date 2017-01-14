@@ -4,7 +4,13 @@
 
 2016-09-14
 
-Zergtel Download Converter is a sane, flexible and reliable appliction for downloading and converting of any video or audio file. Zergtel supports any audio or video file from any location, including from online sites such as YouTube.
+Zergtel Download Converter is a sane, flexible and reliable appliction for downloading media, and converting of any video or audio file.
+
+ZTVDC currently supports the following sites for downloading:
+* YouTube
+* Bandcamp
+
+Conversions rely on [FFMPEG](https://ffmpeg.org/)
 
 Copyright 2016 Zergtel
 
