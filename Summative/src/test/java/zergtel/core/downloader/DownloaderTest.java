@@ -51,7 +51,8 @@ public class DownloaderTest {
         Object[][] lightList = new Object[][] {
             {"https://souleyedigitalmusic.bandcamp.com/album/extreme-road-trip-ost"},
             {"http://simonzeng.tk/example.mp3"},
-            {"https://www.youtube.com/embed/f4yvZF1cMz0"}
+//            {"https://www.youtube.com/embed/f4yvZF1cMz0"}
+            {"https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
         };
 
         List<String> includedGroups = Arrays.asList(context.getIncludedGroups());
