@@ -12,8 +12,10 @@ import zergtel.core.converter.Converter;
 import zergtel.core.converter.Merge;
 import zergtel.core.downloader.Downloader;
 import zergtel.core.io.FileChooser;
+import zergtel.core.searcher.Searcher;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,8 +28,8 @@ import java.io.File;
  */
 public class ComputerUI extends JFrame implements ActionListener{
     private int isPressed = 0;
-    private String url; //this will be used for webview, DO NOT KEEP IN FINAL PRODUCT
-    private String userInput1, userInput2, directory, name, format;
+    private String url; //this will be used for webview
+    private String userInput1, directory, name;
     private File file1, file2;
     private Dimension minSize = new Dimension(1024, 576);
     private JPanel commands = new JPanel();
@@ -35,7 +37,9 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JPanel convert = new JPanel();
     private JPanel search = new JPanel();
     private JPanel openingPanel = new JPanel();
-    private JFXPanel searchPanel = new JFXPanel();
+    private JPanel searchPanel = new JPanel();
+    private JPanel[] searchQuery = new JPanel[5];
+    private JFXPanel browserPanel = new JFXPanel();
     private WebView youtube;
     private WebEngine youtubeEngine;
     private GroupLayout layout;
@@ -45,7 +49,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JButton converterCancel = new JButton("Cancel");
     private JButton merge = new JButton("Merge");
     private JButton mergeCancel = new JButton("Cancel");
-    private JButton searchKW = new JButton("Reload");
+    private JButton searchKW = new JButton("Search by Key Words");
     private JOptionPane info = new JOptionPane();
     private JOptionPane failure = new JOptionPane();
     private JOptionPane userI = new JOptionPane();
@@ -79,6 +83,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         GroupLayout convertLayout = new GroupLayout(convert);
         GroupLayout searchLayout = new GroupLayout(search);
         GroupLayout openingLayout = new GroupLayout(openingPanel);
+        GridLayout searcherLayout = new GridLayout(5, 1);
 
         setLayout(layout);
         commands.setLayout(commandLayout);
@@ -86,6 +91,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         convert.setLayout(convertLayout);
         search.setLayout(searchLayout); //I made seperate layouts in order to make them resizeable
         openingPanel.setLayout(openingLayout);
+        searchPanel.setLayout(searcherLayout);
 
         openingText.setText("Welcome to ZTVDC!\nUse the Menu to the left for options.");
         openingText.setBackground(null);
@@ -100,13 +106,17 @@ public class ComputerUI extends JFrame implements ActionListener{
         convert.add(mergeCancel);
         search.add(searchKW);
         openingPanel.add(openingText);
+        for(int i = 0; i <5; i++) {
+            searchPanel.add(searchQuery[i]);
+        }
 
         openingPanel.setBorder(BorderFactory.createTitledBorder("Welcome to ZTVDC"));
-        searchPanel.setBorder(BorderFactory.createTitledBorder("Browser"));
+        browserPanel.setBorder(BorderFactory.createTitledBorder("Browser"));
         commands.setBorder(BorderFactory.createTitledBorder("Menu"));
         download.setBorder(BorderFactory.createTitledBorder("Downloader"));
         convert.setBorder(BorderFactory.createTitledBorder("Converter"));
         search.setBorder(BorderFactory.createTitledBorder("Search"));
+        searchPanel.setBorder(BorderFactory.createTitledBorder("Search Results"));
 
         layout.setHorizontalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
@@ -182,12 +192,12 @@ public class ComputerUI extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == downloadUrl) {
             if(isPressed == 0) {
-                layout.replace(openingPanel, searchPanel);
+                layout.replace(openingPanel, browserPanel);
                 Platform.runLater(() -> {
                     youtube = new WebView();
                     youtubeEngine = youtube.getEngine();
                     youtubeEngine.load("https://youtube.com");
-                    searchPanel.setScene(new Scene(youtube));
+                    browserPanel.setScene(new Scene(youtube));
                     youtubeEngine.getLoadWorker().stateProperty().addListener(
                             new ChangeListener<State>() {
                                 @Override
@@ -263,9 +273,10 @@ public class ComputerUI extends JFrame implements ActionListener{
         }
         if(e.getSource() == mergeCancel)
             m.cancel();
-        if(e.getSource() == searchKW)
-            Platform.runLater(() ->
-                    youtubeEngine.reload());
+        if(e.getSource() == searchKW) {
+            userInput1 = userI.showInputDialog(null, "Please enter the key words you desire to search for");
+            Searcher.search(userInput1);
+        }
     }
 }
 
