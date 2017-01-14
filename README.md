@@ -10,7 +10,7 @@ ZTVDC currently supports the following sites for downloading:
 * YouTube
 * Bandcamp
 
-Conversions rely on [FFMPEG](https://ffmpeg.org/)
+Conversions rely on [FFMPEG](https://ffmpeg.org/) - more info there
 
 Copyright 2016 Zergtel
 
