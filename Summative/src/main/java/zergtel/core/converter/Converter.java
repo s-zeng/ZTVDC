@@ -39,6 +39,7 @@ public class Converter {
         app.destroy();
         tempFile = new File(directory + name);
         System.out.println(tempFile.getAbsolutePath());
+        tempFile.delete();
     }
 
     //http://stackoverflow.com/questions/17123118/how-to-stop-ffmpeg-that-runs-through-java-process
