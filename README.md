@@ -3,7 +3,7 @@
 CircleCI build state:
 [![CircleCI](https://circleci.com/gh/kronicmage/summative.svg?style=svg)](https://circleci.com/gh/kronicmage/summative)
 
-Zergtel Download Converter is a sane, flexible and reliable appliction for downloading media, and converting of any video or audio file.
+Zergtel Download Converter is a sane and lightweight appliction for downloading media, and converting of any video or audio file.
 
 ZTVDC currently supports the following sites for downloading:
 * YouTube
