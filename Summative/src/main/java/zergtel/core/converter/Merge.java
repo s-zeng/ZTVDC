@@ -1,7 +1,5 @@
 package zergtel.core.converter;
 
-import jdk.nashorn.internal.scripts.JO;
-
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
