@@ -398,7 +398,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             {
                 buttonNo = i;
                 JOptionPane.showMessageDialog(null, "Either preview the url with PreviewURL or download it with Download Link");
-                downloadLink.setEnabled(true);
+                downloadUrl.setEnabled(true);
                 previewURL.setEnabled(true);
             }
         }
