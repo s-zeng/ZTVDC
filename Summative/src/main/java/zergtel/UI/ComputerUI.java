@@ -1,8 +1,6 @@
 package zergtel.UI;
 
 import javafx.application.Platform;
-import javafx.concurrent.Worker.State;
-import javafx.beans.value.*;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
@@ -20,15 +18,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
  * Created by Shyam on 2016-10-25.
  */
 public class ComputerUI extends JFrame implements ActionListener{
-    private int isPressed = 0;
-    private String url; //this will be used for webview
-    private String userInput1, directory, name;
+    private String url;
+    private String userInput, directory, name;
     private File file1, file2;
     private Dimension minSize = new Dimension(1024, 576);
     private JPanel commands = new JPanel();
@@ -37,13 +35,13 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JPanel search = new JPanel();
     private JPanel openingPanel = new JPanel();
     private JPanel searchPanel = new JPanel();
-    private JPanel[] searchQuery = new JPanel[5];
-    private Map[] searchResults = new Map[25];
+    private JPanel searchQuery[] = new JPanel[25];
+    private ArrayList<Map<String, String>> searchResults;
     private JFXPanel browserPanel = new JFXPanel();
     private WebView youtube;
     private WebEngine youtubeEngine;
     private GroupLayout layout;
-    private JButton downloadUrl = new JButton("Download with URL in Browser");
+    private JButton downloadUrl = new JButton("Download with URL from Searcher");
     private JButton downloadLink = new JButton("Download with URL");
     private JButton converter = new JButton("Convert");
     private JButton converterCancel = new JButton("Cancel");
@@ -55,6 +53,12 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JOptionPane failure = new JOptionPane();
     private JOptionPane userI = new JOptionPane();
     private JTextArea openingText = new JTextArea();
+    private JLabel image[] = new JLabel[25];
+    private JLabel title[] = new JLabel[25];
+    private JLabel channel[] = new JLabel[25];
+    private JLabel description[] = new JLabel[25];
+    private JLabel datePublished[] = new JLabel[25];
+    private JButton preview[] = new JButton[25];
     private FileChooser chooser = new FileChooser();
     private Converter c = new Converter();
     private Merge m = new Merge();
@@ -84,6 +88,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         GroupLayout convertLayout = new GroupLayout(convert);
         GroupLayout searchLayout = new GroupLayout(search);
         GroupLayout openingLayout = new GroupLayout(openingPanel);
+        GroupLayout[] searchList = new GroupLayout[25];
         GridLayout searcherLayout = new GridLayout(5, 1);
 
         setLayout(layout);
@@ -116,6 +121,19 @@ public class ComputerUI extends JFrame implements ActionListener{
         convert.setBorder(BorderFactory.createTitledBorder("Converter"));
         search.setBorder(BorderFactory.createTitledBorder("Search"));
         searchPanel.setBorder(BorderFactory.createTitledBorder("Search Results"));
+
+        for(int i = 0; i < 25; i++) {
+            searchQuery[i] = new JPanel();
+            searchQuery[i].setBorder(BorderFactory.createTitledBorder("Results" + i+1));
+            searchList[i] = new GroupLayout(searchQuery[i]);
+            searchQuery[i].setLayout(searchList[i]);
+            preview[i] = new JButton("Preview");
+            searchQuery[i].add(preview[i]);
+            searchQuery[i].add(title[i]);
+            searchQuery[i].add(channel[i]);
+            searchQuery[i].add(description[i]);
+            searchQuery[i].add(datePublished[i]);
+        }
 
         layout.setHorizontalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
@@ -186,8 +204,12 @@ public class ComputerUI extends JFrame implements ActionListener{
         mergeCancel.addActionListener(this);
         searchKW.addActionListener(this);
         previewURL.addActionListener(this);
+        for(int i = 0; i < 25; i++)
+            preview[i].addActionListener(this);
+
 
         this.setLocationRelativeTo(null);
+        downloadUrl.setEnabled(false);
         converterCancel.setEnabled(false);
         mergeCancel.setEnabled(false);
         info.showMessageDialog(null, "Click Download with URL in SearcherExample once to get instructions, then the rest of the time click it to download, or else click convert/merge to use that function!");
@@ -196,24 +218,17 @@ public class ComputerUI extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == downloadUrl) {
-            if(isPressed == 0) {
-                info.showMessageDialog(null, "Reload the page with the desired download video. Click download while playing the youtube video.");
-                isPressed++;
-            } else {
                 try {
                     Downloader.get(url);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     failure.showMessageDialog(null, "Oh no! Something goofed!", "Error", failure.ERROR_MESSAGE);
-
                 }
             }
-        }
         if (e.getSource() == downloadLink) {
-            userInput1 = userI.showInputDialog(null, "Insert the url for the video");
-
+            userInput = userI.showInputDialog(null, "Insert the url for the video");
             try {
-                Downloader.get(userInput1);
+                Downloader.get(userInput);
             } catch (Exception ex){
                 ex.printStackTrace();
                 failure.showMessageDialog(null, "Oh no! Something goofed!", "Error", failure.ERROR_MESSAGE);
@@ -222,7 +237,6 @@ public class ComputerUI extends JFrame implements ActionListener{
         if (e.getSource() == converter) {
             try {
                 file1 = chooser.choose("Select file to convert", JFileChooser.FILES_ONLY);
-//            directory = userI.showInputDialog(null, "Insert the directory of the output file");
                 if (!file1.equals(null)) {
                     directory = chooser.choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
                     if (!directory.equals(null)) {
@@ -239,12 +253,6 @@ public class ComputerUI extends JFrame implements ActionListener{
         if(e.getSource() == converterCancel)
             c.cancel();
         if(e.getSource() == merge) {
-//            userInput1 = userI.showInputDialog(null, "Insert the directory of the video file");
-//            userInput2 = userI.showInputDialog(null, "Insert the directory of the audio file");
-//            directory = userI.showInputDialog(null, "Insert the directory of the output file");
-//            name = userI.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
-//            file1 = new File(userInput1);
-//            file2 = new File(userInput2);
             file1 = chooser.choose("Select video source file", JFileChooser.FILES_ONLY);
             if (!file1.equals(null)) {
                 file2 = chooser.choose("Select audio source file", JFileChooser.FILES_ONLY);
@@ -261,15 +269,25 @@ public class ComputerUI extends JFrame implements ActionListener{
         if(e.getSource() == mergeCancel)
             m.cancel();
         if(e.getSource() == searchKW) {
-            userInput1 = userI.showInputDialog(null, "Please enter the key words you desire to search for");
-            Searcher.search(userInput1);
+            userInput = userI.showInputDialog(null, "Please enter the key words you desire to search for");
+            searchResults = Searcher.search(userInput);
+            for (int i = 0; i <25; i++) {
+                title[i] = new JLabel();
+                title[i].setText(searchResults.get(i).get("title"));
+                channel[i] = new JLabel();
+                channel[i].setText(searchResults.get(i).get("channel"));
+                description[i] = new JLabel();
+                description[i].setText(searchResults.get(i).get("description"));
+                datePublished[i] = new JLabel();
+                datePublished[i].setText(searchResults.get(i).get("datePublished"));
+            }
         }
         if(e.getSource() == previewURL) {
-            userInput1 = userI.showInputDialog(null, "Please enter the URL you would like to search");
+            userInput = userI.showInputDialog(null, "Please enter the URL you would like to search");
             Platform.runLater (() -> {
                 youtube = new WebView();
                 youtubeEngine = youtube.getEngine();
-                youtubeEngine.load(userInput1);
+                youtubeEngine.load(userInput);
                 browserPanel.setScene(new Scene(youtube));
             });
             layout.replace(openingPanel, browserPanel);
