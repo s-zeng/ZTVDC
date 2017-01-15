@@ -1,6 +1,9 @@
 package zergtel.UI;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker.State;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
@@ -19,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
+import java.lang.invoke.SwitchPoint;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -41,6 +45,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JPanel openingPanel = new JPanel();
     private JPanel searchPanel = new JPanel();
     private JPanel searchQuery[] = new JPanel[5];
+    private JPanel searchFiller[] = new JPanel[5];
     private ArrayList<Map<String, String>> searchResults;
     private JFXPanel browserPanel = new JFXPanel();
     private WebView youtube;
@@ -148,30 +153,29 @@ public class ComputerUI extends JFrame implements ActionListener{
             searchQuery[i].add(datePublished[i]);
             image[i] = new JLabel();
             searchQuery[i].add(image[i]);
+            searchFiller[i] = new JPanel();
+            searchQuery[i].add(searchFiller[i]);
 
-            searchList[i].setVerticalGroup(searchList[i].createSequentialGroup()
-            .addGroup(searchList[i].createParallelGroup()
-                .addComponent(image[i], 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(title[i])
-                .addComponent(datePublished[i])
-                .addComponent(preview[i], 0, 500, Short.MAX_VALUE))
-            .addGroup(searchList[i].createParallelGroup()
-                .addComponent(channel[i]))
-            .addGroup(searchList[i].createParallelGroup()
-                .addComponent(description[i])));
             searchList[i].setHorizontalGroup(searchList[i].createSequentialGroup()
+            .addComponent(image[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(image[i], 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(title[i], 50, GroupLayout.DEFAULT_SIZE, 500)
+                .addComponent(channel[i], 500, GroupLayout.DEFAULT_SIZE, 500)
+                .addComponent(description[i], 50, GroupLayout.DEFAULT_SIZE, 500))
             .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(title[i], 0, 0, Short.MAX_VALUE)
-                .addComponent(channel[i], 0, 0, Short.MAX_VALUE)
-                .addComponent(description[i], 0, 90, Short.MAX_VALUE))
-            .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(datePublished[i], 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(preview[i], 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-            searchList[i].setAutoCreateGaps(true);
-            searchList[i].linkSize(title[i], channel[i], description[i]);
+                .addComponent(searchFiller[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(datePublished[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(preview[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+            searchList[i].setVerticalGroup(searchList[i].createSequentialGroup()
+            .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.CENTER)
+                .addComponent(image[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(title[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(searchFiller[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(preview[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.CENTER)
+                .addComponent(channel[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(datePublished[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(description[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
             searchPanel.add(searchQuery[i]);
         }
@@ -275,8 +279,8 @@ public class ComputerUI extends JFrame implements ActionListener{
             System.out.println("Url: " + url);
 
             if (!url.equals(null)) {
-               downloadWorker = new DownloadWorker(url);
-               downloadWorker.execute();
+                downloadWorker = new DownloadWorker(url);
+                downloadWorker.execute();
             }
         }
         if (e.getSource() == downloadLinkCancel)
@@ -298,10 +302,10 @@ public class ComputerUI extends JFrame implements ActionListener{
             }
             converterCancel.setEnabled(true);
         }
-        if(e.getSource() == converterCancel)
+        if (e.getSource() == converterCancel)
             convertWorker.cancel(true);
         //A potential solution - assign the new ConvertWorker to a variable beforehand, and then do variable.execute() to run, and variable.cancel() to cancel lol
-        if(e.getSource() == merge) {
+        if (e.getSource() == merge) {
             file1 = chooser.choose("Select video source file", JFileChooser.FILES_ONLY);
             if (!file1.equals(null)) {
                 file2 = chooser.choose("Select audio source file", JFileChooser.FILES_ONLY);
@@ -317,17 +321,16 @@ public class ComputerUI extends JFrame implements ActionListener{
             }
             mergeCancel.setEnabled(true);
         }
-        if(e.getSource() == mergeCancel)
+        if (e.getSource() == mergeCancel)
             mergeWorker.cancel(true);
-        if(e.getSource() == searchKW) { //TODO: put searcher into a worker to, because this is actually kinda slow
+        if (e.getSource() == searchKW) {
             userInput = JOptionPane.showInputDialog(null, "Please enter the key words you desire to search for");
             searchResults = Searcher.search(userInput);
             for (int i = 0; i < 5; i++) { //magic number, beware
                 Map<String, String> result = searchResults.get(i);
-                System.out.println(result.toString());
                 title[i].setText(result.get("title"));
                 channel[i].setText(result.get("channel"));
-                description[i].setText(result.get("description"));
+                description[i].setText("<html>" + result.get("description") + "</html>");
                 datePublished[i].setText(result.get("datePublished"));
                 imageUrl[i] = result.get("thumbnail");
                 Image[] img = new Image[5];
@@ -336,30 +339,75 @@ public class ComputerUI extends JFrame implements ActionListener{
             }
             if (openingDisplay == 1 && searchDisplay == 0) {
                 layout.replace(openingPanel, searchPanel);
-                openingDisplay = 0; searchDisplay = 1;
-        }
-            else if(browserDisplay == 1 && searchDisplay == 0) {
+                openingDisplay = 0;
+                searchDisplay = 1;
+            } else if (browserDisplay == 1 && searchDisplay == 0) {
                 layout.replace(browserPanel, searchPanel);
-                browserDisplay = 0; searchDisplay = 1;
+                browserDisplay = 0;
+                searchDisplay = 1;
             }
         }
-        if(e.getSource() == previewURL) {
+        if (e.getSource() == previewURL) {
             userInput = JOptionPane.showInputDialog(null, "Please enter the URL you would like to search");
-            Platform.runLater (() -> {
+            Platform.runLater(() -> {
                 youtube = new WebView();
                 youtubeEngine = youtube.getEngine();
                 youtubeEngine.load(userInput);
                 browserPanel.setScene(new Scene(youtube));
             });
-            if(browserDisplay == 0 && openingDisplay == 1) {
+            if (browserDisplay == 0 && openingDisplay == 1) {
                 layout.replace(openingPanel, browserPanel);
-                browserDisplay = 1; openingDisplay = 0;
-            }
-            else if(browserDisplay == 0 && searchDisplay == 1) {
+                browserDisplay = 1;
+                openingDisplay = 0;
+            } else if (browserDisplay == 0 && searchDisplay == 1) {
                 layout.replace(searchPanel, browserPanel);
-                browserDisplay = 1; searchDisplay = 0;
+                browserDisplay = 1;
+                searchDisplay = 0;
             }
         }
+        for(int i = 0; i < preview.length; i++) {
+            if(e.getSource() == preview[i]) {
+                url = urlStorage[i];
+                if (browserDisplay == 0 && openingDisplay == 1) {
+                    layout.replace(openingPanel, browserPanel);
+                    browserDisplay = 1;
+                    openingDisplay = 0;
+                    Platform.runLater(() -> {
+                        youtube = new WebView();
+                        youtubeEngine = youtube.getEngine();
+                        youtubeEngine.load(url);
+                        browserPanel.setScene(new Scene(youtube));
+                        youtubeEngine.getLoadWorker().stateProperty().addListener(
+                                new ChangeListener<State>() {
+                                    @Override
+                                    public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
+                                        if (newValue == State.SUCCEEDED)
+                                            System.out.println(url);
+                                    }
+                                });
+                               });
+                } else if (browserDisplay == 0 && searchDisplay == 1) {
+                    layout.replace(searchPanel, browserPanel);
+                    browserDisplay = 1;
+                    searchDisplay = 0;
+                    Platform.runLater(() -> { //this needs to be threaded or else it breaks after second use
+                        youtube = new WebView();
+                        youtubeEngine = youtube.getEngine();
+                        youtubeEngine.load(url);
+                        browserPanel.setScene(new Scene(youtube));
+                        youtubeEngine.getLoadWorker().stateProperty().addListener(
+                                new ChangeListener<State>() {
+                                    @Override
+                                    public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
+                                        if (newValue == State.SUCCEEDED)
+                                            System.out.println(url);
+                                    }
+                                });
+                    });
+                }
+            }
+        }
+
     }
 }
 
