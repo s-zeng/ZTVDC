@@ -16,7 +16,7 @@ public class Converter {
             file = f;
             directory = d + "\\";
             name = n;
-            cmd = FILE_FFMPEG.getAbsolutePath() + " -i \"" + file.getAbsolutePath() + "\" \"" + directory + name + "\"";
+            cmd = FILE_FFMPEG.getAbsolutePath() + " -loglevel fatal" + " -i \"" + file.getAbsolutePath() + "\" \"" + directory + name + "\"";
             System.out.println(cmd);
             Runtime convert = Runtime.getRuntime();
             app = convert.exec(cmd);
