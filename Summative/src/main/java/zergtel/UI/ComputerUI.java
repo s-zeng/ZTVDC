@@ -35,6 +35,8 @@ public class ComputerUI extends JFrame implements ActionListener{
     int openingDisplay = 1;
     int searchDisplay = 0;
     int browserDisplay = 0;
+    int buttonNo = -1;
+    int numPressed = 0;
     private String[] imageUrl = new String[5];
     private String[] urlStorage = new String[5];
     private String userInput, directory, name, url;
@@ -189,7 +191,6 @@ public class ComputerUI extends JFrame implements ActionListener{
                 .addComponent(channel[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(datePublished[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(description[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-
             searchPanel.add(searchQuery[i]);
         }
 
@@ -275,6 +276,8 @@ public class ComputerUI extends JFrame implements ActionListener{
 
         this.setLocationRelativeTo(null);
         downloadUrl.setEnabled(false);
+        downloadUrlCancel.setEnabled(false);
+        downloadLinkCancel.setEnabled(false);
         converterCancel.setEnabled(false);
         mergeCancel.setEnabled(false);
         JOptionPane.showMessageDialog(null, "Click Download with URL in SearcherExample once to get instructions, then the rest of the time click it to download, or else click convert/merge to use that function!");
@@ -283,7 +286,15 @@ public class ComputerUI extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == downloadUrl) {
-            //lol replace this with downloading url from searcher
+            directory = chooser.choose("Choose where to save the download file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
+            name = JOptionPane.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
+            url = urlStorage[buttonNo];
+            try {
+                EzHttp.get(url, name, directory);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            downloadUrlCancel.setEnabled(true);
         }
         if (e.getSource() == downloadUrlCancel)
             downloadWorker.cancel(true);
@@ -295,6 +306,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                 downloadWorker = new DownloadWorker(url);
                 downloadWorker.execute();
             }
+            downloadLinkCancel.setEnabled(true);
         }
         if (e.getSource() == downloadLinkCancel)
             downloadWorker.cancel(true);
@@ -360,67 +372,59 @@ public class ComputerUI extends JFrame implements ActionListener{
                 searchDisplay = 1;
             }
         }
-        if (e.getSource() == previewURL) {
-            userInput = JOptionPane.showInputDialog(null, "Please enter the URL you would like to search");
-            Platform.runLater(() -> {
-                youtube = new WebView();
-                youtubeEngine = youtube.getEngine();
-                youtubeEngine.load(userInput);
-                browserPanel.setScene(new Scene(youtube));
-            });
-            if (browserDisplay == 0 && openingDisplay == 1) {
-                layout.replace(openingPanel, browserPanel);
-                browserDisplay = 1;
-                openingDisplay = 0;
-            } else if (browserDisplay == 0 && searchDisplay == 1) {
-                layout.replace(searchPanel, browserPanel);
-                browserDisplay = 1;
-                searchDisplay = 0;
+        if(e.getSource() == previewURL) {
+            switch (buttonNo) {
+                case 0: url = urlStorage[0];
+                    browser();
+                    break;
+                case 1: url = urlStorage[1];
+                    browser();
+                    break;
+                case 2: url = urlStorage[2];
+                    browser();
+                    break;
+                case 3: url = urlStorage[3];
+                    browser();
+                    break;
+                case 4: url = urlStorage[4];
+                    browser();
+                    break;
             }
         }
-        for(int i = 0; i < preview.length; i++) {
-            if(e.getSource() == preview[i]) {
-                url = urlStorage[i];
-                if (browserDisplay == 0 && openingDisplay == 1) {
-                    layout.replace(openingPanel, browserPanel);
-                    browserDisplay = 1;
-                    openingDisplay = 0;
-                    Platform.runLater(() -> {
-                        youtube = new WebView();
-                        youtubeEngine = youtube.getEngine();
-                        youtubeEngine.load(url);
-                        browserPanel.setScene(new Scene(youtube));
-                        youtubeEngine.getLoadWorker().stateProperty().addListener(
-                                new ChangeListener<State>() {
-                                    @Override
-                                    public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
-                                        if (newValue == State.SUCCEEDED)
-                                            System.out.println(url);
-                                    }
-                                });
-                               });
-                } else if (browserDisplay == 0 && searchDisplay == 1) {
-                    layout.replace(searchPanel, browserPanel);
-                    browserDisplay = 1;
-                    searchDisplay = 0;
-                    Platform.runLater(() -> { //this needs to be threaded or else it breaks after second use
-                        youtube = new WebView();
-                        youtubeEngine = youtube.getEngine();
-                        youtubeEngine.load(url);
-                        browserPanel.setScene(new Scene(youtube));
-                        youtubeEngine.getLoadWorker().stateProperty().addListener(
-                                new ChangeListener<State>() {
-                                    @Override
-                                    public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
-                                        if (newValue == State.SUCCEEDED)
-                                            System.out.println(url);
-                                    }
-                                });
-                    });
-                }
+        for(int i = 0; i < 5; i++)
+        {
+            if(e.getSource() == preview[i])
+            {
+                buttonNo = i;
+                JOptionPane.showMessageDialog(null, "Either preview the url with PreviewURL or download it with Download Link");
+                downloadLink.setEnabled(true);
+                previewURL.setEnabled(true);
             }
         }
 
+    }
+    public void browser() {
+        Platform.runLater(() -> {
+            if (numPressed != 0)
+                youtubeEngine.getLoadWorker().cancel();
+            if(numPressed == 0) {
+                youtube = new WebView();
+                youtubeEngine = youtube.getEngine();
+                browserPanel.setScene(new Scene(youtube));
+            }
+            youtubeEngine.load(url);
+        });
+        if (browserDisplay == 0 && openingDisplay == 1) {
+            layout.replace(openingPanel, browserPanel);
+            browserDisplay = 1;
+            openingDisplay = 0;
+            youtubeEngine.getLoadWorker().cancel();
+        } else if (browserDisplay == 0 && searchDisplay == 1) {
+            layout.replace(searchPanel, browserPanel);
+            browserDisplay = 1;
+            searchDisplay = 0;
+        }
+        numPressed++;
     }
 }
 
