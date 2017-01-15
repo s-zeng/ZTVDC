@@ -129,9 +129,13 @@ public class ComputerUI extends JFrame implements ActionListener{
             searchQuery[i].setLayout(searchList[i]);
             preview[i] = new JButton("Preview");
             searchQuery[i].add(preview[i]);
+            title[i] = new JLabel();
             searchQuery[i].add(title[i]);
+            channel[i] = new JLabel();
             searchQuery[i].add(channel[i]);
+            description[i] = new JLabel();
             searchQuery[i].add(description[i]);
+            datePublished[i] = new JLabel();
             searchQuery[i].add(datePublished[i]);
         }
 
@@ -276,13 +280,9 @@ public class ComputerUI extends JFrame implements ActionListener{
             for (int i = 0; i <25; i++) {
                 Map<String, String> result = searchResults.get(i);
                 System.out.println(result.toString());
-                title[i] = new JLabel();
                 title[i].setText(result.get("title"));
-                channel[i] = new JLabel();
                 channel[i].setText(result.get("channel"));
-                description[i] = new JLabel();
                 description[i].setText(result.get("description"));
-                datePublished[i] = new JLabel();
                 datePublished[i].setText(result.get("datePublished"));
             }
         }
