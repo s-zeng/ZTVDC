@@ -1,6 +1,9 @@
 package zergtel.core.converter;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 
 public class Converter {
@@ -13,7 +16,7 @@ public class Converter {
             file = f;
             directory = d + "\\";
             name = n;
-            cmd = FILE_FFMPEG.getAbsolutePath() + " -i " + file.getAbsolutePath() + " " + directory + name;
+            cmd = FILE_FFMPEG.getAbsolutePath() + " -i \"" + file.getAbsolutePath() + "\" \"" + directory + name + "\"";
             System.out.println(cmd);
             Runtime convert = Runtime.getRuntime();
             app = convert.exec(cmd);
