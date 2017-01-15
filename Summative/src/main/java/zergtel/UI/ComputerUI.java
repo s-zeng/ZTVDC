@@ -50,7 +50,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JButton searchKW = new JButton("Search by Key Words");
     private JButton previewURL = new JButton("Preview URL");
     private JOptionPane info = new JOptionPane();
-    private JOptionPane failure = new JOptionPane();
+    JOptionPane failure = new JOptionPane();
     private JOptionPane userI = new JOptionPane();
     private JTextArea openingText = new JTextArea();
     private JLabel image[] = new JLabel[25];
@@ -62,6 +62,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private FileChooser chooser = new FileChooser();
     private Converter c = new Converter();
     private Merge m = new Merge();
+    private SwingWorker worker;
 
     public ComputerUI() {
         setTitle("ZergTel VDC");
@@ -222,20 +223,14 @@ public class ComputerUI extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == downloadUrl) {
-                try {
-                    Downloader.get(url);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    failure.showMessageDialog(null, "Oh no! Something goofed!", "Error", failure.ERROR_MESSAGE);
-                }
-            }
+            //lol replace this with downloading url from searcher
+        }
         if (e.getSource() == downloadLink) {
-            userInput = userI.showInputDialog(null, "Insert the url for the video");
-            try {
-                Downloader.get(userInput);
-            } catch (Exception ex){
-                ex.printStackTrace();
-                failure.showMessageDialog(null, "Oh no! Something goofed!", "Error", failure.ERROR_MESSAGE);
+            url = JOptionPane.showInputDialog(null, "Insert media URL to download from");
+            System.out.println("Url: " + url);
+
+            if (!url.equals(null)) {
+                new DownloadWorker(url).execute();
             }
         }
         if (e.getSource() == converter) {
@@ -245,7 +240,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                     directory = chooser.choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
                     if (!directory.equals(null)) {
                         name = userI.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
-                        c.convert(file1, directory, name);
+                        new ConvertWorker(file1, directory, name).execute();
                     }
                 }
             } catch (HeadlessException e1) {
@@ -255,7 +250,8 @@ public class ComputerUI extends JFrame implements ActionListener{
             converterCancel.setEnabled(true);
         }
         if(e.getSource() == converterCancel)
-            c.cancel();
+            c.cancel(); //i may have broken your cancer because i use a seperate converter instance in ConverterWorker - try to make it work
+        //A potential solution - assign the new ConvertWorker to a variable beforehand, and then do variable.execute() to run, and variable.cancel() to cancel lol
         if(e.getSource() == merge) {
             file1 = chooser.choose("Select video source file", JFileChooser.FILES_ONLY);
             if (!file1.equals(null)) {
@@ -264,7 +260,8 @@ public class ComputerUI extends JFrame implements ActionListener{
                     directory = chooser.choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
                     if (!directory.equals(null)) {
                         name = userI.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
-                        m.merge(file1, file2, directory, name);
+//                        m.merge(file1, file2, directory, name);
+                        new MergeWorker(file1, file2, directory, name).execute();
                     }
                 }
             }
@@ -272,12 +269,10 @@ public class ComputerUI extends JFrame implements ActionListener{
         }
         if(e.getSource() == mergeCancel)
             m.cancel();
-        if(e.getSource() == searchKW) {
-            System.out.println("test");
+        if(e.getSource() == searchKW) { //TODO: put searcher into a worker to, because this is actually kinda slow
             userInput = userI.showInputDialog(null, "Please enter the key words you desire to search for");
-            System.out.println(userInput);
             searchResults = Searcher.search(userInput);
-            for (int i = 0; i <25; i++) {
+            for (int i = 0; i <25; i++) { //magic number, beware
                 Map<String, String> result = searchResults.get(i);
                 System.out.println(result.toString());
                 title[i].setText(result.get("title"));
@@ -296,6 +291,72 @@ public class ComputerUI extends JFrame implements ActionListener{
             });
             layout.replace(openingPanel, browserPanel);
         }
+    }
+}
+
+class DownloadWorker extends SwingWorker<String, Void> {
+    String url;
+
+    DownloadWorker(String downUrl) {
+        url = downUrl;
+    }
+
+    @Override
+    public String doInBackground() {
+        try {
+            return Downloader.get(url);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
+            return ex.getMessage();
+        }
+    }
+}
+
+class ConvertWorker extends SwingWorker<String, Void> {
+    String directory, name;
+    File inFile;
+    private Converter converter = new Converter();
+
+    ConvertWorker(File input, String dir, String nom) {
+        inFile = input;
+        directory = dir;
+        name = nom;
+    }
+
+    @Override
+    public String doInBackground() {
+        try {
+            converter.convert(inFile, directory, name);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return null;
+    }
+}
+
+class MergeWorker extends SwingWorker<String, Void> {
+    String directory, name;
+    File file1, file2;
+    private Merge merger = new Merge();
+
+    MergeWorker(File f1, File f2, String dir, String nom) {
+        file1 = f1;
+        file2 = f2;
+        directory = dir;
+        name = nom;
+    }
+
+    @Override
+    public String doInBackground() {
+        try {
+            merger.merge(file1, file2, directory, name);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return null;
     }
 }
 

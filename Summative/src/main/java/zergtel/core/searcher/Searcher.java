@@ -96,6 +96,7 @@ public class Searcher {
             element.put("channel", snippet.getChannelTitle());
             element.put("datePublished", snippet.getPublishedAt().toString());
             output.add(element);
+            System.out.println(element.toString());
         }
         return output;
     }
