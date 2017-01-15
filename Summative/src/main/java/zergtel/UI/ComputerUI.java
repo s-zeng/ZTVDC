@@ -55,6 +55,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private WebView youtube;
     private WebEngine youtubeEngine;
     private GroupLayout layout;
+    private GroupLayout[] searchList = new GroupLayout[5];
     private JButton downloadUrl = new JButton("Download Link");
     private JButton downloadLink = new JButton("Download");
     private JButton downloadUrlCancel = new JButton("Cancel");
@@ -71,6 +72,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JLabel channel[] = new JLabel[5];
     private JLabel description[] = new JLabel[5];
     private JLabel datePublished[] = new JLabel[5];
+    private JLabel test[] = new JLabel[5];
     private JButton preview[] = new JButton[5];
     private FileChooser chooser = new FileChooser();
     private Converter c = new Converter();
@@ -104,7 +106,6 @@ public class ComputerUI extends JFrame implements ActionListener{
         GroupLayout convertLayout = new GroupLayout(convert);
         GroupLayout searchLayout = new GroupLayout(search);
         GroupLayout openingLayout = new GroupLayout(openingPanel);
-        GroupLayout[] searchList = new GroupLayout[5];
         GridLayout searcherLayout = new GridLayout(5, 1);
 
         setLayout(layout);
@@ -155,14 +156,14 @@ public class ComputerUI extends JFrame implements ActionListener{
             searchQuery[i].add(description[i]);
             datePublished[i] = new JLabel();
             searchQuery[i].add(datePublished[i]);
-            image[i] = new JLabel();
-            searchQuery[i].add(image[i]);
+            test[i] = new JLabel();
+            searchQuery[i].add(test[i]);
             searchFiller[i] = new JPanel();
             searchQuery[i].add(searchFiller[i]);
 
 
             searchList[i].setHorizontalGroup(searchList[i].createSequentialGroup()
-            .addComponent(image[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(test[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addComponent(title[i], 50, GroupLayout.DEFAULT_SIZE, 500)
                 .addComponent(channel[i], 500, GroupLayout.DEFAULT_SIZE, 500)
@@ -173,7 +174,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             .addComponent(preview[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
             searchList[i].setVerticalGroup(searchList[i].createSequentialGroup()
             .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addComponent(image[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(test[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(title[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(searchFiller[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(preview[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -349,6 +350,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                 description[i].setText("<html>" + result.get("description") + "</html>");
                 datePublished[i].setText(result.get("datePublished"));
                 urlStorage[i] = result.get("url");
+                image[i] = new JLabel();
                 imageUrl[i] = result.get("thumbnail");
 
                 EzHttp.setDLToTemp();
@@ -360,6 +362,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                 ImageIcon[] imageStored = new ImageIcon[5];
                 imageStored[i] = new ImageIcon("./image" + i + ".png");
                 image[i].setIcon(imageStored[i]);
+                searchList[i].replace(test[i], image[i]);
             }
             if (openingDisplay == 1 && searchDisplay == 0) {
                 layout.replace(openingPanel, searchPanel);
