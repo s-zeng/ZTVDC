@@ -160,16 +160,6 @@ public class ComputerUI extends JFrame implements ActionListener{
             searchFiller[i] = new JPanel();
             searchQuery[i].add(searchFiller[i]);
 
-            EzHttp.setDLToTemp();
-            try {
-                EzHttp.get(imageUrl[i], "image" + i, EzHttp.getDownloadLocation());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            ImageIcon[] imageStored = new ImageIcon[5];
-            imageStored[i] = new ImageIcon("./image" + i);
-            System.out.println(imageStored[i].getIconHeight());
-            image[i].setIcon(imageStored[i]);
 
             searchList[i].setHorizontalGroup(searchList[i].createSequentialGroup()
             .addComponent(image[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -358,10 +348,18 @@ public class ComputerUI extends JFrame implements ActionListener{
                 channel[i].setText(result.get("channel"));
                 description[i].setText("<html>" + result.get("description") + "</html>");
                 datePublished[i].setText(result.get("datePublished"));
-                imageUrl[i] = result.get("thumbnail");
-                Image[] img = new Image[5];
-                img[i] = java.awt.Toolkit.getDefaultToolkit().createImage(imageUrl[i]);
                 urlStorage[i] = result.get("url");
+                imageUrl[i] = result.get("thumbnail");
+
+                EzHttp.setDLToTemp();
+                try {
+                    EzHttp.get(imageUrl[i], "image" + i + ".png", EzHttp.getDownloadLocation());
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
+                ImageIcon[] imageStored = new ImageIcon[5];
+                imageStored[i] = new ImageIcon("./image" + i + ".png");
+                image[i].setIcon(imageStored[i]);
             }
             if (openingDisplay == 1 && searchDisplay == 0) {
                 layout.replace(openingPanel, searchPanel);

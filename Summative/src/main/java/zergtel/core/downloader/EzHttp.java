@@ -68,7 +68,7 @@ public class EzHttp {
 
 		fileName = dir
 				.getAbsolutePath()
-				.concat("/")
+				.concat("\\")
 				.concat(cleanseName(fileName));
 		System.out.println(fileName);
 
