@@ -12,6 +12,7 @@ import jdk.nashorn.internal.scripts.JO;
 import zergtel.core.converter.Converter;
 import zergtel.core.converter.Merge;
 import zergtel.core.downloader.Downloader;
+import zergtel.core.downloader.EzHttp;
 import zergtel.core.io.FileChooser;
 import zergtel.core.searcher.Searcher;
 
@@ -22,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
+import java.io.IOException;
 import java.lang.invoke.SwitchPoint;
 import java.util.ArrayList;
 import java.util.Map;
@@ -155,6 +157,17 @@ public class ComputerUI extends JFrame implements ActionListener{
             searchQuery[i].add(image[i]);
             searchFiller[i] = new JPanel();
             searchQuery[i].add(searchFiller[i]);
+
+            EzHttp.setDLToTemp();
+            try {
+                EzHttp.get(imageUrl[i], "image" + i, EzHttp.getDownloadLocation());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            ImageIcon[] imageStored = new ImageIcon[5];
+            imageStored[i] = new ImageIcon("./image" + i);
+            System.out.println(imageStored[i].getIconHeight());
+            image[i].setIcon(imageStored[i]);
 
             searchList[i].setHorizontalGroup(searchList[i].createSequentialGroup()
             .addComponent(image[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
