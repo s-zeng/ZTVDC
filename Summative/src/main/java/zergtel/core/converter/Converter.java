@@ -43,15 +43,6 @@ public class Converter {
         File file1 = new File("C:/Users/User/IdeaProjects/summative/Summative/bin/file.mp4");
         c.convert(file1, "C:/Users/User/IdeaProjects/summative/Summative/", "test.mp4");
     }
-
-    public void cancel()
-    {
-        app.destroy();
-        tempFile = new File(directory + name);
-        System.out.println(tempFile.getAbsolutePath());
-        tempFile.delete();
-    }
-
     //http://stackoverflow.com/questions/17123118/how-to-stop-ffmpeg-that-runs-through-java-process
     //http://stackoverflow.com/questions/10927718/how-to-read-ffmpeg-response-from-java-and-use-it-to-create-a-progress-bar
 }

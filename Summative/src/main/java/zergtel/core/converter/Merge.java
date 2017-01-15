@@ -39,10 +39,4 @@ public class Merge {
         }
         System.out.println("Working!");
     }
-    public void cancel()
-    {
-        app.destroy();
-        tempFile = new File(directory + name);
-        tempFile.delete();
-    }
 }

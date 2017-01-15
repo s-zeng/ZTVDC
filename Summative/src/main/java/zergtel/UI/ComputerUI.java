@@ -5,6 +5,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import jdk.nashorn.internal.scripts.JO;
 import zergtel.core.converter.Converter;
 import zergtel.core.converter.Merge;
 import zergtel.core.downloader.Downloader;
@@ -25,8 +26,12 @@ import java.util.Map;
  * Created by Shyam on 2016-10-25.
  */
 public class ComputerUI extends JFrame implements ActionListener{
-    private String url;
-    private String userInput, directory, name;
+    int openingDisplay = 1;
+    int searchDisplay = 0;
+    int browserDisplay = 0;
+    private String[] imageUrl = new String[5];
+    private String[] urlStorage = new String[5];
+    private String userInput, directory, name, url;
     private File file1, file2;
     private Dimension minSize = new Dimension(1024, 576);
     private JPanel commands = new JPanel();
@@ -35,34 +40,35 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JPanel search = new JPanel();
     private JPanel openingPanel = new JPanel();
     private JPanel searchPanel = new JPanel();
-    private JPanel searchQuery[] = new JPanel[25];
+    private JPanel searchQuery[] = new JPanel[5];
     private ArrayList<Map<String, String>> searchResults;
     private JFXPanel browserPanel = new JFXPanel();
     private WebView youtube;
     private WebEngine youtubeEngine;
     private GroupLayout layout;
-    private JButton downloadUrl = new JButton("Download with URL from Searcher");
-    private JButton downloadLink = new JButton("Download with URL");
-    private JButton converter = new JButton("Convert");
+    private JButton downloadUrl = new JButton("Download Link");
+    private JButton downloadLink = new JButton("Download");
+    private JButton downloadUrlCancel = new JButton("Cancel");
+    private JButton downloadLinkCancel = new JButton("Cancel");
+    private JButton converter = new JButton("Convert Files ");
     private JButton converterCancel = new JButton("Cancel");
     private JButton merge = new JButton("Merge");
     private JButton mergeCancel = new JButton("Cancel");
     private JButton searchKW = new JButton("Search by Key Words");
     private JButton previewURL = new JButton("Preview URL");
-    private JOptionPane info = new JOptionPane();
-    JOptionPane failure = new JOptionPane();
-    private JOptionPane userI = new JOptionPane();
     private JTextArea openingText = new JTextArea();
-    private JLabel image[] = new JLabel[25];
-    private JLabel title[] = new JLabel[25];
-    private JLabel channel[] = new JLabel[25];
-    private JLabel description[] = new JLabel[25];
-    private JLabel datePublished[] = new JLabel[25];
-    private JButton preview[] = new JButton[25];
+    private JLabel image[] = new JLabel[5];
+    private JLabel title[] = new JLabel[5];
+    private JLabel channel[] = new JLabel[5];
+    private JLabel description[] = new JLabel[5];
+    private JLabel datePublished[] = new JLabel[5];
+    private JButton preview[] = new JButton[5];
     private FileChooser chooser = new FileChooser();
     private Converter c = new Converter();
     private Merge m = new Merge();
-    private SwingWorker worker;
+    private DownloadWorker downloadWorker;
+    private ConvertWorker convertWorker;
+    private MergeWorker mergeWorker;
 
     public ComputerUI() {
         setTitle("ZergTel VDC");
@@ -89,7 +95,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         GroupLayout convertLayout = new GroupLayout(convert);
         GroupLayout searchLayout = new GroupLayout(search);
         GroupLayout openingLayout = new GroupLayout(openingPanel);
-        GroupLayout[] searchList = new GroupLayout[25];
+        GroupLayout[] searchList = new GroupLayout[5];
         GridLayout searcherLayout = new GridLayout(5, 1);
 
         setLayout(layout);
@@ -105,8 +111,10 @@ public class ComputerUI extends JFrame implements ActionListener{
         openingText.setFont(new Font("Times New Roman", Font.PLAIN, 32));
         openingText.setEditable(false);
 
-        download.add(downloadLink);
         download.add(downloadUrl);
+        download.add(downloadUrlCancel);
+        download.add(downloadLink);
+        download.add(downloadLinkCancel);
         convert.add(converter);
         convert.add(converterCancel);
         convert.add(merge);
@@ -123,7 +131,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         search.setBorder(BorderFactory.createTitledBorder("Search"));
         searchPanel.setBorder(BorderFactory.createTitledBorder("Search Results"));
 
-        for(int i = 0; i < 25; i++) {
+        for(int i = 0; i < 5; i++) {
             searchQuery[i] = new JPanel();
             searchQuery[i].setBorder(BorderFactory.createTitledBorder("Results" + i+1));
             searchList[i] = new GroupLayout(searchQuery[i]);
@@ -138,6 +146,34 @@ public class ComputerUI extends JFrame implements ActionListener{
             searchQuery[i].add(description[i]);
             datePublished[i] = new JLabel();
             searchQuery[i].add(datePublished[i]);
+            image[i] = new JLabel();
+            searchQuery[i].add(image[i]);
+
+            searchList[i].setVerticalGroup(searchList[i].createSequentialGroup()
+            .addGroup(searchList[i].createParallelGroup()
+                .addComponent(image[i], 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(title[i])
+                .addComponent(datePublished[i])
+                .addComponent(preview[i], 0, 500, Short.MAX_VALUE))
+            .addGroup(searchList[i].createParallelGroup()
+                .addComponent(channel[i]))
+            .addGroup(searchList[i].createParallelGroup()
+                .addComponent(description[i])));
+            searchList[i].setHorizontalGroup(searchList[i].createSequentialGroup()
+            .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addComponent(image[i], 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addComponent(title[i], 0, 0, Short.MAX_VALUE)
+                .addComponent(channel[i], 0, 0, Short.MAX_VALUE)
+                .addComponent(description[i], 0, 90, Short.MAX_VALUE))
+            .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addComponent(datePublished[i], 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addComponent(preview[i], 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+            searchList[i].setAutoCreateGaps(true);
+            searchList[i].linkSize(title[i], channel[i], description[i]);
+
+            searchPanel.add(searchQuery[i]);
         }
 
         layout.setHorizontalGroup(layout.createSequentialGroup()
@@ -164,12 +200,17 @@ public class ComputerUI extends JFrame implements ActionListener{
         downloadLayout.setHorizontalGroup(downloadLayout.createSequentialGroup()
         .addGroup(downloadLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
         .addComponent(downloadUrl, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addComponent(downloadLink, 0 ,GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+        .addComponent(downloadLink, 0 ,GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addGroup(downloadLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        .addComponent(downloadUrlCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(downloadLinkCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         downloadLayout.setVerticalGroup(downloadLayout.createSequentialGroup()
-        .addGroup(downloadLayout.createParallelGroup(GroupLayout.Alignment.CENTER))
-        .addComponent(downloadUrl, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addGroup(downloadLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-        .addComponent(downloadLink, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+        .addComponent(downloadUrl, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(downloadUrlCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addGroup(downloadLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+        .addComponent(downloadLink, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(downloadLinkCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         convertLayout.setHorizontalGroup(convertLayout.createSequentialGroup()
         .addGroup(convertLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -202,14 +243,16 @@ public class ComputerUI extends JFrame implements ActionListener{
         .addComponent(openingText, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
         downloadUrl.addActionListener(this);
+        downloadUrlCancel.addActionListener(this);
         downloadLink.addActionListener(this);
+        downloadLinkCancel.addActionListener(this);
         converter.addActionListener(this);
         converterCancel.addActionListener(this);
         merge.addActionListener(this);
         mergeCancel.addActionListener(this);
         searchKW.addActionListener(this);
         previewURL.addActionListener(this);
-        for(int i = 0; i < 25; i++)
+        for(int i = 0; i < 5; i++)
             preview[i].addActionListener(this);
 
 
@@ -217,7 +260,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         downloadUrl.setEnabled(false);
         converterCancel.setEnabled(false);
         mergeCancel.setEnabled(false);
-        info.showMessageDialog(null, "Click Download with URL in SearcherExample once to get instructions, then the rest of the time click it to download, or else click convert/merge to use that function!");
+        JOptionPane.showMessageDialog(null, "Click Download with URL in SearcherExample once to get instructions, then the rest of the time click it to download, or else click convert/merge to use that function!");
     }
 
     @Override
@@ -225,32 +268,38 @@ public class ComputerUI extends JFrame implements ActionListener{
         if (e.getSource() == downloadUrl) {
             //lol replace this with downloading url from searcher
         }
+        if (e.getSource() == downloadUrlCancel)
+            downloadWorker.cancel(true);
         if (e.getSource() == downloadLink) {
             url = JOptionPane.showInputDialog(null, "Insert media URL to download from");
             System.out.println("Url: " + url);
 
             if (!url.equals(null)) {
-                new DownloadWorker(url).execute();
+               downloadWorker = new DownloadWorker(url);
+               downloadWorker.execute();
             }
         }
+        if (e.getSource() == downloadLinkCancel)
+            downloadWorker.cancel(true);
         if (e.getSource() == converter) {
             try {
                 file1 = chooser.choose("Select file to convert", JFileChooser.FILES_ONLY);
                 if (!file1.equals(null)) {
                     directory = chooser.choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
                     if (!directory.equals(null)) {
-                        name = userI.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
-                        new ConvertWorker(file1, directory, name).execute();
+                        name = JOptionPane.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
+                        convertWorker = new ConvertWorker(file1, directory, name);
+                        convertWorker.execute();
                     }
                 }
             } catch (HeadlessException e1) {
                 e1.printStackTrace();
-                failure.showMessageDialog(null, e1.getMessage(), "Error", failure.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
             converterCancel.setEnabled(true);
         }
         if(e.getSource() == converterCancel)
-            c.cancel(); //i may have broken your cancer because i use a seperate converter instance in ConverterWorker - try to make it work
+            convertWorker.cancel(true);
         //A potential solution - assign the new ConvertWorker to a variable beforehand, and then do variable.execute() to run, and variable.cancel() to cancel lol
         if(e.getSource() == merge) {
             file1 = chooser.choose("Select video source file", JFileChooser.FILES_ONLY);
@@ -259,37 +308,57 @@ public class ComputerUI extends JFrame implements ActionListener{
                 if (!file2.equals(null)) {
                     directory = chooser.choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
                     if (!directory.equals(null)) {
-                        name = userI.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
+                        name = JOptionPane.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
 //                        m.merge(file1, file2, directory, name);
-                        new MergeWorker(file1, file2, directory, name).execute();
+                        mergeWorker = new MergeWorker(file1, file2, directory, name);
+                        mergeWorker.execute();
                     }
                 }
             }
             mergeCancel.setEnabled(true);
         }
         if(e.getSource() == mergeCancel)
-            m.cancel();
+            mergeWorker.cancel(true);
         if(e.getSource() == searchKW) { //TODO: put searcher into a worker to, because this is actually kinda slow
-            userInput = userI.showInputDialog(null, "Please enter the key words you desire to search for");
+            userInput = JOptionPane.showInputDialog(null, "Please enter the key words you desire to search for");
             searchResults = Searcher.search(userInput);
-            for (int i = 0; i <25; i++) { //magic number, beware
+            for (int i = 0; i < 5; i++) { //magic number, beware
                 Map<String, String> result = searchResults.get(i);
                 System.out.println(result.toString());
                 title[i].setText(result.get("title"));
                 channel[i].setText(result.get("channel"));
                 description[i].setText(result.get("description"));
                 datePublished[i].setText(result.get("datePublished"));
+                imageUrl[i] = result.get("thumbnail");
+                Image[] img = new Image[5];
+                img[i] = java.awt.Toolkit.getDefaultToolkit().createImage(imageUrl[i]);
+                urlStorage[i] = result.get("url");
+            }
+            if (openingDisplay == 1 && searchDisplay == 0) {
+                layout.replace(openingPanel, searchPanel);
+                openingDisplay = 0; searchDisplay = 1;
+        }
+            else if(browserDisplay == 1 && searchDisplay == 0) {
+                layout.replace(browserPanel, searchPanel);
+                browserDisplay = 0; searchDisplay = 1;
             }
         }
         if(e.getSource() == previewURL) {
-            userInput = userI.showInputDialog(null, "Please enter the URL you would like to search");
+            userInput = JOptionPane.showInputDialog(null, "Please enter the URL you would like to search");
             Platform.runLater (() -> {
                 youtube = new WebView();
                 youtubeEngine = youtube.getEngine();
                 youtubeEngine.load(userInput);
                 browserPanel.setScene(new Scene(youtube));
             });
-            layout.replace(openingPanel, browserPanel);
+            if(browserDisplay == 0 && openingDisplay == 1) {
+                layout.replace(openingPanel, browserPanel);
+                browserDisplay = 1; openingDisplay = 0;
+            }
+            else if(browserDisplay == 0 && searchDisplay == 1) {
+                layout.replace(searchPanel, browserPanel);
+                browserDisplay = 1; searchDisplay = 0;
+            }
         }
     }
 }
