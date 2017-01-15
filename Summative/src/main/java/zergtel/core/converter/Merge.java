@@ -20,7 +20,20 @@ public class Merge {
             System.out.println(cmd);
             Runtime convert = Runtime.getRuntime();
             app = convert.exec(cmd);
-            BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getInputStream()));
+            BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getErrorStream()));
+            try {
+                app.waitFor();
+                final int TERMINATED = app.waitFor();
+                if(TERMINATED == 0)
+                    System.out.println("Completed!");
+                else {
+                    String line;
+                    if((line = appReader.readLine()) != null)
+                        System.out.println(line);
+                }
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
