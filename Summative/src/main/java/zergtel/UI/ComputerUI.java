@@ -374,6 +374,9 @@ public class ComputerUI extends JFrame implements ActionListener{
                 ImageIcon[] imageStored = new ImageIcon[5];
                 imageStored[i] = new ImageIcon("./image" + i + ".png");
                 image[i].setIcon(imageStored[i]);
+                System.out.println(image[i].getIcon());
+                System.out.print(imageStored[i].getIconHeight());
+                System.out.println(" " + imageStored[i].getIconWidth());
                 searchList[i].replace(test[i], image[i]);
             }
             if (openingDisplay == 1 && searchDisplay == 0) {
