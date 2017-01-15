@@ -1,14 +1,10 @@
 package zergtel.UI;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker.State;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import jdk.nashorn.internal.scripts.JO;
 import zergtel.core.converter.Converter;
 import zergtel.core.converter.Merge;
 import zergtel.core.downloader.Downloader;
@@ -23,8 +19,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
-import java.io.IOException;
-import java.lang.invoke.SwitchPoint;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -143,10 +137,10 @@ public class ComputerUI extends JFrame implements ActionListener{
 
         for(int i = 0; i < 5; i++) {
             searchQuery[i] = new JPanel();
-            searchQuery[i].setBorder(BorderFactory.createTitledBorder("Results" + i+1));
+            searchQuery[i].setBorder(BorderFactory.createTitledBorder("Result #" + (i+1)));
             searchList[i] = new GroupLayout(searchQuery[i]);
             searchQuery[i].setLayout(searchList[i]);
-            preview[i] = new JButton("Preview");
+            preview[i] = new JButton("Select");
             searchQuery[i].add(preview[i]);
             title[i] = new JLabel();
             searchQuery[i].add(title[i]);
@@ -279,10 +273,13 @@ public class ComputerUI extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == downloadUrl) {
             directory = chooser.choose("Choose where to save the download file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
-            name = JOptionPane.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
+//            name = JOptionPane.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
             url = urlStorage[buttonNo];
             try {
-                EzHttp.get(url, name, directory);
+                EzHttp.setDownloadLocation(directory);
+//                EzHttp.get(url, name, directory);
+                Downloader.get(url);
+
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -355,6 +352,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         if (e.getSource() == searchKW) {
             userInput = JOptionPane.showInputDialog(null, "Please enter the key words you desire to search for");
             searchResults = Searcher.search(userInput);
+            ImageIcon[] imageStored = new ImageIcon[5];
             for (int i = 0; i < 5; i++) { //magic number, beware
                 Map<String, String> result = searchResults.get(i);
                 title[i].setText(result.get("title"));
@@ -365,14 +363,12 @@ public class ComputerUI extends JFrame implements ActionListener{
                 image[i] = new JLabel();
                 imageUrl[i] = result.get("thumbnail");
 
-                EzHttp.setDLToTemp();
                 try {
-                    EzHttp.get(imageUrl[i], "image" + i + ".png", EzHttp.getDownloadLocation());
+                    EzHttp.get(imageUrl[i], "image" + i + ".png", EzHttp.TEMP_LOCATION);
                 } catch (Exception e2) {
                     e2.printStackTrace();
                 }
-                ImageIcon[] imageStored = new ImageIcon[5];
-                imageStored[i] = new ImageIcon("./image" + i + ".png");
+                imageStored[i] = new ImageIcon("temp/image" + i + ".png");
                 image[i].setIcon(imageStored[i]);
                 System.out.println(image[i].getIcon());
                 System.out.print(imageStored[i].getIconHeight());

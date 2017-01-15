@@ -10,8 +10,8 @@ import java.net.URLConnection;
 
 public class EzHttp {
 	private static final int BUFFER_SIZE = 4096;
-	private static final String DEFAULT_LOCATION = "download/";
-	private static final String TEMP_LOCATION = "temp/";
+	public static final String DEFAULT_LOCATION = "download/";
+	public static final String TEMP_LOCATION = "temp/";
 	private static String downloadLocation = "download/";
 
 //	Todo - method to avoid naming conflicts (e.g. save as example(1).mp3 if example.mp3 already exists)
@@ -62,7 +62,7 @@ public class EzHttp {
 		}
 
 		File dir = new File(
-				downloadLocation.concat(cleanseDirectory(downLocation))
+				cleanseDirectory(downLocation)
 		);
 		dir.mkdir();
 
