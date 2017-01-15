@@ -1,6 +1,5 @@
 package zergtel.core.downloader;
 
-import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.DataProvider;
@@ -44,7 +43,7 @@ public class DownloaderTest {
             {"https://insaneintherainmusic.bandcamp.com/album/live-at-grillbys"},
             {"http://simonzeng.tk/example.mp3"},
             {"https://www.youtube.com/watch?v=f4yvZF1cMz0"},
-            {"https://vimeo.com/29950141"},
+            {"https://vimeo.com/29950141.html"},
             {"https://www.youtube.com/watch?v=4zLfCnGVeL4"},
             {"https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
         };
@@ -52,7 +51,8 @@ public class DownloaderTest {
             {"https://souleyedigitalmusic.bandcamp.com/album/extreme-road-trip-ost"},
             {"http://simonzeng.tk/example.mp3"},
 //            {"https://www.youtube.com/embed/f4yvZF1cMz0"}
-            {"https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
+            {"https://www.youtube.com/embed/dQw4w9WgXcQ"}
+//            {"https://vimeo.com/29950141"}
         };
 
         List<String> includedGroups = Arrays.asList(context.getIncludedGroups());
@@ -82,11 +82,7 @@ public class DownloaderTest {
     public void testGet(String link) throws Exception {
         System.out.println("Link test: " + link);
         String downLocation = Downloader.get(link);
-        String[] paths = downLocation.split("\\/|\\\\");
-        System.out.println(Arrays.toString(paths));
-
-        Assert.assertTrue(true);
-
+        System.out.println(downLocation);
         System.out.println("Test success");
     }
 

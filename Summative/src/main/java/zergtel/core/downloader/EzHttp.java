@@ -15,7 +15,6 @@ public class EzHttp {
 //	Todo - method to avoid naming conflicts (e.g. save as example(1).mp3 if example.mp3 already exists)
 //		maybe add seperate class for file things like this and cleanseName
 
-
 	public static String getDownloadLocation() {
 		return downloadLocation;
 	}

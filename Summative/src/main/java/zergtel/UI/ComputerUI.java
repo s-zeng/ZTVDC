@@ -269,17 +269,21 @@ public class ComputerUI extends JFrame implements ActionListener{
         if(e.getSource() == mergeCancel)
             m.cancel();
         if(e.getSource() == searchKW) {
+            System.out.println("test");
             userInput = userI.showInputDialog(null, "Please enter the key words you desire to search for");
+            System.out.println(userInput);
             searchResults = Searcher.search(userInput);
             for (int i = 0; i <25; i++) {
+                Map<String, String> result = searchResults.get(i);
+                System.out.println(result.toString());
                 title[i] = new JLabel();
-                title[i].setText(searchResults.get(i).get("title"));
+                title[i].setText(result.get("title"));
                 channel[i] = new JLabel();
-                channel[i].setText(searchResults.get(i).get("channel"));
+                channel[i].setText(result.get("channel"));
                 description[i] = new JLabel();
-                description[i].setText(searchResults.get(i).get("description"));
+                description[i].setText(result.get("description"));
                 datePublished[i] = new JLabel();
-                datePublished[i].setText(searchResults.get(i).get("datePublished"));
+                datePublished[i].setText(result.get("datePublished"));
             }
         }
         if(e.getSource() == previewURL) {
