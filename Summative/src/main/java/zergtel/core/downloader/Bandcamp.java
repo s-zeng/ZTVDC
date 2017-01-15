@@ -29,7 +29,7 @@ import java.net.URL;
 public class Bandcamp {
     public static String get(URL url) throws Exception {
         File tmp;
-        tmp = new File(EzHttp.get(url, "bandcamp.tmp"));
+        tmp = new File(EzHttp.get(url.toString(), "bandcamp.tmp", EzHttp.TEMP_LOCATION));
         String[] downloadedFiles = extractFiles(tmp);
         tmp.delete();
 
@@ -80,7 +80,7 @@ public class Bandcamp {
 
             try {
                 System.out.println(mediaName + " - " + downloadLink);
-                EzHttp.get(downloadLink, mediaName, folder);
+                EzHttp.get(downloadLink, mediaName, EzHttp.getDownloadLocation() + folder);
                 output[i] = folder + "\\" + mediaName;
             } catch (Exception e) {
                 System.err.println("wtf");

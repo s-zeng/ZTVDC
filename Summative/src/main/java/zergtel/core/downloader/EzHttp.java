@@ -38,7 +38,7 @@ public class EzHttp {
 	}
 
 	public static String get(URL uri) throws Exception {
-		return get(uri, "", "");
+		return get(uri, "", downloadLocation);
 	}
 
 	public static String get(URL uri, String fileName) throws Exception {

@@ -40,12 +40,12 @@ public class DownloaderTest {
     @DataProvider(name = "links")
     public static Object[][] getLinks(ITestContext context) {
         Object[][] fullList = new Object[][] {
+            {"https://www.youtube.com/embed/dQw4w9WgXcQ"},
             {"https://insaneintherainmusic.bandcamp.com/album/live-at-grillbys"},
             {"http://simonzeng.tk/example.mp3"},
             {"https://www.youtube.com/watch?v=f4yvZF1cMz0"},
-            {"https://vimeo.com/29950141.html"},
-            {"https://www.youtube.com/watch?v=4zLfCnGVeL4"},
-            {"https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
+//            {"https://vimeo.com/29950141.html"},
+            {"https://www.youtu.be/4zLfCnGVeL4"}
         };
         Object[][] lightList = new Object[][] {
             {"https://souleyedigitalmusic.bandcamp.com/album/extreme-road-trip-ost"},

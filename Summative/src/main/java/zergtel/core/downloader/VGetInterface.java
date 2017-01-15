@@ -15,11 +15,13 @@ public class VGetInterface {
     }
 
     public static String get(URL url) throws Exception {
-        VGet axetGetter = new VGet(url, new File(EzHttp.getDownloadLocation()));
+        File temp = new File(EzHttp.TEMP_LOCATION);
+        temp.mkdir();
+        VGet axetGetter = new VGet(url, temp);
         axetGetter.download();
         System.out.println("YT source: " + axetGetter.getVideo().getSource().toString());
+        System.out.println(axetGetter.getVideo().getInfo().size());
 
-
-        return EzHttp.getDownloadLocation() + "/" + axetGetter.getVideo().getTitle();
+        return EzHttp.TEMP_LOCATION + "/" + axetGetter.getVideo().getTitle();
     }
 }
