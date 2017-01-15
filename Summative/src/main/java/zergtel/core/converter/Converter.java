@@ -28,8 +28,8 @@ public class Converter {
                     if((line = appReader.readLine()) != null)
                         System.out.println(line);
                 }
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         } catch (IOException e) {
             e.printStackTrace();
