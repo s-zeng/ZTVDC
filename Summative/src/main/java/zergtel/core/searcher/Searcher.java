@@ -90,7 +90,7 @@ public class Searcher {
             rId = result.getId();
             Map<String, String> element = new HashMap<String, String>();
             element.put("title", snippet.getTitle());
-            element.put("url", "http://www.youtube.com/embed/" + rId.getVideoId());
+            element.put("url", "http://www.youtube.com/watch?v=" + rId.getVideoId());
             element.put("thumbnail", snippet.getThumbnails().getDefault().getUrl());
             element.put("description", snippet.getDescription());
             element.put("channel", snippet.getChannelTitle());
