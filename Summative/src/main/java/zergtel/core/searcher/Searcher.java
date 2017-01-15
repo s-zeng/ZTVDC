@@ -94,7 +94,7 @@ public class Searcher {
             element.put("thumbnail", snippet.getThumbnails().getDefault().getUrl());
             element.put("description", snippet.getDescription());
             element.put("channel", snippet.getChannelTitle());
-            element.put("datePublished", snippet.getPublishedAt().toString());
+            element.put("datePublished", snippet.getPublishedAt().toString().substring(0, 10));
             output.add(element);
             System.out.println(element.toString());
         }
