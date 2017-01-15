@@ -1,5 +1,8 @@
 package zergtel.core.converter;
 
+import jdk.nashorn.internal.scripts.JO;
+
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -21,11 +24,12 @@ public class Merge {
             Runtime convert = Runtime.getRuntime();
             app = convert.exec(cmd);
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getErrorStream()));
+            JOptionPane.showMessageDialog(null, "Merging Began");
             try {
                 app.waitFor();
                 final int TERMINATED = app.waitFor();
                 if(TERMINATED == 0)
-                    System.out.println("Completed!");
+                    JOptionPane.showMessageDialog(null, "Merging Finished for" + name);
                 else {
                     String line;
                     if((line = appReader.readLine()) != null)
