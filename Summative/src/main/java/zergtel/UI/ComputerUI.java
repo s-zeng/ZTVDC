@@ -291,6 +291,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         if (e.getSource() == downloadUrlCancel) {
             downloadWorker.cancel(true);
             downloadUrlCancel.setEnabled(false);
+            new File(directory + name).delete();
         }
         if (e.getSource() == downloadLink) {
             url = JOptionPane.showInputDialog(null, "Insert media URL to download from");
@@ -305,6 +306,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         if (e.getSource() == downloadLinkCancel) {
             downloadWorker.cancel(true);
             downloadLinkCancel.setEnabled(false);
+            new File(directory + name).delete();
         }
         if (e.getSource() == converter) {
             try {
@@ -326,6 +328,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         if (e.getSource() == converterCancel) {
             convertWorker.cancel(true);
             converterCancel.setEnabled(false);
+            new File(directory + name).delete();
         }
         //A potential solution - assign the new ConvertWorker to a variable beforehand, and then do variable.execute() to run, and variable.cancel() to cancel lol
         if (e.getSource() == merge) {
@@ -347,6 +350,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         if (e.getSource() == mergeCancel) {
             mergeWorker.cancel(true);
             mergeCancel.setEnabled(false);
+            new File(directory + name).delete();
         }
         if (e.getSource() == searchKW) {
             userInput = JOptionPane.showInputDialog(null, "Please enter the key words you desire to search for");
