@@ -298,15 +298,17 @@ public class ComputerUI extends JFrame implements ActionListener{
         if (e.getSource() == downloadLink) {
             url = JOptionPane.showInputDialog(null, "Insert BandCamp, YouTube, or raw file link to download from");
             System.out.println("Url: " + url);
-            directory = chooser.choose("Choose where to save the downloaded file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath() + "\\";
+            if (!url.equals(null)) {
+                directory = chooser.choose("Choose where to save the downloaded file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath() + "\\";
 
-            if (!url.equals(null) && !directory.equals(null)) {
-                EzHttp.setDownloadLocation(directory);
-                downloadWorker = new DownloadWorker(url);
-                JOptionPane.showMessageDialog(null, "Downloading has begun - we'll alert you when it's done.");
-                downloadWorker.execute();
+                if (!directory.equals(null)) {
+                    EzHttp.setDownloadLocation(directory);
+                    downloadWorker = new DownloadWorker(url);
+                    JOptionPane.showMessageDialog(null, "Downloading has begun - we'll alert you when it's done.");
+                    downloadWorker.execute();
+                    downloadLinkCancel.setEnabled(true);
+                }
             }
-            downloadLinkCancel.setEnabled(true);
         }
         if (e.getSource() == downloadLinkCancel) {
             downloadWorker.cancel(true);
