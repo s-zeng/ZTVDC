@@ -51,8 +51,8 @@ public class ComputerUI extends JFrame implements ActionListener{
     private WebEngine youtubeEngine;
     private GroupLayout layout;
     private GroupLayout[] searchList = new GroupLayout[5];
-    private JButton downloadUrl = new JButton("Download Link");
-    private JButton downloadLink = new JButton("Download");
+    private JButton downloadUrl = new JButton("Download Selected");
+    private JButton downloadLink = new JButton("Download Link");
     private JButton downloadUrlCancel = new JButton("Cancel");
     private JButton downloadLinkCancel = new JButton("Cancel");
     private JButton converter = new JButton("Convert Files ");
@@ -60,7 +60,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JButton merge = new JButton("Merge");
     private JButton mergeCancel = new JButton("Cancel");
     private JButton searchKW = new JButton("Search by Key Words");
-    private JButton previewURL = new JButton("Preview URL");
+    private JButton previewURL = new JButton("Preview Selected");
     private JTextArea openingText = new JTextArea();
     private JLabel image[] = new JLabel[5];
     private JLabel title[] = new JLabel[5];
