@@ -32,12 +32,14 @@ import java.util.Map;
  * Created by Shyam on 2016-10-25.
  */
 public class ComputerUI extends JFrame implements ActionListener{
-    int openingDisplay = 1;
-    int searchDisplay = 0;
-    int browserDisplay = 0;
-    int buttonNo = -1;
-    int numPressed = 0;
-    int swap = 0;
+    private int openingDisplay = 1;
+    private int searchDisplay = 0;
+    private int browserDisplay = 0;
+    private int buttonNo = -1;
+    private int numPressed = 0;
+    private int swap = 0;
+    public int isConverterCancelled = 0;
+    public int isMergeCancelled = 0;
     private String[] imageUrl = new String[5];
     private String[] urlStorage = new String[5];
     private String userInput, directory, name, url;
@@ -330,8 +332,12 @@ public class ComputerUI extends JFrame implements ActionListener{
             converterCancel.setEnabled(true);
         }
         if (e.getSource() == converterCancel) {
+            isConverterCancelled = 1;
             convertWorker.cancel(true);
             converterCancel.setEnabled(false);
+            File temp = new File("./" + name);
+            System.out.println(temp);
+            temp.delete();
         }
         //A potential solution - assign the new ConvertWorker to a variable beforehand, and then do variable.execute() to run, and variable.cancel() to cancel lol
         if (e.getSource() == merge) {
@@ -352,8 +358,10 @@ public class ComputerUI extends JFrame implements ActionListener{
             mergeCancel.setEnabled(true);
         }
         if (e.getSource() == mergeCancel) {
+            isMergeCancelled = 1;
             mergeWorker.cancel(true);
             mergeCancel.setEnabled(false);
+            new File(directory + "\\" +  name).delete();
         }
         if (e.getSource() == searchKW) {
             userInput = JOptionPane.showInputDialog(null, "Please enter your search query");
@@ -497,9 +505,13 @@ class ConvertWorker extends SwingWorker<String, Void> {
     public String doInBackground() {
         try {
             converter.convert(inFile, directory, name);
-            if (converter.getTerminated() == 0) {
+            if (converter.getTerminated() == 0 && Main.ui.isConverterCancelled == 0)
                 JOptionPane.showMessageDialog(null, "Conversion has finished for " + name);
-                new File(directory + name).delete(); }
+            else if(converter.getTerminated() == 0 && Main.ui.isConverterCancelled == 1) {
+                JOptionPane.showMessageDialog(null, "Conversion was cancelled for" + name);
+                converter.app.destroy();
+                Main.ui.isConverterCancelled = 0;
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -525,9 +537,12 @@ class MergeWorker extends SwingWorker<String, Void> {
     public String doInBackground() {
         try {
             merger.merge(file1, file2, directory, name);
-            if(merger.getTerminated() == 0) {
+            if(merger.getTerminated() == 0)
                 JOptionPane.showMessageDialog(null, "Merging has finished for" + name);
-                new File(directory + name).delete();
+            else if(merger.getTerminated() == 0 && Main.ui.isMergeCancelled == 1) {
+                JOptionPane.showMessageDialog(null, "Merging was cancelled for" + name);
+                merger.app.destroy();
+                Main.ui.isMergeCancelled = 0;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
