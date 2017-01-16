@@ -336,7 +336,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             convertWorker.cancel(true);
             converterCancel.setEnabled(false);
             File temp = new File("./" + name);
-            System.out.println(temp);
+            System.out.println(temp.getAbsolutePath());
             temp.delete();
         }
         //A potential solution - assign the new ConvertWorker to a variable beforehand, and then do variable.execute() to run, and variable.cancel() to cancel lol
