@@ -43,6 +43,6 @@ public class VGetInterface {
             );
         }
 
-        return EzHttp.TEMP_LOCATION + "/" + axetGetter.getVideo().getTitle();
+        return title;
     }
 }

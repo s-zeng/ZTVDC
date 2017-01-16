@@ -275,6 +275,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             directory = chooser.choose("Choose where to save the download file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
             url = urlStorage[buttonNo];
             downloadWorker = new DownloadWorker(url);
+            JOptionPane.showMessageDialog(null, "Downloading has begun - we'll alert you when it's done.");
             downloadWorker.execute();
             downloadUrlCancel.setEnabled(true);
         }
@@ -289,6 +290,7 @@ public class ComputerUI extends JFrame implements ActionListener{
 
             if (!url.equals(null)) {
                 downloadWorker = new DownloadWorker(url);
+                JOptionPane.showMessageDialog(null, "Downloading has begun - we'll alert you when it's done.");
                 downloadWorker.execute();
             }
             downloadLinkCancel.setEnabled(true);
@@ -446,13 +448,17 @@ class DownloadWorker extends SwingWorker<String, Void> {
 
     @Override
     public String doInBackground() {
+        String output;
+
         try {
-            return Downloader.get(url);
+            output = Downloader.get(url);
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
             return ex.getMessage();
         }
+        JOptionPane.showMessageDialog(null, "Downloading has finished for " + output);
+        return output;
     }
 }
 

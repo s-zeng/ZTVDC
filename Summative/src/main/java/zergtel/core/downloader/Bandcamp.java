@@ -31,9 +31,7 @@ public class Bandcamp {
         File tmp;
         tmp = new File(EzHttp.get(url.toString(), "bandcamp.tmp", EzHttp.TEMP_LOCATION));
         String[] downloadedFiles = extractFiles(tmp);
-        tmp.delete();
-
-        return "Replace this string later";
+        return getTitle(tmp);
     }
 
     public static String get(String url) throws Exception{
