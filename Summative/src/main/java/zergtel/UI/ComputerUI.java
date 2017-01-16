@@ -425,6 +425,7 @@ public class ComputerUI extends JFrame implements ActionListener{
 
     }
     public void browser() {
+        Platform.setImplicitExit(false);
         Platform.runLater(() -> {
             if (numPressed != 0)
                 youtubeEngine.getLoadWorker().cancel();
