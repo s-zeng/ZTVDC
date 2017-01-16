@@ -82,6 +82,10 @@ public class ComputerUI extends JFrame implements ActionListener{
     private MergeWorker mergeWorker;
 
     public ComputerUI() {
+        URL iconURL = getClass().getResource("/zergtel.png");
+        ImageIcon icon = new ImageIcon(iconURL);
+        this.setIconImage(icon.getImage());
+
         setTitle("ZergTel VDC");
         setResizable(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
