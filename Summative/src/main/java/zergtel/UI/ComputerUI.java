@@ -12,13 +12,16 @@ import zergtel.core.downloader.EzHttp;
 import zergtel.core.io.FileChooser;
 import zergtel.core.searcher.Searcher;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -351,24 +354,28 @@ public class ComputerUI extends JFrame implements ActionListener{
                 title[i].setText("<html>" + "Title: " + result.get("title") + "<br>" + "Channel: " + result.get("channel") + "<br>" + "<font color = 'gray'>" + "Description: " + result.get("description") + "</font>" + "</html>");
                 datePublished[i].setText(result.get("datePublished"));
                 urlStorage[i] = result.get("url");
-                image[i] = new JLabel();
                 imageUrl[i] = result.get("thumbnail");
                 URL[] url = new URL[5];
                 try {
                     url[i] = new URL(imageUrl[i]);
+                    BufferedImage[] images = new BufferedImage[5];
+                    images[i] = ImageIO.read(url[i]);
+                    image[i] = new JLabel(new ImageIcon(images[i]));
                 } catch(MalformedURLException e3) {
-
+                    e3.printStackTrace();
+                } catch(IOException e4) {
+                    e4.printStackTrace();
                 }
-                try {
-                    EzHttp.get(imageUrl[i], "image" + i + ".png", EzHttp.TEMP_LOCATION);
-                } catch (Exception e2) {
-                    e2.printStackTrace();
-                }
-                imageStored[i] = new ImageIcon("temp/image" + i + ".png");
-                image[i].setIcon(imageStored[i]);
-                System.out.println(image[i].getIcon());
-                System.out.print(imageStored[i].getIconHeight());
-                System.out.println(" " + imageStored[i].getIconWidth());
+             //   try {
+             //      EzHttp.get(imageUrl[i], "image" + i + ".png", EzHttp.TEMP_LOCATION);
+             //   } catch (Exception e2) {
+             //       e2.printStackTrace();
+             //   }
+             //   imageStored[i] = new ImageIcon("temp/image" + i + ".png");
+             //   image[i].setIcon(imageStored[i]);
+             //   System.out.println(image[i].getIcon());
+             //   System.out.print(imageStored[i].getIconHeight());
+             //   System.out.println(" " + imageStored[i].getIconWidth());
                 if (swap == 0) {
                     searchList[i].replace(test[i], image[i]);
                     searchList[i].linkSize(SwingConstants.VERTICAL, image[i], preview[i]);
