@@ -343,7 +343,6 @@ public class ComputerUI extends JFrame implements ActionListener{
             isConverterCancelled = 1;
             convertWorker.cancel(true);
             converterCancel.setEnabled(false);
-            isConverterCancelled = 0;
         }
         //A potential solution - assign the new ConvertWorker to a variable beforehand, and then do variable.execute() to run, and variable.cancel() to cancel lol
         if (e.getSource() == merge) {
@@ -367,8 +366,6 @@ public class ComputerUI extends JFrame implements ActionListener{
             isMergeCancelled = 1;
             mergeWorker.cancel(true);
             mergeCancel.setEnabled(false);
-            isMergeCancelled = 0;
-
         }
         if (e.getSource() == searchKW) {
             userInput = JOptionPane.showInputDialog(null, "Please enter your search query");
