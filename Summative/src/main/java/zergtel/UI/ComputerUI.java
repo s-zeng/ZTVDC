@@ -352,44 +352,46 @@ public class ComputerUI extends JFrame implements ActionListener{
         }
         if (e.getSource() == searchKW) {
             userInput = JOptionPane.showInputDialog(null, "Please enter the key words you desire to search for");
-            searchResults = Searcher.search(userInput);
-            URL[] url = new URL[5];
-            ImageIcon[] imageStored = new ImageIcon[5];
-            BufferedImage[] images = new BufferedImage[5];
-            for (int i = 0; i < searchResults.size(); i++) { //magic number, beware
-                Map<String, String> result = searchResults.get(i);
-                title[i].setText("<html>" + "Title: " + result.get("title") + "<br>" + "Channel: " + result.get("channel") + "<br>" + "<font color = 'gray'>" + "Description: " + result.get("description") + "</font>" + "</html>");
-                datePublished[i].setText(result.get("datePublished"));
-                urlStorage[i] = result.get("url");
-                imageUrl[i] = result.get("thumbnail");
-                try {
-                    url[i] = new URL(imageUrl[i]);
-                    images[i] = ImageIO.read(url[i]);
-                    imageStored[i] = new ImageIcon(images[i]);
-                    image[i].setIcon(imageStored[i]);
-                } catch(MalformedURLException e3) {
-                    e3.printStackTrace();
-                } catch(IOException e4) {
-                    e4.printStackTrace();
+            if (!userInput.equals("")) {
+                searchResults = Searcher.search(userInput);
+                URL[] url = new URL[5];
+                ImageIcon[] imageStored = new ImageIcon[5];
+                BufferedImage[] images = new BufferedImage[5];
+                for (int i = 0; i < searchResults.size(); i++) { //magic number, beware
+                    Map<String, String> result = searchResults.get(i);
+                    title[i].setText("<html>" + "Title: " + result.get("title") + "<br>" + "Channel: " + result.get("channel") + "<br>" + "<font color = 'gray'>" + "Description: " + result.get("description") + "</font>" + "</html>");
+                    datePublished[i].setText(result.get("datePublished"));
+                    urlStorage[i] = result.get("url");
+                    imageUrl[i] = result.get("thumbnail");
+                    try {
+                        url[i] = new URL(imageUrl[i]);
+                        images[i] = ImageIO.read(url[i]);
+                        imageStored[i] = new ImageIcon(images[i]);
+                        image[i].setIcon(imageStored[i]);
+                    } catch(MalformedURLException e3) {
+                        e3.printStackTrace();
+                    } catch(IOException e4) {
+                        e4.printStackTrace();
+                    }
+                    if (swap == 0) {
+                        searchList[i].replace(test[i], image[i]);
+                        searchList[i].linkSize(SwingConstants.VERTICAL, image[i], preview[i]);
+                    }
+                    searchList[i].replace(image[i], image[i]);
                 }
-                if (swap == 0) {
-                    searchList[i].replace(test[i], image[i]);
-                    searchList[i].linkSize(SwingConstants.VERTICAL, image[i], preview[i]);
-                }
-                searchList[i].replace(image[i], image[i]);
-            }
-            if (searchResults.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "No search results found");
-            } else {
-                swap++;
-                if (openingDisplay == 1 && searchDisplay == 0) {
-                    layout.replace(openingPanel, searchPanel);
-                    openingDisplay = 0;
-                    searchDisplay = 1;
-                } else if (browserDisplay == 1 && searchDisplay == 0) {
-                    layout.replace(browserPanel, searchPanel);
-                    browserDisplay = 0;
-                    searchDisplay = 1;
+                if (searchResults.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No search results found");
+                } else {
+                    swap++;
+                    if (openingDisplay == 1 && searchDisplay == 0) {
+                        layout.replace(openingPanel, searchPanel);
+                        openingDisplay = 0;
+                        searchDisplay = 1;
+                    } else if (browserDisplay == 1 && searchDisplay == 0) {
+                        layout.replace(browserPanel, searchPanel);
+                        browserDisplay = 0;
+                        searchDisplay = 1;
+                    }
                 }
             }
         }
