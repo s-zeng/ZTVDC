@@ -506,11 +506,9 @@ class ConvertWorker extends SwingWorker<String, Void> {
             if (converter.getTerminated() == 0 && Main.ui.isConverterCancelled == 0)
                 JOptionPane.showMessageDialog(null, "Conversion has finished for " + name);
             else if(converter.getTerminated() == 0 && Main.ui.isConverterCancelled == 1) {
-                JOptionPane.showMessageDialog(null, "Conversion was cancelled for" + name);
+                JOptionPane.showMessageDialog(null, "Conversion was cancelled for " + name);
                 converter.app.destroy();
                 Main.ui.isConverterCancelled = 0;
-                wait(1000);
-                new File(directory + "\\" + name);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -543,8 +541,6 @@ class MergeWorker extends SwingWorker<String, Void> {
                 JOptionPane.showMessageDialog(null, "Merging was cancelled for " + name);
                 merger.app.destroy();
                 Main.ui.isMergeCancelled = 0;
-                wait(1000);
-                new File(directory + "\\" + name);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
