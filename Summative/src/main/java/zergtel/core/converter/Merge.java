@@ -37,7 +37,7 @@ public class Merge {
                     Thread.sleep(500);
                     File file = new File(directory + name);
                     if(file.exists() == false)
-                        JOptionPane.showMessageDialog(null, "Conversion failed!");
+                        JOptionPane.showMessageDialog(null, "Merging failed!");
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
