@@ -1,13 +1,14 @@
 # Zergtel Download Converter
 
 CircleCI build state:
-[![CircleCI](https://circleci.com/gh/kronicmage/summative.svg?style=svg)](https://circleci.com/gh/kronicmage/summative)
+[![CircleCI](https://circleci.com/gh/kronicmage/ZTVDC.svg?style=svg)](https://circleci.com/gh/kronicmage/ZTVDC)
 
 Zergtel Download Converter is a sane and lightweight appliction for downloading media, and converting of any video or audio file.
 
 ZTVDC currently supports the following sites for downloading:
 * YouTube
 * Bandcamp
+* Direct downloads
 
 Conversions rely on [FFMPEG](https://ffmpeg.org/) - more info there
 
