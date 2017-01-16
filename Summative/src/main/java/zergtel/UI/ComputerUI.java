@@ -269,16 +269,9 @@ public class ComputerUI extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == downloadUrl) {
             directory = chooser.choose("Choose where to save the download file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
-//            name = JOptionPane.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
             url = urlStorage[buttonNo];
-            try {
-                EzHttp.setDownloadLocation(directory);
-//                EzHttp.get(url, name, directory);
-                Downloader.get(url);
-
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+            downloadWorker = new DownloadWorker(url);
+            downloadWorker.execute();
             downloadUrlCancel.setEnabled(true);
         }
         if (e.getSource() == downloadUrlCancel) {
