@@ -105,10 +105,10 @@ public class EzHttp {
 
 	public static String cleanseName(String fileName) {
 		//flesh this function out to be able to fix all illegal windows file names
-		return fileName.replaceAll("\"|\\/|\\?|\\||:|\\*|<|>", "");
+		return fileName.replaceAll("\"|\\/|\\?|\\||:|\\*|<|>", "").replaceAll("\\.+$", "");
 	}
 
 	public static String cleanseDirectory(String dirName) {
-		return dirName.replaceAll("\"|\\?|\\||:|\\*|<|>", "");
+		return dirName.replaceAll("\"|\\?|\\||:|\\*|<|>", "").replaceAll("\\.+$", "");
 	}
 }

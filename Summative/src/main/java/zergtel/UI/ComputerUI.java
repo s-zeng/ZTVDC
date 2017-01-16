@@ -9,6 +9,7 @@ import zergtel.core.Main;
 import zergtel.core.converter.Converter;
 import zergtel.core.converter.Merge;
 import zergtel.core.downloader.Downloader;
+import zergtel.core.downloader.EzHttp;
 import zergtel.core.io.FileChooser;
 import zergtel.core.searcher.Searcher;
 
@@ -57,7 +58,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private GroupLayout layout;
     private GroupLayout[] searchList = new GroupLayout[5];
     private JButton downloadUrl = new JButton("Download Selected");
-    private JButton downloadLink = new JButton("Download Link");
+    private JButton downloadLink = new JButton("Download from URL");
     public JButton downloadUrlCancel = new JButton("Cancel");
     public JButton downloadLinkCancel = new JButton("Cancel");
     private JButton converter = new JButton("      Convert Files      ");
@@ -272,18 +273,20 @@ public class ComputerUI extends JFrame implements ActionListener{
         converterCancel.setEnabled(false);
         mergeCancel.setEnabled(false);
         previewURL.setEnabled(false);
-        JOptionPane.showMessageDialog(null, "Click Download with URL in SearcherExample once to get instructions, then the rest of the time click it to download, or else click convert/merge to use that function!");
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == downloadUrl) {
-            directory = chooser.choose("Choose where to save the download file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
-            url = urlStorage[buttonNo];
-            downloadWorker = new DownloadWorker(url);
-            JOptionPane.showMessageDialog(null, "Downloading has begun - we'll alert you when it's done.");
-            downloadWorker.execute();
-            downloadUrlCancel.setEnabled(true);
+            directory = chooser.choose("Choose where to save the downloaded file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath() + "\\";
+            if (!directory.equals(null)) {
+                EzHttp.setDownloadLocation(directory);
+                url = urlStorage[buttonNo];
+                downloadWorker = new DownloadWorker(url);
+                JOptionPane.showMessageDialog(null, "Downloading has begun - we'll alert you when it's done.");
+                downloadWorker.execute();
+                downloadUrlCancel.setEnabled(true);
+            }
         }
         if (e.getSource() == downloadUrlCancel) {
             downloadWorker.cancel(true);
@@ -291,10 +294,12 @@ public class ComputerUI extends JFrame implements ActionListener{
             new File(directory + name).delete();
         }
         if (e.getSource() == downloadLink) {
-            url = JOptionPane.showInputDialog(null, "Insert media URL to download from");
+            url = JOptionPane.showInputDialog(null, "Insert BandCamp, YouTube, or raw file link to download from");
             System.out.println("Url: " + url);
+            directory = chooser.choose("Choose where to save the downloaded file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath() + "\\";
 
-            if (!url.equals(null)) {
+            if (!url.equals(null) && !directory.equals(null)) {
+                EzHttp.setDownloadLocation(directory);
                 downloadWorker = new DownloadWorker(url);
                 JOptionPane.showMessageDialog(null, "Downloading has begun - we'll alert you when it's done.");
                 downloadWorker.execute();
@@ -314,7 +319,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                     if (!directory.equals(null)) {
                         name = JOptionPane.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
                         convertWorker = new ConvertWorker(file1, directory, name);
-                        JOptionPane.showMessageDialog(null, "Conversion Began");
+                        JOptionPane.showMessageDialog(null, "Conversion has begun - we'll alert you when it's done");
                         convertWorker.execute();
                     }
                 }
@@ -339,7 +344,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                         name = JOptionPane.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
 //                        m.merge(file1, file2, directory, name);
                         mergeWorker = new MergeWorker(file1, file2, directory, name);
-                        JOptionPane.showMessageDialog(null, "Merging Began");
+                        JOptionPane.showMessageDialog(null, "Merging has begun - we'll alert you when it's done.");
                         mergeWorker.execute();
                     }
                 }
@@ -351,7 +356,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             mergeCancel.setEnabled(false);
         }
         if (e.getSource() == searchKW) {
-            userInput = JOptionPane.showInputDialog(null, "Please enter the key words you desire to search for");
+            userInput = JOptionPane.showInputDialog(null, "Please enter your search query");
             if (!userInput.equals("")) {
                 searchResults = Searcher.search(userInput);
                 URL[] url = new URL[5];
@@ -380,7 +385,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                     searchList[i].replace(image[i], image[i]);
                 }
                 if (searchResults.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "No search results found");
+                    JOptionPane.showMessageDialog(null, "No search results found.", "Woops!", 0);
                 } else {
                     swap++;
                     if (openingDisplay == 1 && searchDisplay == 0) {
@@ -419,7 +424,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             if(e.getSource() == preview[i])
             {
                 buttonNo = i;
-                JOptionPane.showMessageDialog(null, "Either preview the url with PreviewURL or download it with Download Link");
+                JOptionPane.showMessageDialog(null, "You may now use the appropriate button on the left to preview or download.", "Video selected!", 1);
                 downloadUrl.setEnabled(true);
                 previewURL.setEnabled(true);
             }
@@ -493,7 +498,7 @@ class ConvertWorker extends SwingWorker<String, Void> {
         try {
             converter.convert(inFile, directory, name);
             if (converter.getTerminated() == 0) {
-                JOptionPane.showMessageDialog(null, "Conversion Finished for " + name);
+                JOptionPane.showMessageDialog(null, "Conversion has finished for " + name);
                 new File(directory + name).delete(); }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -521,7 +526,7 @@ class MergeWorker extends SwingWorker<String, Void> {
         try {
             merger.merge(file1, file2, directory, name);
             if(merger.getTerminated() == 0) {
-                JOptionPane.showMessageDialog(null, "Merging Finished for" + name);
+                JOptionPane.showMessageDialog(null, "Merging has finished for" + name);
                 new File(directory + name).delete();
             }
         } catch (Exception ex) {
