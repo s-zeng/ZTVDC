@@ -161,9 +161,8 @@ public class ComputerUI extends JFrame implements ActionListener{
             .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.CENTER)
                 .addComponent(test[i]))
             .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(title[i], 450, GroupLayout.DEFAULT_SIZE, 450)
-                .addComponent(channel[i], 450, GroupLayout.DEFAULT_SIZE, 450)
-                .addComponent(description[i], 450, GroupLayout.DEFAULT_SIZE, 450))
+                .addComponent(title[i], 450, 450, 750)
+                .addComponent(description[i], 450, 450, 750))
             .addComponent(datePublished[i], 75, GroupLayout.DEFAULT_SIZE, 75)
             .addComponent(preview[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
             searchList[i].setVerticalGroup(searchList[i].createSequentialGroup()
@@ -173,8 +172,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                 .addComponent(datePublished[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(preview[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addComponent(channel[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(description[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+                .addComponent(description[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
             searchList[i].setAutoCreateGaps(true);
             searchPanel.add(searchQuery[i]);
         }
@@ -355,8 +353,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             ImageIcon[] imageStored = new ImageIcon[5];
             for (int i = 0; i < 5; i++) { //magic number, beware
                 Map<String, String> result = searchResults.get(i);
-                title[i].setText(result.get("title"));
-                channel[i].setText(result.get("channel"));
+                title[i].setText("<html>" + result.get("title") + "<br>" + result.get("channel") + "</html>");
                 description[i].setText("<html>" + result.get("description") + "</html>");
                 datePublished[i].setText(result.get("datePublished"));
                 urlStorage[i] = result.get("url");
