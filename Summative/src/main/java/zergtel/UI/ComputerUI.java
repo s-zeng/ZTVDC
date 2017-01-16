@@ -5,6 +5,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import zergtel.core.Main;
 import zergtel.core.converter.Converter;
 import zergtel.core.converter.Merge;
 import zergtel.core.downloader.Downloader;
@@ -57,8 +58,8 @@ public class ComputerUI extends JFrame implements ActionListener{
     private GroupLayout[] searchList = new GroupLayout[5];
     private JButton downloadUrl = new JButton("Download Selected");
     private JButton downloadLink = new JButton("Download Link");
-    private JButton downloadUrlCancel = new JButton("Cancel");
-    private JButton downloadLinkCancel = new JButton("Cancel");
+    public JButton downloadUrlCancel = new JButton("Cancel");
+    public JButton downloadLinkCancel = new JButton("Cancel");
     private JButton converter = new JButton("      Convert Files      ");
     private JButton converterCancel = new JButton("Cancel");
     private JButton merge = new JButton("Merge");
@@ -461,6 +462,8 @@ class DownloadWorker extends SwingWorker<String, Void> {
             JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
             return ex.getMessage();
         }
+        Main.ui.downloadLinkCancel.setEnabled(false);
+        Main.ui.downloadUrlCancel.setEnabled(false);
         JOptionPane.showMessageDialog(null, "Downloading has finished for " + output);
         return output;
     }

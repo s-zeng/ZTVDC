@@ -7,9 +7,10 @@ import zergtel.core.downloader.EzHttp;
 import java.io.File;
 
 public class Main {
+	public static ComputerUI ui;
 
 	public static void main(String[] args) {
-		ComputerUI ui = new ComputerUI();
+		ui = new ComputerUI();
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
