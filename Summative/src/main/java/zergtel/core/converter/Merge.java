@@ -22,6 +22,11 @@ public class Merge {
             System.out.println(cmd);
             Runtime convert = Runtime.getRuntime();
             app = convert.exec(cmd);
+
+            File output = new File(directory + name);
+            System.out.println(output.getAbsolutePath());
+            System.out.println("Deleted: " + output.delete());
+
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getErrorStream()));
             try {
                 app.waitFor();

@@ -30,9 +30,10 @@ public class VGetInterface {
         System.out.println(info.get(0).getTarget().getAbsolutePath());
         String title = axetGetter.getVideo().getTitle();
 
+
         if (files == 1) {
             Converter converter = new Converter();
-            converter.convert(info.get(0).getTarget().getAbsoluteFile(), EzHttp.getDownloadLocation(), title + ".mp4");
+            converter.convert(info.get(0).getTarget().getAbsoluteFile(), EzHttp.getDownloadLocation(), EzHttp.cleanseName(title) + ".mp4");
         } else if (files == 2) {
             Merge merger = new Merge();
             merger.merge(

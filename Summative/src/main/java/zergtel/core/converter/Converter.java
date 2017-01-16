@@ -20,6 +20,11 @@ public class Converter {
             cmd = FILE_FFMPEG.getAbsolutePath() + " -loglevel fatal" + " -i \"" + file.getAbsolutePath() + "\" \"" + directory + name + "\"";
             System.out.println(cmd);
             Runtime convert = Runtime.getRuntime();
+
+            File output = new File(directory + name);
+            System.out.println(output.getAbsolutePath());
+            System.out.println("Deleted: " + output.delete());
+
             app = convert.exec(cmd);
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getErrorStream()));
             try {

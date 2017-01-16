@@ -474,9 +474,9 @@ class DownloadWorker extends SwingWorker<String, Void> {
     @Override
     public String doInBackground() {
         String output;
-
         try {
             output = Downloader.get(url);
+            JOptionPane.showMessageDialog(null, "Downloading has finished for " + output);
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -484,7 +484,6 @@ class DownloadWorker extends SwingWorker<String, Void> {
         }
         Main.ui.downloadLinkCancel.setEnabled(false);
         Main.ui.downloadUrlCancel.setEnabled(false);
-        JOptionPane.showMessageDialog(null, "Downloading has finished for " + output);
         return output;
     }
 }
