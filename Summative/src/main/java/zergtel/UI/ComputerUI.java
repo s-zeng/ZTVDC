@@ -55,7 +55,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JButton downloadLink = new JButton("Download Link");
     private JButton downloadUrlCancel = new JButton("Cancel");
     private JButton downloadLinkCancel = new JButton("Cancel");
-    private JButton converter = new JButton("Convert Files ");
+    private JButton converter = new JButton("      Convert Files      ");
     private JButton converterCancel = new JButton("Cancel");
     private JButton merge = new JButton("Merge");
     private JButton mergeCancel = new JButton("Cancel");
