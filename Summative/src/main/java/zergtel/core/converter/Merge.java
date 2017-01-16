@@ -10,6 +10,7 @@ public class Merge {
     public Process app;
     public String cmd, directory, name;
     public File tempFile, file1, file2;
+    private int terminated;
     public final static File FILE_FFMPEG = new File("./ffmpeg.exe");
     public void merge(File f1, File f2, String d, String n) {
         try {
@@ -24,13 +25,14 @@ public class Merge {
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getErrorStream()));
             try {
                 app.waitFor();
-                final int TERMINATED = app.waitFor();
-                if(TERMINATED == 0)
+                terminated = app.waitFor();
+                if(terminated == 0)
                     System.out.println("WOOOOOOOOOOOOOOOOOOO!");
                 else {
-                    String line;
-                    if((line = appReader.readLine()) != null)
-                        System.out.println(line);
+                    Thread.sleep(500);
+                    File file = new File(directory + name);
+                    if(file.exists() == false)
+                        JOptionPane.showMessageDialog(null, "Conversion failed!");
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -40,4 +42,5 @@ public class Merge {
         }
         System.out.println("Working!");
     }
+    public int getTerminated() { return terminated; }
 }

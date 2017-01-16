@@ -471,7 +471,8 @@ class ConvertWorker extends SwingWorker<String, Void> {
     public String doInBackground() {
         try {
             converter.convert(inFile, directory, name);
-            JOptionPane.showMessageDialog(null, "Conversion Finished for" + name);
+            if (converter.getTerminated() == 0)
+                JOptionPane.showMessageDialog(null, "Conversion Finished for " + name);
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -496,7 +497,8 @@ class MergeWorker extends SwingWorker<String, Void> {
     public String doInBackground() {
         try {
             merger.merge(file1, file2, directory, name);
-            JOptionPane.showMessageDialog(null, "Merging Finished for" + name);
+            if(merger.getTerminated() == 0)
+                JOptionPane.showMessageDialog(null, "Merging Finished for" + name);
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);

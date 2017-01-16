@@ -10,6 +10,7 @@ public class Converter {
     public Process app;
     public String cmd, directory, name;
     public File file, tempFile;
+    private int terminated;
     public final static File FILE_FFMPEG = new File("./ffmpeg.exe");
     public void convert(File f, String d, String n) {
         try {
@@ -23,13 +24,14 @@ public class Converter {
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getErrorStream()));
             try {
                 app.waitFor();
-                final int TERMINATED = app.waitFor();
-                if(TERMINATED == 0)
+                terminated = app.waitFor();
+                if(terminated == 0)
                     System.out.println("WOOOOOOOOOOOOOOO!");
                 else {
-                    String line;
-                    if((line = appReader.readLine()) != null)
-                        System.out.println(line);
+                    Thread.sleep(500);
+                    File file = new File(directory + name);
+                    if(file.exists() == false)
+                        JOptionPane.showMessageDialog(null, "Conversion failed!");
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -46,6 +48,8 @@ public class Converter {
         File file1 = new File("C:/Users/User/IdeaProjects/summative/Summative/bin/file.mp4");
         c.convert(file1, "C:/Users/User/IdeaProjects/summative/Summative/", "test.mp4");
     }
+    public int getTerminated() { return terminated; }
+
     //http://stackoverflow.com/questions/17123118/how-to-stop-ffmpeg-that-runs-through-java-process
     //http://stackoverflow.com/questions/10927718/how-to-read-ffmpeg-response-from-java-and-use-it-to-create-a-progress-bar
 }
