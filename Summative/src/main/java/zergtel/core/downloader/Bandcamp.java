@@ -54,7 +54,7 @@ public class Bandcamp {
                 .getAsJsonArray("trackinfo");
 
         String folder = getTitle(file);
-        System.out.println(folder);
+        System.out.println("Folder: " + folder);
 
         String[] output = new String[mediaList.size()];
         for (int i = 0; i < mediaList.size(); i++) {
@@ -78,10 +78,12 @@ public class Bandcamp {
 
             try {
                 System.out.println(mediaName + " - " + downloadLink);
+                System.out.println(folder);
+                System.out.println(EzHttp.getDownloadLocation());
                 EzHttp.get(downloadLink, mediaName, EzHttp.getDownloadLocation() + folder);
                 output[i] = folder + "\\" + mediaName;
             } catch (Exception e) {
-                System.err.println("wtf");
+                e.printStackTrace();
             }
 
         }

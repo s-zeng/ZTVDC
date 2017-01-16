@@ -11,7 +11,7 @@ import java.net.URLConnection;
 public class EzHttp {
 	private static final int BUFFER_SIZE = 4096;
 	public static final String DEFAULT_LOCATION = "download/";
-	public static final String TEMP_LOCATION = "temp/";
+	public static final String TEMP_LOCATION = System.getenv("temp") + "/ZTVDC/";
 	private static String downloadLocation = "download/";
 
 //	Todo - method to avoid naming conflicts (e.g. save as example(1).mp3 if example.mp3 already exists)
@@ -61,11 +61,15 @@ public class EzHttp {
 			System.out.println("File name: " + fileName);
 		}
 
+		System.out.println("DownLocation: " + downLocation);
 		File dir = new File(
 				cleanseDirectory(downLocation)
 		);
-		dir.mkdir();
+		System.out.println("new downlocation: " + dir.getAbsolutePath());
+		System.out.println(dir.mkdirs());
 
+		System.out.println(fileName);
+		System.out.println(dir.getAbsolutePath());
 		fileName = dir
 				.getAbsolutePath()
 				.concat("\\")
@@ -109,6 +113,6 @@ public class EzHttp {
 	}
 
 	public static String cleanseDirectory(String dirName) {
-		return dirName.replaceAll("\"|\\?|\\||:|\\*|<|>", "").replaceAll("\\.+$", "");
+		return dirName.replaceAll("\"|\\?|\\||\\*|<|>", "").replaceAll("\\.+$", "");
 	}
 }
