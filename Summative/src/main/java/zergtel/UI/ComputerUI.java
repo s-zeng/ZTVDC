@@ -61,9 +61,9 @@ public class ComputerUI extends JFrame implements ActionListener{
     public JButton downloadUrlCancel = new JButton("Cancel");
     public JButton downloadLinkCancel = new JButton("Cancel");
     private JButton converter = new JButton("      Convert Files      ");
-    private JButton converterCancel = new JButton("Cancel");
+    public JButton converterCancel = new JButton("Cancel");
     private JButton merge = new JButton("Merge");
-    private JButton mergeCancel = new JButton("Cancel");
+    public JButton mergeCancel = new JButton("Cancel");
     private JButton searchKW = new JButton("Search by Key Words");
     private JButton previewURL = new JButton("Preview Selected");
     private JTextArea openingText = new JTextArea();
@@ -499,6 +499,7 @@ class ConvertWorker extends SwingWorker<String, Void> {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        Main.ui.converterCancel.setEnabled(false);
         return null;
     }
 }
@@ -527,6 +528,7 @@ class MergeWorker extends SwingWorker<String, Void> {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        Main.ui.mergeCancel.setEnabled(false);
         return null;
     }
 }
