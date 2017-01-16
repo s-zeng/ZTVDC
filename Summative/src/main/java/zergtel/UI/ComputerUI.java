@@ -327,7 +327,6 @@ public class ComputerUI extends JFrame implements ActionListener{
         if (e.getSource() == converterCancel) {
             convertWorker.cancel(true);
             converterCancel.setEnabled(false);
-            new File(directory + name).delete();
         }
         //A potential solution - assign the new ConvertWorker to a variable beforehand, and then do variable.execute() to run, and variable.cancel() to cancel lol
         if (e.getSource() == merge) {
@@ -350,7 +349,6 @@ public class ComputerUI extends JFrame implements ActionListener{
         if (e.getSource() == mergeCancel) {
             mergeWorker.cancel(true);
             mergeCancel.setEnabled(false);
-            new File(directory + name).delete();
         }
         if (e.getSource() == searchKW) {
             userInput = JOptionPane.showInputDialog(null, "Please enter the key words you desire to search for");
@@ -491,8 +489,9 @@ class ConvertWorker extends SwingWorker<String, Void> {
     public String doInBackground() {
         try {
             converter.convert(inFile, directory, name);
-            if (converter.getTerminated() == 0)
+            if (converter.getTerminated() == 0) {
                 JOptionPane.showMessageDialog(null, "Conversion Finished for " + name);
+                new File(directory + name).delete(); }
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -517,8 +516,10 @@ class MergeWorker extends SwingWorker<String, Void> {
     public String doInBackground() {
         try {
             merger.merge(file1, file2, directory, name);
-            if(merger.getTerminated() == 0)
+            if(merger.getTerminated() == 0) {
                 JOptionPane.showMessageDialog(null, "Merging Finished for" + name);
+                new File(directory + name).delete();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
