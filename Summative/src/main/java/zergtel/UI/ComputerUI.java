@@ -1,5 +1,6 @@
 package zergtel.UI;
 
+import com.github.axet.wget.info.ex.DownloadInterruptedError;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
@@ -40,6 +41,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private int swap = 0;
     public int isConverterCancelled = 0;
     public int isMergeCancelled = 0;
+    public int isDownloadCancelled = 0;
     private String[] imageUrl = new String[5];
     private String[] urlStorage = new String[5];
     private String userInput, directory, name, url;
@@ -291,9 +293,11 @@ public class ComputerUI extends JFrame implements ActionListener{
             }
         }
         if (e.getSource() == downloadUrlCancel) {
+            isDownloadCancelled = 1;
             downloadWorker.cancel(true);
             downloadUrlCancel.setEnabled(false);
             new File(directory + name).delete();
+            isDownloadCancelled = 0;
         }
         if (e.getSource() == downloadLink) {
             url = JOptionPane.showInputDialog(null, "Insert BandCamp, YouTube, or raw file link to download from");
@@ -311,9 +315,11 @@ public class ComputerUI extends JFrame implements ActionListener{
             }
         }
         if (e.getSource() == downloadLinkCancel) {
+            isDownloadCancelled = 1;
             downloadWorker.cancel(true);
             downloadLinkCancel.setEnabled(false);
             new File(directory + name).delete();
+            isDownloadCancelled = 0;
         }
         if (e.getSource() == converter) {
             try {
@@ -337,6 +343,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             isConverterCancelled = 1;
             convertWorker.cancel(true);
             converterCancel.setEnabled(false);
+            isConverterCancelled = 0;
         }
         //A potential solution - assign the new ConvertWorker to a variable beforehand, and then do variable.execute() to run, and variable.cancel() to cancel lol
         if (e.getSource() == merge) {
@@ -360,6 +367,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             isMergeCancelled = 1;
             mergeWorker.cancel(true);
             mergeCancel.setEnabled(false);
+            isMergeCancelled = 0;
 
         }
         if (e.getSource() == searchKW) {
@@ -473,13 +481,19 @@ class DownloadWorker extends SwingWorker<String, Void> {
 
     @Override
     public String doInBackground() {
-        String output;
+        String output = "";
         try {
             output = Downloader.get(url);
             JOptionPane.showMessageDialog(null, "Downloading has finished for " + output);
+        } catch (DownloadInterruptedError ex){
+            JOptionPane.showMessageDialog(null, "Downloading has been cancelled!");
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
+            if (Main.ui.isDownloadCancelled != 1) {
+                JOptionPane.showMessageDialog(null, "Downloading has stopped!", "Oh no!", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Downloading has been cancelled!");
+            }
             return ex.getMessage();
         }
         Main.ui.downloadLinkCancel.setEnabled(false);
@@ -512,9 +526,14 @@ class ConvertWorker extends SwingWorker<String, Void> {
                 wait(1000);
                 new File(directory + "\\" + name);
             }
+        } catch (DownloadInterruptedError ex){
+            JOptionPane.showMessageDialog(null, "Conversion was cancelled for" + name);
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
+            if (Main.ui.isConverterCancelled != 1) {
+                JOptionPane.showMessageDialog(null, "Conversion has stopped!", "Oh no!", JOptionPane.ERROR_MESSAGE);
+            }
+            Main.ui.isConverterCancelled = 0;
         }
         Main.ui.converterCancel.setEnabled(false);
         return null;
@@ -546,9 +565,14 @@ class MergeWorker extends SwingWorker<String, Void> {
                 wait(1000);
                 new File(directory + "\\" + name);
             }
+        } catch (DownloadInterruptedError ex){
+            JOptionPane.showMessageDialog(null, "Merging was cancelled for " + name);
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
+            if (Main.ui.isMergeCancelled != 1) {
+                JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            Main.ui.isMergeCancelled = 0;
         }
         Main.ui.mergeCancel.setEnabled(false);
         return null;
