@@ -40,7 +40,6 @@ public class Merge {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Working!");
     }
     public int getTerminated() { return terminated; }
 }

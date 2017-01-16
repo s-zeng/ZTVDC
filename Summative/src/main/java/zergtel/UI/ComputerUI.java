@@ -337,9 +337,6 @@ public class ComputerUI extends JFrame implements ActionListener{
             isConverterCancelled = 1;
             convertWorker.cancel(true);
             converterCancel.setEnabled(false);
-            File temp = new File("./" + name);
-            System.out.println(temp.getAbsolutePath());
-            temp.delete();
         }
         //A potential solution - assign the new ConvertWorker to a variable beforehand, and then do variable.execute() to run, and variable.cancel() to cancel lol
         if (e.getSource() == merge) {
@@ -363,7 +360,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             isMergeCancelled = 1;
             mergeWorker.cancel(true);
             mergeCancel.setEnabled(false);
-            new File(directory + "\\" +  name).delete();
+
         }
         if (e.getSource() == searchKW) {
             userInput = JOptionPane.showInputDialog(null, "Please enter your search query");
@@ -513,6 +510,8 @@ class ConvertWorker extends SwingWorker<String, Void> {
                 JOptionPane.showMessageDialog(null, "Conversion was cancelled for" + name);
                 converter.app.destroy();
                 Main.ui.isConverterCancelled = 0;
+                wait(1000);
+                new File(directory + "\\" + name);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -539,12 +538,14 @@ class MergeWorker extends SwingWorker<String, Void> {
     public String doInBackground() {
         try {
             merger.merge(file1, file2, directory, name);
-            if(merger.getTerminated() == 0)
-                JOptionPane.showMessageDialog(null, "Merging has finished for" + name);
+            if(merger.getTerminated() == 0 && Main.ui.isMergeCancelled == 0)
+                JOptionPane.showMessageDialog(null, "Merging has finished for " + name);
             else if(merger.getTerminated() == 0 && Main.ui.isMergeCancelled == 1) {
-                JOptionPane.showMessageDialog(null, "Merging was cancelled for" + name);
+                JOptionPane.showMessageDialog(null, "Merging was cancelled for " + name);
                 merger.app.destroy();
                 Main.ui.isMergeCancelled = 0;
+                wait(1000);
+                new File(directory + "\\" + name);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
