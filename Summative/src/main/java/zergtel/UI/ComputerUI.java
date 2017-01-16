@@ -157,6 +157,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             datePublished[i] = new JLabel();
             searchQuery[i].add(datePublished[i]);
             test[i] = new JLabel();
+            image[i] = new JLabel();
             searchQuery[i].add(test[i]);
             searchFiller[i] = new JPanel();
             searchQuery[i].add(searchFiller[i]);
@@ -350,19 +351,20 @@ public class ComputerUI extends JFrame implements ActionListener{
         if (e.getSource() == searchKW) {
             userInput = JOptionPane.showInputDialog(null, "Please enter the key words you desire to search for");
             searchResults = Searcher.search(userInput);
+            URL[] url = new URL[5];
             ImageIcon[] imageStored = new ImageIcon[5];
+            BufferedImage[] images = new BufferedImage[5];
             for (int i = 0; i < searchResults.size(); i++) { //magic number, beware
                 Map<String, String> result = searchResults.get(i);
                 title[i].setText("<html>" + "Title: " + result.get("title") + "<br>" + "Channel: " + result.get("channel") + "<br>" + "<font color = 'gray'>" + "Description: " + result.get("description") + "</font>" + "</html>");
                 datePublished[i].setText(result.get("datePublished"));
                 urlStorage[i] = result.get("url");
                 imageUrl[i] = result.get("thumbnail");
-                URL[] url = new URL[5];
                 try {
                     url[i] = new URL(imageUrl[i]);
-                    BufferedImage[] images = new BufferedImage[5];
                     images[i] = ImageIO.read(url[i]);
-                    image[i] = new JLabel(new ImageIcon(images[i]));
+                    imageStored[i] = new ImageIcon(images[i]);
+                    image[i].setIcon(imageStored[i]);
                 } catch(MalformedURLException e3) {
                     e3.printStackTrace();
                 } catch(IOException e4) {
@@ -372,6 +374,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                     searchList[i].replace(test[i], image[i]);
                     searchList[i].linkSize(SwingConstants.VERTICAL, image[i], preview[i]);
                 }
+                searchList[i].replace(image[i], image[i]);
             }
             if (searchResults.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "No search results found");
