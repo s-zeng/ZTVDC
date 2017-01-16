@@ -22,12 +22,11 @@ public class Merge {
             Runtime convert = Runtime.getRuntime();
             app = convert.exec(cmd);
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getErrorStream()));
-            JOptionPane.showMessageDialog(null, "Merging Began");
             try {
                 app.waitFor();
                 final int TERMINATED = app.waitFor();
                 if(TERMINATED == 0)
-                    JOptionPane.showMessageDialog(null, "Merging Finished for" + name);
+                    System.out.println("WOOOOOOOOOOOOOOOOOOO!");
                 else {
                     String line;
                     if((line = appReader.readLine()) != null)

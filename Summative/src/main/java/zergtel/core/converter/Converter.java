@@ -21,12 +21,11 @@ public class Converter {
             Runtime convert = Runtime.getRuntime();
             app = convert.exec(cmd);
             BufferedReader appReader = new BufferedReader(new InputStreamReader(app.getErrorStream()));
-            JOptionPane.showMessageDialog(null, "Conversion Began");
             try {
                 app.waitFor();
                 final int TERMINATED = app.waitFor();
                 if(TERMINATED == 0)
-                    JOptionPane.showMessageDialog(null, "Conversion Finished for" + name);
+                    System.out.println("WOOOOOOOOOOOOOOO!");
                 else {
                     String line;
                     if((line = appReader.readLine()) != null)

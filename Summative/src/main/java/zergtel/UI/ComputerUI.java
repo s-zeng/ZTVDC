@@ -19,6 +19,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -302,6 +304,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                     if (!directory.equals(null)) {
                         name = JOptionPane.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
                         convertWorker = new ConvertWorker(file1, directory, name);
+                        JOptionPane.showMessageDialog(null, "Conversion Began");
                         convertWorker.execute();
                     }
                 }
@@ -327,6 +330,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                         name = JOptionPane.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
 //                        m.merge(file1, file2, directory, name);
                         mergeWorker = new MergeWorker(file1, file2, directory, name);
+                        JOptionPane.showMessageDialog(null, "Merging Began");
                         mergeWorker.execute();
                     }
                 }
@@ -349,7 +353,12 @@ public class ComputerUI extends JFrame implements ActionListener{
                 urlStorage[i] = result.get("url");
                 image[i] = new JLabel();
                 imageUrl[i] = result.get("thumbnail");
+                URL[] url = new URL[5];
+                try {
+                    url[i] = new URL(imageUrl[i]);
+                } catch(MalformedURLException e3) {
 
+                }
                 try {
                     EzHttp.get(imageUrl[i], "image" + i + ".png", EzHttp.TEMP_LOCATION);
                 } catch (Exception e2) {
@@ -466,6 +475,7 @@ class ConvertWorker extends SwingWorker<String, Void> {
     public String doInBackground() {
         try {
             converter.convert(inFile, directory, name);
+            JOptionPane.showMessageDialog(null, "Conversion Finished for" + name);
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -490,6 +500,7 @@ class MergeWorker extends SwingWorker<String, Void> {
     public String doInBackground() {
         try {
             merger.merge(file1, file2, directory, name);
+            JOptionPane.showMessageDialog(null, "Merging Finished for" + name);
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Oh no! Something goofed!", "Error", JOptionPane.ERROR_MESSAGE);
