@@ -36,7 +36,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     private String[] urlStorage = new String[5];
     private String userInput, directory, name, url;
     private File file1, file2;
-    private Dimension minSize = new Dimension(1080, 620);
+    private Dimension minSize = new Dimension(1080, 635);
     private JPanel commands = new JPanel();
     private JPanel download = new JPanel();
     private JPanel convert = new JPanel();
@@ -158,21 +158,19 @@ public class ComputerUI extends JFrame implements ActionListener{
 
 
             searchList[i].setHorizontalGroup(searchList[i].createSequentialGroup()
-            .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.CENTER)
+            .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addComponent(test[i]))
             .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(title[i], 450, 450, 750)
-                .addComponent(description[i], 450, 450, 750))
-            .addComponent(datePublished[i], 75, GroupLayout.DEFAULT_SIZE, 75)
+                .addComponent(title[i], 450, 450, 750))
+            .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING))
+                    .addComponent(datePublished[i], 75, GroupLayout.DEFAULT_SIZE, 75)
             .addComponent(preview[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
             searchList[i].setVerticalGroup(searchList[i].createSequentialGroup()
             .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.CENTER)
                 .addComponent(test[i])
                 .addComponent(title[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(datePublished[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(preview[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addComponent(description[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                .addComponent(preview[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
             searchList[i].setAutoCreateGaps(true);
             searchPanel.add(searchQuery[i]);
         }
@@ -353,8 +351,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             ImageIcon[] imageStored = new ImageIcon[5];
             for (int i = 0; i < 5; i++) { //magic number, beware
                 Map<String, String> result = searchResults.get(i);
-                title[i].setText("<html>" + result.get("title") + "<br>" + result.get("channel") + "</html>");
-                description[i].setText("<html>" + result.get("description") + "</html>");
+                title[i].setText("<html>" + "Title: " + result.get("title") + "<br>" + "Channel: " + result.get("channel") + "<br>" + "<font color = 'gray'>" + "Description: " + result.get("description") + "</font>" + "</html>");
                 datePublished[i].setText(result.get("datePublished"));
                 urlStorage[i] = result.get("url");
                 image[i] = new JLabel();
