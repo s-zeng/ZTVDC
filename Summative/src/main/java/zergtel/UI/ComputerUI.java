@@ -8,7 +8,6 @@ import javafx.scene.web.WebView;
 import zergtel.core.converter.Converter;
 import zergtel.core.converter.Merge;
 import zergtel.core.downloader.Downloader;
-import zergtel.core.downloader.EzHttp;
 import zergtel.core.io.FileChooser;
 import zergtel.core.searcher.Searcher;
 
@@ -366,16 +365,6 @@ public class ComputerUI extends JFrame implements ActionListener{
                 } catch(IOException e4) {
                     e4.printStackTrace();
                 }
-             //   try {
-             //      EzHttp.get(imageUrl[i], "image" + i + ".png", EzHttp.TEMP_LOCATION);
-             //   } catch (Exception e2) {
-             //       e2.printStackTrace();
-             //   }
-             //   imageStored[i] = new ImageIcon("temp/image" + i + ".png");
-             //   image[i].setIcon(imageStored[i]);
-             //   System.out.println(image[i].getIcon());
-             //   System.out.print(imageStored[i].getIconHeight());
-             //   System.out.println(" " + imageStored[i].getIconWidth());
                 if (swap == 0) {
                     searchList[i].replace(test[i], image[i]);
                     searchList[i].linkSize(SwingConstants.VERTICAL, image[i], preview[i]);
