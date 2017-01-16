@@ -31,11 +31,12 @@ public class ComputerUI extends JFrame implements ActionListener{
     int browserDisplay = 0;
     int buttonNo = -1;
     int numPressed = 0;
+    int swap = 0;
     private String[] imageUrl = new String[5];
     private String[] urlStorage = new String[5];
     private String userInput, directory, name, url;
     private File file1, file2;
-    private Dimension minSize = new Dimension(1024, 576);
+    private Dimension minSize = new Dimension(1080, 620);
     private JPanel commands = new JPanel();
     private JPanel download = new JPanel();
     private JPanel convert = new JPanel();
@@ -157,25 +158,24 @@ public class ComputerUI extends JFrame implements ActionListener{
 
 
             searchList[i].setHorizontalGroup(searchList[i].createSequentialGroup()
-            .addComponent(test[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.CENTER)
+                .addComponent(test[i]))
             .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(title[i], 50, GroupLayout.DEFAULT_SIZE, 500)
-                .addComponent(channel[i], 500, GroupLayout.DEFAULT_SIZE, 500)
-                .addComponent(description[i], 50, GroupLayout.DEFAULT_SIZE, 500))
-            .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(searchFiller[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(datePublished[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(title[i], 450, GroupLayout.DEFAULT_SIZE, 450)
+                .addComponent(channel[i], 450, GroupLayout.DEFAULT_SIZE, 450)
+                .addComponent(description[i], 450, GroupLayout.DEFAULT_SIZE, 450))
+            .addComponent(datePublished[i], 75, GroupLayout.DEFAULT_SIZE, 75)
             .addComponent(preview[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
             searchList[i].setVerticalGroup(searchList[i].createSequentialGroup()
             .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addComponent(test[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(test[i])
                 .addComponent(title[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(searchFiller[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(datePublished[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(preview[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(searchList[i].createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addComponent(channel[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(datePublished[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(channel[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(description[i], GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+            searchList[i].setAutoCreateGaps(true);
             searchPanel.add(searchQuery[i]);
         }
 
@@ -373,8 +373,12 @@ public class ComputerUI extends JFrame implements ActionListener{
                 System.out.println(image[i].getIcon());
                 System.out.print(imageStored[i].getIconHeight());
                 System.out.println(" " + imageStored[i].getIconWidth());
-                searchList[i].replace(test[i], image[i]);
+                if (swap == 0) {
+                    searchList[i].replace(test[i], image[i]);
+                    searchList[i].linkSize(SwingConstants.VERTICAL, image[i], preview[i]);
+                }
             }
+            swap++;
             if (openingDisplay == 1 && searchDisplay == 0) {
                 layout.replace(openingPanel, searchPanel);
                 openingDisplay = 0;
