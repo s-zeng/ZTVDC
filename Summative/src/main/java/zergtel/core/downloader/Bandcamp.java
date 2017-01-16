@@ -12,7 +12,7 @@ import java.net.URL;
 
 
 /**
- * Created by Simonin on 11/1/2016.
+ * Created by Simon on 11/1/2016.
  */
 
 /**

@@ -35,7 +35,12 @@ public class VGetInterface {
             converter.convert(info.get(0).getTarget().getAbsoluteFile(), EzHttp.getDownloadLocation(), title + ".mp4");
         } else if (files == 2) {
             Merge merger = new Merge();
-            merger.merge(info.get(0).getTarget().getAbsoluteFile(), info.get(1).getTarget().getAbsoluteFile(), EzHttp.getDownloadLocation(), title + ".mp4");
+            merger.merge(
+                    info.get(0).getTarget().getAbsoluteFile(),
+                    info.get(1).getTarget().getAbsoluteFile(),
+                    new File(EzHttp.getDownloadLocation()).getAbsolutePath(),
+                    EzHttp.cleanseName(title) + ".mp4"
+            );
         }
 
         return EzHttp.TEMP_LOCATION + "/" + axetGetter.getVideo().getTitle();
