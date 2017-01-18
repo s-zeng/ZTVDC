@@ -31,6 +31,8 @@ public class EzHttp {
 
 	public static void setDownloadLocation(String ndownloadLocation) {
 		downloadLocation = ndownloadLocation;
+		File dir = new File(downloadLocation);
+		dir.mkdirs();
 	}
 
 	public static String get(String uri) throws Exception {
