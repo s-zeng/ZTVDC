@@ -65,9 +65,9 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JButton downloadLink = new JButton("Download from URL");
     public JButton downloadUrlCancel = new JButton("Cancel");
     public JButton downloadLinkCancel = new JButton("Cancel");
-    private JButton converter = new JButton("      Convert Files      ");
+    public JButton converter = new JButton("      Convert Files      ");
     public JButton converterCancel = new JButton("Cancel");
-    private JButton merge = new JButton("Merge");
+    public JButton merge = new JButton("Merge");
     public JButton mergeCancel = new JButton("Cancel");
     private JButton searchKW = new JButton("Search by Key Words");
     private JButton previewURL = new JButton("Preview Selected");
@@ -338,6 +338,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                 JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
             converterCancel.setEnabled(true);
+            converter.setEnabled(false);
         }
         if (e.getSource() == converterCancel) {
             isConverterCancelled = 1;
@@ -360,6 +361,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                     }
                 }
             }
+            merge.setEnabled(false);
             mergeCancel.setEnabled(true);
         }
         if (e.getSource() == mergeCancel) {
@@ -531,6 +533,7 @@ class ConvertWorker extends SwingWorker<String, Void> {
             Main.ui.isConverterCancelled = 0;
         }
         Main.ui.converterCancel.setEnabled(false);
+        Main.ui.converter.setEnabled(true);
         return null;
     }
 }
@@ -568,6 +571,7 @@ class MergeWorker extends SwingWorker<String, Void> {
             Main.ui.isMergeCancelled = 0;
         }
         Main.ui.mergeCancel.setEnabled(false);
+        Main.ui.merge.setEnabled(true);
         return null;
     }
 }
