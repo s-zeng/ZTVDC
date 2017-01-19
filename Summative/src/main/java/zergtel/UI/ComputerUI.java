@@ -62,8 +62,8 @@ public class ComputerUI extends JFrame implements ActionListener{
     private WebEngine youtubeEngine;
     private GroupLayout layout;
     private GroupLayout[] searchList = new GroupLayout[5];
-    private JButton downloadSelected = new JButton("Download Selected");
-    private JButton downloadLink = new JButton("Download from URL");
+    public JButton downloadSelected = new JButton("Download Selected");
+    public JButton downloadLink = new JButton("Download from URL");
     public JButton downloadSelectedCancel = new JButton("Cancel");
     public JButton downloadLinkCancel = new JButton("Cancel");
     public JButton converter = new JButton("      Convert Files      ");
@@ -292,12 +292,14 @@ public class ComputerUI extends JFrame implements ActionListener{
                 JOptionPane.showMessageDialog(null, "Downloading has begun - we'll alert you when it's done.");
                 downloadSelectedWorker.execute();
                 downloadSelectedCancel.setEnabled(true);
+                downloadSelected.setEnabled(false);
             }
         }
         if (e.getSource() == downloadSelectedCancel) {
             isDownloadSelectedCancelled = 1;
             downloadSelectedWorker.cancel(true);
             downloadSelectedCancel.setEnabled(false);
+            downloadSelected.setEnabled(true);
             new File(directory + name).delete();
             isDownloadSelectedCancelled = 0;
         }
@@ -309,19 +311,21 @@ public class ComputerUI extends JFrame implements ActionListener{
 
                 if (!directory.equals(null)) {
                     EzHttp.setDownloadLocation(directory);
-                    downloadWorker = new DownloadWorker(url);
+                    downloadLinkWorker = new DownloadLinkWorker(url);
                     JOptionPane.showMessageDialog(null, "Downloading has begun - we'll alert you when it's done.");
-                    downloadWorker.execute();
+                    downloadLinkWorker.execute();
                     downloadLinkCancel.setEnabled(true);
+                    downloadLink.setEnabled(false);
                 }
             }
         }
         if (e.getSource() == downloadLinkCancel) {
-            isDownloadCancelled = 1;
-            downloadWorker.cancel(true);
+            isDownloadLinkCancelled = 1;
+            downloadLinkWorker.cancel(true);
             downloadLinkCancel.setEnabled(false);
+            downloadLink.setEnabled(true);
             new File(directory + name).delete();
-            isDownloadCancelled = 0;
+            isDownloadLinkCancelled = 0;
         }
         if (e.getSource() == converter) {
             try {
@@ -498,6 +502,37 @@ class DownloadSelectedWorker extends SwingWorker<String, Void> {
             return ex.getMessage();
         }
         Main.ui.downloadSelectedCancel.setEnabled(false);
+        Main.ui.downloadSelected.setEnabled(true);
+        return output;
+    }
+}
+
+class DownloadLinkWorker extends SwingWorker<String, Void> {
+    String url;
+
+    DownloadLinkWorker(String downUrl) {
+        url = downUrl;
+    }
+
+    @Override
+    public String doInBackground() {
+        String output = "";
+        try {
+            output = Downloader.get(url);
+            JOptionPane.showMessageDialog(null, "Downloading has finished for " + output);
+        } catch (DownloadInterruptedError ex){
+            JOptionPane.showMessageDialog(null, "Downloading has been cancelled!");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            if (Main.ui.isDownloadLinkCancelled != 1) {
+                JOptionPane.showMessageDialog(null, "Downloading has stopped!", "Oh no!", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Downloading has been cancelled!");
+            }
+            return ex.getMessage();
+        }
+        Main.ui.downloadLinkCancel.setEnabled(false);
+        Main.ui.downloadLink.setEnabled(true);
         return output;
     }
 }
