@@ -41,7 +41,8 @@ public class ComputerUI extends JFrame implements ActionListener{
     private int swap = 0;
     public int isConverterCancelled = 0;
     public int isMergeCancelled = 0;
-    public int isDownloadCancelled = 0;
+    public int isDownloadSelectedCancelled = 0;
+    public int isDownloadLinkCancelled = 0;
     private String[] imageUrl = new String[5];
     private String[] urlStorage = new String[5];
     private String userInput, directory, name, url;
@@ -61,9 +62,9 @@ public class ComputerUI extends JFrame implements ActionListener{
     private WebEngine youtubeEngine;
     private GroupLayout layout;
     private GroupLayout[] searchList = new GroupLayout[5];
-    private JButton downloadUrl = new JButton("Download Selected");
+    private JButton downloadSelected = new JButton("Download Selected");
     private JButton downloadLink = new JButton("Download from URL");
-    public JButton downloadUrlCancel = new JButton("Cancel");
+    public JButton downloadSelectedCancel = new JButton("Cancel");
     public JButton downloadLinkCancel = new JButton("Cancel");
     public JButton converter = new JButton("      Convert Files      ");
     public JButton converterCancel = new JButton("Cancel");
@@ -82,7 +83,8 @@ public class ComputerUI extends JFrame implements ActionListener{
     private FileChooser chooser = new FileChooser();
     private Converter c = new Converter();
     private Merge m = new Merge();
-    private DownloadWorker downloadWorker;
+    private DownloadSelectedWorker downloadSelectedWorker;
+    private DownloadLinkWorker downloadLinkWorker;
     private ConvertWorker convertWorker;
     private MergeWorker mergeWorker;
 
@@ -130,8 +132,8 @@ public class ComputerUI extends JFrame implements ActionListener{
         openingText.setFont(new Font("Times New Roman", Font.PLAIN, 32));
         openingText.setEditable(false);
 
-        download.add(downloadUrl);
-        download.add(downloadUrlCancel);
+        download.add(downloadSelected);
+        download.add(downloadSelectedCancel);
         download.add(downloadLink);
         download.add(downloadLinkCancel);
         convert.add(converter);
@@ -213,15 +215,15 @@ public class ComputerUI extends JFrame implements ActionListener{
 
         downloadLayout.setHorizontalGroup(downloadLayout.createSequentialGroup()
         .addGroup(downloadLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-        .addComponent(downloadUrl, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(downloadSelected, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addComponent(downloadLink, 0 ,GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addGroup(downloadLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-        .addComponent(downloadUrlCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(downloadSelectedCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addComponent(downloadLinkCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         downloadLayout.setVerticalGroup(downloadLayout.createSequentialGroup()
         .addGroup(downloadLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-        .addComponent(downloadUrl, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addComponent(downloadUrlCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addComponent(downloadSelected, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(downloadSelectedCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addGroup(downloadLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
         .addComponent(downloadLink, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addComponent(downloadLinkCancel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
@@ -256,8 +258,8 @@ public class ComputerUI extends JFrame implements ActionListener{
         openingLayout.setVerticalGroup(openingLayout.createSequentialGroup()
         .addComponent(openingText, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
-        downloadUrl.addActionListener(this);
-        downloadUrlCancel.addActionListener(this);
+        downloadSelected.addActionListener(this);
+        downloadSelectedCancel.addActionListener(this);
         downloadLink.addActionListener(this);
         downloadLinkCancel.addActionListener(this);
         converter.addActionListener(this);
@@ -271,8 +273,8 @@ public class ComputerUI extends JFrame implements ActionListener{
 
 
         this.setLocationRelativeTo(null);
-        downloadUrl.setEnabled(false);
-        downloadUrlCancel.setEnabled(false);
+        downloadSelected.setEnabled(false);
+        downloadSelectedCancel.setEnabled(false);
         downloadLinkCancel.setEnabled(false);
         converterCancel.setEnabled(false);
         mergeCancel.setEnabled(false);
@@ -281,23 +283,23 @@ public class ComputerUI extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == downloadUrl) {
+        if (e.getSource() == downloadSelected) {
             directory = chooser.choose("Choose where to save the downloaded file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath() + "\\";
             if (!directory.equals(null)) {
                 EzHttp.setDownloadLocation(directory);
                 url = urlStorage[buttonNo];
-                downloadWorker = new DownloadWorker(url);
+                downloadSelectedWorker = new DownloadSelectedWorker(url);
                 JOptionPane.showMessageDialog(null, "Downloading has begun - we'll alert you when it's done.");
-                downloadWorker.execute();
-                downloadUrlCancel.setEnabled(true);
+                downloadSelectedWorker.execute();
+                downloadSelectedCancel.setEnabled(true);
             }
         }
-        if (e.getSource() == downloadUrlCancel) {
-            isDownloadCancelled = 1;
-            downloadWorker.cancel(true);
-            downloadUrlCancel.setEnabled(false);
+        if (e.getSource() == downloadSelectedCancel) {
+            isDownloadSelectedCancelled = 1;
+            downloadSelectedWorker.cancel(true);
+            downloadSelectedCancel.setEnabled(false);
             new File(directory + name).delete();
-            isDownloadCancelled = 0;
+            isDownloadSelectedCancelled = 0;
         }
         if (e.getSource() == downloadLink) {
             url = JOptionPane.showInputDialog(null, "Insert BandCamp, YouTube, or raw file link to download from");
@@ -439,7 +441,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             {
                 buttonNo = i;
                 JOptionPane.showMessageDialog(null, "You may now use the appropriate button on the left to preview or download.", "Video selected!", 1);
-                downloadUrl.setEnabled(true);
+                downloadSelected.setEnabled(true);
                 previewURL.setEnabled(true);
             }
         }
@@ -471,10 +473,10 @@ public class ComputerUI extends JFrame implements ActionListener{
     }
 }
 
-class DownloadWorker extends SwingWorker<String, Void> {
+class DownloadSelectedWorker extends SwingWorker<String, Void> {
     String url;
 
-    DownloadWorker(String downUrl) {
+    DownloadSelectedWorker(String downUrl) {
         url = downUrl;
     }
 
@@ -488,15 +490,14 @@ class DownloadWorker extends SwingWorker<String, Void> {
             JOptionPane.showMessageDialog(null, "Downloading has been cancelled!");
         } catch (Exception ex) {
             ex.printStackTrace();
-            if (Main.ui.isDownloadCancelled != 1) {
+            if (Main.ui.isDownloadSelectedCancelled != 1) {
                 JOptionPane.showMessageDialog(null, "Downloading has stopped!", "Oh no!", JOptionPane.ERROR_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Downloading has been cancelled!");
             }
             return ex.getMessage();
         }
-        Main.ui.downloadLinkCancel.setEnabled(false);
-        Main.ui.downloadUrlCancel.setEnabled(false);
+        Main.ui.downloadSelectedCancel.setEnabled(false);
         return output;
     }
 }
