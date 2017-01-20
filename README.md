@@ -1,4 +1,4 @@
-# Zergtel Download Converter
+# Zergtel Video Downloader/Converter
 
 CircleCI build state:
 [![CircleCI](https://circleci.com/gh/s-zeng/ZTVDC.svg?style=svg)](https://circleci.com/gh/s-zeng/ZTVDC)
