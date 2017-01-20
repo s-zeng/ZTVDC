@@ -1,7 +1,7 @@
 # Zergtel Download Converter
 
 CircleCI build state:
-[![CircleCI](https://circleci.com/gh/kronicmage/ZTVDC.svg?style=svg)](https://circleci.com/gh/kronicmage/ZTVDC)
+[![CircleCI](https://circleci.com/gh/s-zeng/ZTVDC.svg?style=svg)](https://circleci.com/gh/s-zeng/ZTVDC)
 
 Zergtel Download Converter is a sane and lightweight appliction for downloading media, and converting of any video or audio file.
 
