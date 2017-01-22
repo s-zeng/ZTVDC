@@ -15,7 +15,7 @@ ZTVDC currently supports the following sites for downloading:
 
 Conversions rely on [FFMPEG](https://ffmpeg.org/) - more info there
 
-Copyright 2016 Zergtel
+Copyright 2017 Zergtel
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
