@@ -9,41 +9,43 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /**
- * Created by Shyam on 2016-12-19.
+ * ConverterProgressBars/MergeProgressBars class
+ * These classes were depricated
  */
-
+//Displays progress of a convert method being ran.
 public class ConverterProgressBar extends JPanel implements Runnable {
     Converter c = new Converter();
     JTextField progress = new JTextField();
     File f;
-    String d;
-    String n;
-    String fn;
+    String d, n, fn;
+    //constructor receiving a file, and directory and a name as inputs
     ConverterProgressBar(File fi, String di, String na) {
         f = fi;
         d = di;
         n = na;
         c.convert(f, d, n);
 
-        Scanner read = new Scanner(c.app.getErrorStream());
+        Scanner read = new Scanner(c.app.getErrorStream()); //reads ffmpeg input from an error stream gotten from app
         Pattern lengthPatt = Pattern.compile("(?<=Duration: )[^,]*");
-        String l = read.findWithinHorizon(lengthPatt, 0);
-        String[] length = l.split(":");
-        double dur = Integer.parseInt(length[0]) * 3600 + Integer.parseInt(length[1]) * 60 + Double.parseDouble(length[2]);
-        progress.setBorder(BorderFactory.createTitledBorder("Total Duration in Seconds:" + dur));
+        String l = read.findWithinHorizon(lengthPatt, 0);//attempts to find the next occurrence of a pattern constructed from the specified string, ignoring delimiters
+        String[] length = l.split(":"); //stores the length of conversion
+        double dur = Integer.parseInt(length[0]) * 3600 + Integer.parseInt(length[1]) * 60 + Double.parseDouble(length[2]); //double that stores the duration
+        progress.setBorder(BorderFactory.createTitledBorder("Total Duration in Seconds:" + dur)); //TextField containing the progress
 
         Pattern timePatt = Pattern.compile("(?<=time=)[\\d:.]*");
         String match;
         String[] matchComp;
         while (null != (match = read.findWithinHorizon(timePatt, 0))) {
-            matchComp = match.split(":");
-            double completionRate = Integer.parseInt(matchComp[0]) * 3600 + Integer.parseInt(matchComp[1]) * 60 + Double.parseDouble(matchComp[2]) / dur;
-            progress.setText("" + completionRate);
+            matchComp = match.split(":"); //splits the string match into an array receiving current duration for hours, minutes and seconds
+            double completionRate = Integer.parseInt(matchComp[0]) * 3600 + Integer.parseInt(matchComp[1]) * 60 + Double.parseDouble(matchComp[2]) / dur; //stores duration left
+            progress.setText("" + completionRate); //displays duration left
         }
     }
+    //runs a new thread for a converter progress bar
     public void run() { ConverterProgressBar cPB = new ConverterProgressBar(f, d, n); }//this won't work, find work around
 
 }
+//exact same methodology as ConverterProgressBar, only difference is using the merge method instead of convert method. Same comments apply
 class MergeProgressBar extends JPanel implements Runnable {
     File f1, f2;
     String d, n;
