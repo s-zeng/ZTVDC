@@ -13,20 +13,12 @@ import java.net.URL;
 
 /**
  * Created by Simon on 11/1/2016.
- */
-
-/**
- * To download from bandcamp:
- * In the script sections of the html of any album/track page, there will be a JSON object in the form of var TralbumData -
- * TralbumData['trackinfo'] is a list of JSONs, where each element corresponds to one track on the page
- * TralbumData['trackinfo'][n]['title'] contains the title of the nth track, and
- * TralbumData['trackinfo'][n]['file'] contains a json with available download links for that track
- * Normally, the only available format to download is mp3-128. However, sometimes we are lucky and it's a free download by default -
- * in that case, we have things like flac and mp3-320 to choose from.
- * As of right now though, this class downloads mp3-128 only - we will have to add additional format detection later
+ *
+ * This class handles downloads from BandCamp
  */
 
 public class Bandcamp {
+
     public static String get(URL url) throws Exception {
         File tmp;
         tmp = new File(EzHttp.get(url.toString(), "bandcamp.tmp", EzHttp.TEMP_LOCATION));
@@ -38,6 +30,21 @@ public class Bandcamp {
         return get(new URL(url));
     }
 
+    /**
+     * Extracts and downloads all songs from a given bandcamp page
+     *
+     * To download from bandcamp:
+     * In the script sections of the html of any album/track page, there will be a JSON object in the form of var TralbumData -
+     * TralbumData['trackinfo'] is a list of JSONs, where each element corresponds to one track on the page
+     * TralbumData['trackinfo'][n]['title'] contains the title of the nth track, and
+     * TralbumData['trackinfo'][n]['file'] contains a json with available download links for that track
+     * Normally, the only available format to download is mp3-128. However, sometimes we are lucky and it's a free download by default -
+     * in that case, we have things like flac and mp3-320 to choose from.
+     * As of right now though, this class downloads mp3-128 only - we will have to add additional format detection later
+     *
+     * @param file - Html file of bandcamp page
+     * @return - Array of names of songs found on the bandcamp page
+     */
     private static String[] extractFiles(File file) {
         //such a good debug tool for json shenanigans: http://jsonviewer.stack.hu/
         String rawJson = extractLine(file, "poppler");
@@ -91,7 +98,13 @@ public class Bandcamp {
         return output;
     }
 
-    //gets the first line within file that contains string str
+    /**
+     * Gets the first line within file that contains str
+     *
+     * @param file - File to scan
+     * @param str - String to scan for
+     * @return - Line of file where str is found (the actual line, not the line number)
+     */
     private static String extractLine(File file, String str) {
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -109,7 +122,12 @@ public class Bandcamp {
         return line;
     }
 
-    //gets title of track/album
+    /**
+     * Gets title of html page
+     *
+     * @param http - html file
+     * @return - Title of html file
+     */
     private static String getTitle(File http) {
         return extractLine(http, "<title>").trim().replaceAll("<(.*?)>|\\\\|\\/", "");
     }

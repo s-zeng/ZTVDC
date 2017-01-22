@@ -10,6 +10,11 @@ import java.net.URLConnection;
 /**
  * The core behind grabbing resources from the web
  * Very simple and naive implementation of http resource grabbing
+ *
+ * Some nuances with this class:
+ *   - Throughout ComputerUI, download location is set by using setDownloadLocation in this class. Unfortunately,
+ *     this can cause some complication with where some files actually end up, depending on the sequencing of events.
+ *     See VGetInterface for an example
  */
 public class EzHttp {
 	private static final int BUFFER_SIZE = 4096;
