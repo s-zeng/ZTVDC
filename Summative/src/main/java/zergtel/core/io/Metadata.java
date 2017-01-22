@@ -13,7 +13,8 @@ public class Metadata {
      * Sets the metadata of a file
      * @param file the file that will have the information stored into
      * @param map Information of the Metadata to be added to the file
-     * This class was depricated
+     * This class is deprecated
+     *            (add more content about uses and how to revive)
      */
     public static void set(File file, Map<String, String> map)
     {
