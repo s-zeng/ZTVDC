@@ -33,12 +33,12 @@ import java.util.Map;
  * Created by Shyam on 2016-10-25.
  */
 public class ComputerUI extends JFrame implements ActionListener{
-    private int openingDisplay = 1;
-    private int searchDisplay = 0;
-    private int browserDisplay = 0;
-    private int buttonNo = -1;
-    private int numPressed = 0;
-    private int swap = 0;
+    private int openingDisplay = 1; //checks if the current panel is the opening panel, if 1 = true, if 0 = false
+    private int searchDisplay = 0; //checks if the current panel is the search panel, if 1 = true, if 0 = false
+    private int browserDisplay = 0; //checks if the current panel is the browser panel, if 1 = true, if 0 = false
+    private int buttonNo = -1; //stores the current number of the button for search selection
+    private int numPressed = 0; //stores the number of times the button is pressed, used for browser in order to not constantly reinitialize the same components
+    private int swap = 0; //checks if current test label (placeholder) is replaced with image label, 0 = false, 1 = true
     public int isConverterCancelled = 0;
     public int isMergeCancelled = 0;
     public int isDownloadSelectedCancelled = 0;
@@ -88,11 +88,15 @@ public class ComputerUI extends JFrame implements ActionListener{
     private ConvertWorker convertWorker;
     private MergeWorker mergeWorker;
 
+    /**
+     * This is the constructor
+     */
     public ComputerUI() {
         URL iconURL = getClass().getResource("/zergtel.png");
         ImageIcon icon = new ImageIcon(iconURL);
         this.setIconImage(icon.getImage());
 
+        //Setup the GUI
         setTitle("ZergTel VDC");
         setResizable(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -111,6 +115,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         });
         setVisible(true);
 
+        //Declare and initialize layouts
         layout = new GroupLayout(getContentPane());
         GroupLayout commandLayout = new GroupLayout(commands);
         GroupLayout downloadLayout = new GroupLayout(download);
@@ -119,6 +124,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         GroupLayout openingLayout = new GroupLayout(openingPanel);
         GridLayout searcherLayout = new GridLayout(5, 1);
 
+        //set JFrame and panels to a layout
         setLayout(layout);
         commands.setLayout(commandLayout);
         download.setLayout(downloadLayout);
@@ -127,11 +133,13 @@ public class ComputerUI extends JFrame implements ActionListener{
         openingPanel.setLayout(openingLayout);
         searchPanel.setLayout(searcherLayout);
 
+        //setup for opening panel's text
         openingText.setText("Welcome to ZTVDC!\nUse the Menu to the left for options.");
         openingText.setBackground(null);
         openingText.setFont(new Font("Times New Roman", Font.PLAIN, 32));
         openingText.setEditable(false);
 
+        //add components to the components
         download.add(downloadSelected);
         download.add(downloadSelectedCancel);
         download.add(downloadLink);
@@ -144,6 +152,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         search.add(previewURL);
         openingPanel.add(openingText);
 
+        //add border for the components
         openingPanel.setBorder(BorderFactory.createTitledBorder("Welcome to ZTVDC"));
         browserPanel.setBorder(BorderFactory.createTitledBorder("Browser"));
         commands.setBorder(BorderFactory.createTitledBorder("Menu"));
@@ -152,6 +161,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         search.setBorder(BorderFactory.createTitledBorder("Search"));
         searchPanel.setBorder(BorderFactory.createTitledBorder("Search Results"));
 
+        //Add and setup layout and components for search panel
         for(int i = 0; i < 5; i++) {
             searchQuery[i] = new JPanel();
             searchQuery[i].setBorder(BorderFactory.createTitledBorder("Result #" + (i+1)));
@@ -192,6 +202,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             searchPanel.add(searchQuery[i]);
         }
 
+        //Organize the layouts used in the components
         layout.setHorizontalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                         .addComponent(commands, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -258,6 +269,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         openingLayout.setVerticalGroup(openingLayout.createSequentialGroup()
         .addComponent(openingText, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
+        //add action listeners for the buttons
         downloadSelected.addActionListener(this);
         downloadSelectedCancel.addActionListener(this);
         downloadLink.addActionListener(this);
@@ -271,8 +283,7 @@ public class ComputerUI extends JFrame implements ActionListener{
         for(int i = 0; i < 5; i++)
             preview[i].addActionListener(this);
 
-
-        this.setLocationRelativeTo(null);
+        //set buttons to false where the user is required to do a certain action in the GUI before being able to access these buttons
         downloadSelected.setEnabled(false);
         downloadSelectedCancel.setEnabled(false);
         downloadLinkCancel.setEnabled(false);
@@ -283,6 +294,7 @@ public class ComputerUI extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        //downloads selected search result
         if (e.getSource() == downloadSelected) {
             directory = chooser.choose("Choose where to save the downloaded file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath() + "\\";
             if (!directory.equals(null)) {
@@ -295,6 +307,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                 downloadSelected.setEnabled(false);
             }
         }
+        //cancels download for selected search result
         if (e.getSource() == downloadSelectedCancel) {
             isDownloadSelectedCancelled = 1;
             downloadSelectedWorker.cancel(true);
@@ -303,6 +316,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             new File(directory + name).delete();
             isDownloadSelectedCancelled = 0;
         }
+        //downloads video from url
         if (e.getSource() == downloadLink) {
             url = JOptionPane.showInputDialog(null, "Insert BandCamp, YouTube, or raw file link to download from");
             System.out.println("Url: " + url);
@@ -319,6 +333,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                 }
             }
         }
+        //cancels download from url
         if (e.getSource() == downloadLinkCancel) {
             isDownloadLinkCancelled = 1;
             downloadLinkWorker.cancel(true);
@@ -327,6 +342,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             new File(directory + name).delete();
             isDownloadLinkCancelled = 0;
         }
+        //converts a selected file into a new file, name chosen by the user
         if (e.getSource() == converter) {
             try {
                 file1 = chooser.choose("Select file to convert", JFileChooser.FILES_ONLY);
@@ -346,12 +362,13 @@ public class ComputerUI extends JFrame implements ActionListener{
             converterCancel.setEnabled(true);
             converter.setEnabled(false);
         }
+        //cancels conversion
         if (e.getSource() == converterCancel) {
             isConverterCancelled = 1;
             convertWorker.cancel(true);
             converterCancel.setEnabled(false);
         }
-        //A potential solution - assign the new ConvertWorker to a variable beforehand, and then do variable.execute() to run, and variable.cancel() to cancel lol
+        //merges 2 files selected files from the user into a new file (name chosen by user)
         if (e.getSource() == merge) {
             file1 = chooser.choose("Select video source file", JFileChooser.FILES_ONLY);
             if (!file1.equals(null)) {
@@ -360,7 +377,6 @@ public class ComputerUI extends JFrame implements ActionListener{
                     directory = chooser.choose("Choose where to save the output file", JFileChooser.DIRECTORIES_ONLY).getAbsolutePath();
                     if (!directory.equals(null)) {
                         name = JOptionPane.showInputDialog(null, "Insert name of the new file (Include format) example: test.mp4");
-//                        m.merge(file1, file2, directory, name);
                         mergeWorker = new MergeWorker(file1, file2, directory, name);
                         JOptionPane.showMessageDialog(null, "Merging has begun - we'll alert you when it's done.");
                         mergeWorker.execute();
@@ -370,11 +386,13 @@ public class ComputerUI extends JFrame implements ActionListener{
             merge.setEnabled(false);
             mergeCancel.setEnabled(true);
         }
+        //cancels merge
         if (e.getSource() == mergeCancel) {
             isMergeCancelled = 1;
             mergeWorker.cancel(true);
             mergeCancel.setEnabled(false);
         }
+        //searches results from youtube search query and displays important content to user
         if (e.getSource() == searchKW) {
             userInput = JOptionPane.showInputDialog(null, "Please enter your search query");
             if (!userInput.equals("")) {
@@ -420,6 +438,7 @@ public class ComputerUI extends JFrame implements ActionListener{
                 }
             }
         }
+        //previews the url from user's selected search
         if(e.getSource() == previewURL) {
             switch (buttonNo) {
                 case 0: url = urlStorage[0];
@@ -451,6 +470,10 @@ public class ComputerUI extends JFrame implements ActionListener{
         }
 
     }
+
+    /**
+     * Method that calls our preview feature (playback feature)
+     */
     public void browser() {
         Platform.setImplicitExit(false);
         Platform.runLater(() -> {
