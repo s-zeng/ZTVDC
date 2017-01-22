@@ -7,7 +7,15 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-
+/**
+ * The core behind grabbing resources from the web
+ * Very simple and naive implementation of http resource grabbing
+ *
+ * Some nuances with this class:
+ *   - Throughout ComputerUI, download location is set by using setDownloadLocation in this class. Unfortunately,
+ *     this can cause some complication with where some files actually end up, depending on the sequencing of events.
+ *     See VGetInterface for an example
+ */
 public class EzHttp {
 	private static final int BUFFER_SIZE = 4096;
 	public static final String DEFAULT_LOCATION = "download/";
@@ -55,6 +63,15 @@ public class EzHttp {
 		return get(new URL(uri), fileName, downLocation);
 	}
 
+	/**
+	 * Gets a resource from a given url, and saves it as filename at downlocation
+	 *
+	 * @param uri - URL of resource
+	 * @param fileName - Name of saved file
+	 * @param downLocation - Location of saving
+	 * @return - Name of file
+	 * @throws Exception - This should be replaced with a much more specific exception
+	 */
 	private static String get(URL uri, String fileName, String downLocation) throws Exception {
 		//Merits some refactoring for efficiency this code does
 
@@ -109,11 +126,23 @@ public class EzHttp {
 		return output;
 	}
 
+	/**
+	 * Cleanses a file from illegal characters with some regex
+	 *
+	 * @param fileName - Name to cleanse
+	 * @return - Cleansed name
+	 */
 	public static String cleanseName(String fileName) {
 		//flesh this function out to be able to fix all illegal windows file names
 		return fileName.replaceAll("\"|\\/|\\?|\\||:|\\*|<|>", "").replaceAll("\\.+$", "");
 	}
 
+	/**
+	 * Same as cleanseName, but allows slashes for nested directories
+	 *
+	 * @param dirName - Name to cleanse
+	 * @return - Cleansed name
+	 */
 	public static String cleanseDirectory(String dirName) {
 		return dirName.replaceAll("\"|\\?|\\||\\*|<|>", "").replaceAll("\\.+$", "");
 	}

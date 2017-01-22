@@ -6,7 +6,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Observable;
 
-// This class downloads a file from a URL.
+/**
+ * Deprecated class stolen from the internet that helps implement threading and progress checks on http downloads
+ * Not used in final program, due to difficulties in getting consistency with VGetInterface and vget
+ */
 public class Http extends Observable implements Runnable {
 
     // Max size of download buffer.
