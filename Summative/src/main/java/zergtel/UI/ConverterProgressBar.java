@@ -10,7 +10,15 @@ import java.util.regex.Pattern;
 
 /**
  * ConverterProgressBars/MergeProgressBars class
- * These classes were depricated
+ * These classes were deprecated and are no longer used in the program
+ *
+ * The primary difficulty with implementing progress bars is extracting up-to-date progress information from Downloader,
+ * Converter, and Merger. We haven't found a good way to get constantly up-to-date progress from these classes in an efficient
+ * manner yet, and as a result, the GUI side implementation has been removed from use in the final code. It's still here
+ * for reference though.
+ *
+ * This implementation attempts to do it's own math on completion based on expected file size, but ultimately that didn't
+ * pan out very well.
  */
 //Displays progress of a convert method being ran.
 public class ConverterProgressBar extends JPanel implements Runnable {
