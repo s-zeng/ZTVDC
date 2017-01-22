@@ -6,12 +6,18 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * Converter class
+ * Conversion is done by using an application called FFMPEG, which converts audio and video formats into others
+ * This class uses Process in order to input certain command lines which allows FFMPEG to convert videos within Java
+ */
 public class Converter {
     public Process app;
     public String cmd, directory, name;
-    public File file, tempFile;
-    private int terminated;
+    public File file;
+    private int terminated; //stores the value of the app if it successfully terminates.
     public final static File FILE_FFMPEG = new File("./ffmpeg.exe");
+    //Method called in order to convert videos using ffmpeg
     public void convert(File f, String d, String n) {
         try {
             file = f;
@@ -47,16 +53,9 @@ public class Converter {
         }
 
     }
-
-    public static void main(String args[])
-    {
-        Converter c = new Converter();
-        File file1 = new File("C:/Users/User/IdeaProjects/summative/Summative/bin/file.mp4");
-        c.convert(file1, "C:/Users/User/IdeaProjects/summative/Summative/", "test.mp4");
-    }
+    //returns the value of terminated, used in ComputerUI class.
     public int getTerminated() { return terminated; }
 
-    //http://stackoverflow.com/questions/17123118/how-to-stop-ffmpeg-that-runs-through-java-process
-    //http://stackoverflow.com/questions/10927718/how-to-read-ffmpeg-response-from-java-and-use-it-to-create-a-progress-bar
+    //Link used to figure out Process and methods to run FFMPEG through java: http://stackoverflow.com/questions/17123118/how-to-stop-ffmpeg-that-runs-through-java-process
 }
 
