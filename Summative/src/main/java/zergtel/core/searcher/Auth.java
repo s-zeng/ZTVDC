@@ -20,7 +20,8 @@ import java.io.Reader;
 import java.util.List;
 
 /**
- * Class borrowed straight from Google Api samples
+ * Class borrowed straight from Google Api samples. Works well enough for our purposes, so why not.
+ * If there's some licensing issue, just inform me
  */
 public class Auth {
 
