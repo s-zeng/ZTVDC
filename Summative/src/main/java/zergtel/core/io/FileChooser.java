@@ -12,7 +12,7 @@ public class FileChooser {
     private int chooserValue;
 
     public FileChooser() {
-        try {
+        try { //The lines within this block serve to make the file chooser popup look like a native windows popup rather than an ugly java one.
             LookAndFeel previousLF = UIManager.getLookAndFeel();
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             chooser = new JFileChooser();
@@ -22,10 +22,22 @@ public class FileChooser {
         }
     }
 
+    /**
+     * Sets directory which the file chooser will default to on opening
+     *
+     * @param directory - The directory which it will default to
+     */
     public void setDirectory(File directory) {
         chooser.setCurrentDirectory(directory);
     }
 
+    /**
+     * Allows user to choose a file through a JFileChooser popup
+     *
+     * @param title
+     * @param mode
+     * @return
+     */
     public File choose(String title, int mode) {
         chooser.setDialogTitle(title);
         chooser.setFileSelectionMode(mode);
