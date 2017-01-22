@@ -52,6 +52,10 @@ import java.util.Map;
  *   - Despite the amount of search queries returned being a property in youtube.properties under java/resources, every variable
  *     that has something to with searcher in the UI is implemented with a magic number of 5. You'll have to change some or all of
  *     those if you want to implement support for multiple pages of searches.
+ *   - Searcher is non-threaded, which means that there is quite a noticeable delay between searching for something and
+ *     seeing the results on the screen. This is primarily due to the need to download thumbnails. Future maintainers should
+ *     add browserlike functionality to the loading process to ensure that users can see results despite thumbnails having
+ *     not loaded.
  */
 public class ComputerUI extends JFrame implements ActionListener{
     /**
