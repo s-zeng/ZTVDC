@@ -49,7 +49,9 @@ import java.util.Map;
  *   - ZTVDC does not, at the moment, support more than one of a particular task at a time (with the exception of downloading,
  *     where technically two can happen at a time). Should one be able to create a more generalizeable worker thread implementation,
  *     that should be easily fixable (along with many of the points listed above).
- *   - Despite the amount of search queries returned being
+ *   - Despite the amount of search queries returned being a property in youtube.properties under java/resources, every variable
+ *     that has something to with searcher in the UI is implemented with a magic number of 5. You'll have to change some or all of
+ *     those if you want to implement support for multiple pages of searches.
  */
 public class ComputerUI extends JFrame implements ActionListener{
     /**
