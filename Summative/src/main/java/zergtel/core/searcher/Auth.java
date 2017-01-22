@@ -20,8 +20,9 @@ import java.io.Reader;
 import java.util.List;
 
 /**
+ * Authenticates ZTVDC with Google's Youtube api
  * Class borrowed straight from Google Api samples. Works well enough for our purposes, so why not.
- * If there's some licensing issue, just inform me
+ * If there's some licensing issue, just inform me and I'll replace this class
  */
 public class Auth {
 
