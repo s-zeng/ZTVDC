@@ -31,23 +31,70 @@ import java.util.Map;
 
 /**
  * Created by Shyam on 2016-10-25.
+ * This class is our implementation of a GUI wrapper around the library functions of zergtel.core
+ * When forking this project, this class is completely replaceable with your own GUI implementation
+ *
+ * If you choose to keep this GUI implementation, there are a number of nuances you should know:
+ *   - Cancelling threads proved out to be a very hacky process for us - a number of relevant variables had to be made public
+ *     and the calling of the ComputerUI class (see zergtel.core.Main) had to be attached to a static variable in order for the
+ *     worker classes to be able to access certain variables of the ComputerUI object. More info on this throughout this class and
+ *     in zergtel.core.Main
+ *   - Somewhat related to this, there exist two seperate DownloadThread classes with *almost* identical code -
+ *     one for each download button in the gui. The primary reason for this is cancelling ambiguity; back when we had one
+ *     class for the both, cancelling from one of the buttons would cancel both threads, and vice versa. Also, when buttons
+ *     would ungrey after a task being finished, the single download thread would ungrey both the download buttons.
+ *     Should you find a better implementation for cancellation that doesn't require static shenanigans, this should be an
+ *     easy fix too - all you would need to do is create two instances of the single class rather than two seperate classes
+ *     for the download buttons.
+ *   - ZTVDC does not, at the moment, support more than one of a particular task at a time (with the exception of downloading,
+ *     where technically two can happen at a time). Should one be able to create a more generalizeable worker thread implementation,
+ *     that should be easily fixable (along with many of the points listed above).
+ *   - Despite the amount of search queries returned being
  */
 public class ComputerUI extends JFrame implements ActionListener{
+    /**
+     * A number of the variables below could easily be represented as booleans -
+     * historically we had intended for more states for a number of these, but in the end those additional features
+     * got cut leaving us with the integer booleans we have now.
+     */
     private int openingDisplay = 1; //checks if the current panel is the opening panel, if 1 = true, if 0 = false
     private int searchDisplay = 0; //checks if the current panel is the search panel, if 1 = true, if 0 = false
     private int browserDisplay = 0; //checks if the current panel is the browser panel, if 1 = true, if 0 = false
     private int buttonNo = -1; //stores the current number of the button for search selection
     private int numPressed = 0; //stores the number of times the button is pressed, used for browser in order to not constantly reinitialize the same components
     private int swap = 0; //checks if current test label (placeholder) is replaced with image label, 0 = false, 1 = true
-    public int isConverterCancelled = 0;
-    public int isMergeCancelled = 0;
-    public int isDownloadSelectedCancelled = 0;
-    public int isDownloadLinkCancelled = 0;
+
+    /**
+     * The following variables are more int booleans that check whether or not a certain worker thread has been cancelled or not
+     * As previously mentioned, cancellation of tasks in progress is implemented in a fairly hacky fashion. These variables exist
+     * so that the worker thread may check if it has got an exception due to cancellation, or whether or it's from any other source.
+     * You may ask - why not just kill the thread and be done with it?
+     * There's a few reasons, namely file cleanup and the relevant gui popup, but we all know that these can be fairly easily fixed
+     * if we put the relevant methods outside of the worker classes, but the primary reason we haven't done so is to avoid
+     * the display of the "Task complete!" popup on cancellation.
+     *
+     * In order to fix that, one would have to fix the way we are handling exceptions - more on that later on in this class,
+     * and in the relevant zergtel.core classes.
+     *
+     */
+    public int isConverterCancelled = 0; //simple boolean check if converter has been cancelled
+    public int isMergeCancelled = 0; //ditto for merge
+    public int isDownloadSelectedCancelled = 0; //ditto for download selected thread
+    public int isDownloadLinkCancelled = 0; //ditto for download link thread
+
+    //These variables store the thumbnail url and the video url of search results, respectively
     private String[] imageUrl = new String[5];
     private String[] urlStorage = new String[5];
+
+    //These are variables which could honestly be anonymous calls or local variables 99% of the time, but we made static
+    //for ease of name recognition
     private String userInput, directory, name, url;
     private File file1, file2;
+
+    //This is the size of the program in pixels
     private Dimension minSize = new Dimension(1080, 635);
+
+    //Various jpanels that make up our GUI
     private JPanel commands = new JPanel();
     private JPanel download = new JPanel();
     private JPanel convert = new JPanel();
@@ -56,12 +103,19 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JPanel searchPanel = new JPanel();
     private JPanel searchQuery[] = new JPanel[5];
     private JPanel searchFiller[] = new JPanel[5];
+
+    private GroupLayout layout; //Overall layout of the program
+    private GroupLayout[] searchList = new GroupLayout[5]; //Layout for search results
+
+    //Arraylist of maps to hold searchresults
     private ArrayList<Map<String, String>> searchResults;
-    private JFXPanel browserPanel = new JFXPanel();
+
+    //Things required to implement a webview for previewing
     private WebView youtube;
     private WebEngine youtubeEngine;
-    private GroupLayout layout;
-    private GroupLayout[] searchList = new GroupLayout[5];
+    private JFXPanel browserPanel = new JFXPanel();
+
+    //Assorted Jbuttons, labels, and text areas for the ui
     public JButton downloadSelected = new JButton("Download Selected");
     public JButton downloadLink = new JButton("Download from URL");
     public JButton downloadSelectedCancel = new JButton("Cancel");
@@ -70,6 +124,7 @@ public class ComputerUI extends JFrame implements ActionListener{
     public JButton converterCancel = new JButton("Cancel");
     public JButton merge = new JButton("Merge");
     public JButton mergeCancel = new JButton("Cancel");
+    private JButton preview[] = new JButton[5]; //This one holds all the jbuttons for searching
     private JButton searchKW = new JButton("Search by Key Words");
     private JButton previewURL = new JButton("Preview Selected");
     private JTextArea openingText = new JTextArea();
@@ -79,8 +134,11 @@ public class ComputerUI extends JFrame implements ActionListener{
     private JLabel description[] = new JLabel[5];
     private JLabel datePublished[] = new JLabel[5];
     private JLabel test[] = new JLabel[5];
-    private JButton preview[] = new JButton[5];
+
+    //Initiates a file chooser
     private FileChooser chooser = new FileChooser();
+
+    //Initiates converter and merge objects, and worker threads
     private Converter c = new Converter();
     private Merge m = new Merge();
     private DownloadSelectedWorker downloadSelectedWorker;
@@ -202,7 +260,7 @@ public class ComputerUI extends JFrame implements ActionListener{
             searchPanel.add(searchQuery[i]);
         }
 
-        //Organize the layouts used in the components
+        //Organize the layouts used in the components, sets sizes, etc.
         layout.setHorizontalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                         .addComponent(commands, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -473,6 +531,7 @@ public class ComputerUI extends JFrame implements ActionListener{
 
     /**
      * Method that calls our preview feature (playback feature)
+     * Webview is very finicky - try not to adjust too much unless you know what you're doing (which we still really don't)
      */
     public void browser() {
         Platform.setImplicitExit(false);
@@ -499,6 +558,20 @@ public class ComputerUI extends JFrame implements ActionListener{
         numPressed++;
     }
 }
+
+/**
+ * The following four classes are our assorted threads for downloading, merging, and converting
+ * As previously stated, these are coded in a fairly spaghetti fashion in order to make button un/regreying possible
+ * after a successful completion of task, and to make cancelling work.
+ *
+ * One issue that might help fix the latter situation if solved is the exception handling - in the Downloader, Converter,
+ * and merge classes in zergtel.core, methods throw a generic Exception - should we patch the program to include better exception
+ * classes and handling, that should allow for us to remove the need for the isXCancelled variables. Still wouldn't help
+ * for button re/degreying though.
+ *
+ * The ultimate dream for these classes is a generalized worker class that could potentially take in inputs in its constructor
+ * relevant to what command will be run (to bad java doesn't have first class functions), and what buttons will be affected.
+ */
 
 class DownloadSelectedWorker extends SwingWorker<String, Void> {
     String url;
