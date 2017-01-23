@@ -34,8 +34,8 @@ public class FileChooser {
     /**
      * Allows user to choose a file through a JFileChooser popup
      *
-     * @param title
-     * @param mode
+     * @param title - Title of the file chooser popup
+     * @param mode - Can be either JFileChooser.DIRECTORIES_ONLY, JFileChooser.FILES_AND_DIRECTORIES, or JFileChooser.FILES_ONLY
      * @return
      */
     public File choose(String title, int mode) {
