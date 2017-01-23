@@ -1,6 +1,8 @@
 package zergtel.core.searcher;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.ResourceId;
 import com.google.api.services.youtube.model.SearchListResponse;
@@ -72,7 +74,7 @@ public class Searcher {
      */
     private static ArrayList<Map<String, String>> search(String query, int beginIndex, int endIndex, Properties properties) {
         try {
-            youtube = new YouTube.Builder(Auth.HTTP_TRANSPORT, Auth.JSON_FACTORY, request -> {
+            youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), request -> {
             }).setApplicationName("ZTVDC").build();
 
             YouTube.Search.List search = youtube.search().list("id,snippet");
